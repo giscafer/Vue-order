@@ -1,10 +1,11 @@
 <div class="container">
-    <div class="col-md-8 col-md-offset-3">
+    <div class="col-md-8 col-md-offset-2">
         <h1>Vue Order</h1>
         <div class="well">
             <form class="form-horizontal">
-                <div class="input-prepend input-group">
-                    过滤： <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                <label for="inputEmail3" class="col-sm-2 control-label">查询：</label> 
+                <div class="col-sm-10 input-prepend input-group">
+                    <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                     <input type="text" style="width: 200px" name="queryDate" id="queryDate" class="form-control" value="2016-01-01" />
                 </div>
             </form>
@@ -34,15 +35,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="order in orders">
-                            <td class="text-right" v-bind:class="{ 'highlight': order.ispack}">{{$index+1}}</td>
-                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.dish_name}}</td>
-                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.user_id}}</td>
-                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.dish_price}}</td>
-                            <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.ispack?'打包':'堂吃'}}</td>
-                            <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.update_at | dateformat}}</td>
-                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">
-                                <button type="button" class="btn btn-danger"  @click="delOrder(order)">删除</button>
-                            </td>
+                        <td class="text-right" v-bind:class="{ 'highlight': order.ispack}">{{$index+1}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.dish_name}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.user_id}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.dish_price}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.ispack?'打包':'堂吃'}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.update_at | dateformat}}</td>
+                        <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">
+                            <button type="button" class="btn btn-danger" @click="delOrder(order)">删除</button>
+                        </td>
                     </tr>
                     <tr>
                         <td class="text-right" colspan="8">
@@ -123,14 +124,35 @@ var vue = new Vue({
         },
         delOrder: function(order) {
             var that = this;
-            $.get('http://localhost:8000/orders/' + order._id + '/del', function(res) {
-                console.log(res);
-                if (res.success === 1) {
-                    that.orders.$remove(order);
-                }
-            }).error(function(data, status, request) {
-                console.log('fail' + status + "," + request);
+            BootstrapDialog.show({
+                title: '提示',
+                message: '是否确定删除改记录？',
+                buttons: [{
+                    label: '删除',
+                    action: function(dialog) {
+                        //删除记录
+                        $.get('http://localhost:8000/orders/' + order._id + '/del', function(res) {
+                            console.log(res);
+                            if (res.success === 1) {
+                                that.orders.$remove(order);
+                                dialog.close();
+                            }
+                        }).error(function(data, status, request) {
+                            console.log('fail' + status + "," + request);
+                        });
+                    }
+                }, {
+                    label: '取消',
+                    action: function(dialog) {
+                        dialog.close();
+                    }
+                }]
             });
+            //未知的两个遮罩层
+            setTimeout(function(){
+                $('.modal-backdrop.fade.in').css('z-index','0');
+            }, 300);
+
         },
         sortBy: function(sortparam) {
 
