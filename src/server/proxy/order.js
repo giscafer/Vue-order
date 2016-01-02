@@ -70,7 +70,7 @@ exports.getRepliesByUserId = function(userId, opt, callback) {
  * @param {String} user_id 回复作者
  * @param {Function} callback 回调函数
  */
-exports.newAndSave = function(dish_name, dish_price, user_id, callback) {
+exports.newAndSave = function(dish_name, dish_price, ispack,user_id, callback) {
     if (typeof user_id === 'function') {
         callback = user_id;
         user_id = null;
@@ -78,6 +78,7 @@ exports.newAndSave = function(dish_name, dish_price, user_id, callback) {
     var order = new Order();
     order.dish_name = dish_name;
     order.dish_price = dish_price;
+    order.ispack = ispack;
 
     if (user_id) {
         order.user_id = user_id;

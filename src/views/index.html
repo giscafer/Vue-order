@@ -1,44 +1,61 @@
 <div class="container">
-        <div class="col-md-6 col-md-offset-3">
-            <h1>Vue Order</h1>
-            <div id="app">
-                <table class="table table-hover" v-cloak>
-                    <thead>
-                        <tr>
-                            <th class="text-right" @click="sortBy('id')">序号</th>
-                            <th class="text-right" @click="sortBy('name')">菜名</th>
-                            <th class="text-right" @click="sortBy('author')">用户</th>
-                            <th class="text-right" @click="sortBy('price')">价格(元)</th>
-                            <th class="text-right" @click="sortBy('price')">打包</th>
-                            <th class="text-right">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="order in orders">
-                            <td class="text-right">{{$index+1}}</td>
-                            <td class="text-right">{{order.dish_name}}</td>
-                            <td class="text-right">{{order.user_id}}</td>
-                            <td class="text-right">{{order.dish_price}}</td>
-                            <td class="text-right">否</td>
-                            <template v-if="order.id%2==0">
-                                <td class="text-right">
-                                    <button type="button" class="btn btn-success" @click="delorder(order)">删除</button>
-                                </td>
-                            </template>
-                            <template v-else>
-                                <td class="text-right">
-                                    <button type="button" class="btn btn-danger" @click="delorder(order)">删除</button>
-                                </td>
-                            </template>
-                        </tr>
-                        <tr>
-                            <td class="text-right" colspan="6">
-                                <h4>总数：{{count}}（份） ，总价：{{sum}}（元）</h4></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div id="add-order">
-                  <form action="/orders" method='post'>
+    <div class="col-md-8 col-md-offset-3">
+        <h1>Vue Order</h1>
+            <div class="well">
+               <form class="form-horizontal">
+                     <div class="input-prepend input-group">
+                      过滤： <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span><input type="text" style="width: 200px" name="queryDate" id="queryDate" class="form-control" value="2016-01-01" /> 
+                     </div>
+               </form>
+               <script type="text/javascript">
+               $(document).ready(function() {
+                  $('#queryDate').daterangepicker({ singleDatePicker: true }, function(start, end, label) {
+                    var queryDate=$.formatDate(new Date(start),"yyyy-MM-dd");
+                    EventProxy.fire('getOrders',queryDate);
+                  });
+               });
+               </script>
+
+            </div>
+        <div id="app">
+            <table class="table table-hover" v-cloak>
+                <thead>
+                    <tr>
+                        <th class="text-right" @click="sortBy('$index')">序号</th>
+                        <th class="text-right" @click="sortBy('dish_name')">菜名</th>
+                        <th class="text-right" @click="sortBy('user_id')">用户</th>
+                        <th class="text-right" @click="sortBy('dish_price')">价格(元)</th>
+                        <th class="text-right" @click="sortBy('ispack')">打包</th>
+                        <th class="text-right" @click="sortBy('update_at')">修改时间</th>
+                        <th class="text-right">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders">
+                        <td class="text-right">{{$index+1}}</td>
+                        <td class="text-right">{{order.dish_name}}</td>
+                        <td class="text-right">{{order.user_id}}</td>
+                        <td class="text-right">{{order.dish_price}}</td>
+                        
+                        <template v-if="order.ispack===true">
+                           <td class="text-right" style="background:yellow">打包</td>
+                        </template>
+                        <template v-else>
+                           <td class="text-right">堂吃</td>
+                        </template>
+                        <td class="text-right">{{order.update_at | dateformat}}</td>
+                        <td class="text-right">
+                            <button type="button" class="btn btn-danger" @click="delOrder(order)">删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" colspan="8">
+                            <h4>总数：{{count}}（份） ，总价：{{sum}}（元）</h4></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="add-order">
+                <form action="/orders" method='post'>
                     <legend>订餐</legend>
                     <div class="form-group">
                         <label for="dish_name">菜名</label>
@@ -48,61 +65,83 @@
                         <label for="dish_price">价格</label>
                         <input type="text" class="form-control" id="dish_price" name="dish_price" v-model="order.price" placeholder="请输入价格">
                     </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="ispack"> 打包
+                        </label>
+                    </div>
                     <button class="btn btn-primary btn-block" v-on:click="addorder()">添加</button>
-                   </form>
-                </div>
-                <br>
+                </form>
             </div>
+            <br>
         </div>
     </div>
+</div>
 <script>
-	new Vue({
-	    el: '#app',
-	    ready: function() {
-	    	var that=this;
-	        $.get('http://localhost:8000/topics', function(res) {
-	            that.$set('orders', res.data);
-	            console.log(res.data);
-	        }).error(function(data, status, request) {
-	            console.log('fail' + status + "," + request);
-	        });
-	    },
-	    data: {
-	        sortparam: '',
-	        book: {
-	            id: 0,
-	            author: '',
-	            name: '',
-	            price: ''
-	        },
-	        books: ''
-	    },
-	    computed: {
-	        sum: function() {
-	            var result = 0;
-	            for (var i = 0; i < this.orders.length; i++) {
-	                result = Number(this.orders[i].dish_price) + result;
-	            }
-	            return result;
-	        },
-	        count:function(){
-	        	return this.orders.length;
-	        }
-	    },
+var EventProxy=new EventProxy();
+var vue=new Vue({
+    el: '#app',
+    ready: function() {
+        var that = this;
+        var queryDate=$.formatDate(new Date(),"yyyy-MM-dd");
+        $("#queryDate").attr('value',queryDate);
+        function getOrders(queryDate){
+            $.get('http://localhost:8000/orders/'+queryDate, function(res) {
+                that.$set('orders', res.data);
+            }).error(function(data, status, request) {
+                console.log('fail' + status + "," + request);
+            });
+        }
+        EventProxy.on('getOrders', getOrders);
+        EventProxy.fire('getOrders',queryDate);
+    },
+    data: {
+        date:'2016-01-02',
+        sortparam: '',
+        order: {
+            dish_name: '',
+            dish_price: '',
+            ispack: ''
+        },
+        orders: ''
+    },
+    computed: {
+        sum: function() {
+            var result = 0;
+            for (var i = 0; i < this.orders.length; i++) {
+                result = Number(this.orders[i].dish_price) + result;
+            }
+            return result;
+        },
+        count: function() {
+            return this.orders.length;
+        }
+    },
 
-	    methods: {
-	        addBook: function() {
-	            this.book.id = this.books.length + 1;
-	            this.books.push(this.book);
-	            this.book = '';
-	        },
-	        delBook: function(book) {
-	            this.books.$remove(book);
-	        },
-	        sortBy: function(sortparam) {
+    methods: {
+        addOrder: function() {
+            this.order.id = this.orders.length + 1;
+            this.orders.push(this.order);
+            this.order = '';
+        },
+        delOrder: function(order) {
+            var that = this;
+            $.get('http://localhost:8000/orders/'+order._id+'/del', function(res) {
+                console.log(res);
+                if(res.success===1){
+                   that.orders.$remove(order);
+                }
+            }).error(function(data, status, request) {
+                console.log('fail' + status + "," + request);
+            });
+        },
+        sortBy: function(sortparam) {
 
-	            this.sortparam = sortparam;
-	        }
-	    }
-	});
+            this.sortparam = sortparam;
+        }
+    }
+});
+Vue.filter('dateformat', function (value) {
+    return $.formatDate(new Date(value),"yyyy-MM-dd HH:mm:ss");
+});
 </script>

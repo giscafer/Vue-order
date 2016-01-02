@@ -21,7 +21,7 @@ var webRouter = require('./src/server/web_router');
 var bodyParser = require('body-parser');
 
 // 静态文件目录
-var staticDir = path.join(__dirname, 'public');
+var staticDir = path.join(__dirname, './src/libs');
 
 config.hostname = config.host;
 
@@ -37,7 +37,7 @@ app.enable('trust proxy');
 
 // 静态资源
 // app.use(Loader.less(__dirname));
-app.use('/public', express.static(staticDir));
+app.use('/libs', express.static(staticDir));
 //限制
 app.use(bodyParser.json({limit: '1mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
