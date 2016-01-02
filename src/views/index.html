@@ -1,22 +1,24 @@
 <div class="container">
     <div class="col-md-8 col-md-offset-3">
         <h1>Vue Order</h1>
-            <div class="well">
-               <form class="form-horizontal">
-                     <div class="input-prepend input-group">
-                      过滤： <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span><input type="text" style="width: 200px" name="queryDate" id="queryDate" class="form-control" value="2016-01-01" /> 
-                     </div>
-               </form>
-               <script type="text/javascript">
-               $(document).ready(function() {
-                  $('#queryDate').daterangepicker({ singleDatePicker: true }, function(start, end, label) {
-                    var queryDate=$.formatDate(new Date(start),"yyyy-MM-dd");
-                    EventProxy.fire('getOrders',queryDate);
-                  });
-               });
-               </script>
-
-            </div>
+        <div class="well">
+            <form class="form-horizontal">
+                <div class="input-prepend input-group">
+                    过滤： <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
+                    <input type="text" style="width: 200px" name="queryDate" id="queryDate" class="form-control" value="2016-01-01" />
+                </div>
+            </form>
+            <script type="text/javascript">
+            $(document).ready(function() {
+                $('#queryDate').daterangepicker({
+                    singleDatePicker: true
+                }, function(start, end, label) {
+                    var queryDate = $.formatDate(new Date(start), "yyyy-MM-dd");
+                    EventProxy.fire('getOrders', queryDate);
+                });
+            });
+            </script>
+        </div>
         <div id="app">
             <table class="table table-hover" v-cloak>
                 <thead>
@@ -32,21 +34,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="order in orders">
-                        <td class="text-right">{{$index+1}}</td>
-                        <td class="text-right">{{order.dish_name}}</td>
-                        <td class="text-right">{{order.user_id}}</td>
-                        <td class="text-right">{{order.dish_price}}</td>
-                        
-                        <template v-if="order.ispack===true">
-                           <td class="text-right" style="background:yellow">打包</td>
-                        </template>
-                        <template v-else>
-                           <td class="text-right">堂吃</td>
-                        </template>
-                        <td class="text-right">{{order.update_at | dateformat}}</td>
-                        <td class="text-right">
-                            <button type="button" class="btn btn-danger" @click="delOrder(order)">删除</button>
-                        </td>
+                            <td class="text-right" v-bind:class="{ 'highlight': order.ispack}">{{$index+1}}</td>
+                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.dish_name}}</td>
+                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.user_id}}</td>
+                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">{{order.dish_price}}</td>
+                            <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.ispack?'打包':'堂吃'}}</td>
+                            <td class="text-right" v-bind:class="{ 'highlight':order.ispack}">{{order.update_at | dateformat}}</td>
+                            <td class="text-right"  v-bind:class="{ 'highlight':order.ispack}">
+                                <button type="button" class="btn btn-danger"  @click="delOrder(order)">删除</button>
+                            </td>
                     </tr>
                     <tr>
                         <td class="text-right" colspan="8">
@@ -78,25 +74,26 @@
     </div>
 </div>
 <script>
-var EventProxy=new EventProxy();
-var vue=new Vue({
+var EventProxy = new EventProxy();
+var vue = new Vue({
     el: '#app',
     ready: function() {
         var that = this;
-        var queryDate=$.formatDate(new Date(),"yyyy-MM-dd");
-        $("#queryDate").attr('value',queryDate);
-        function getOrders(queryDate){
-            $.get('http://localhost:8000/orders/'+queryDate, function(res) {
+        var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
+        $("#queryDate").attr('value', queryDate);
+
+        function getOrders(queryDate) {
+            $.get('http://localhost:8000/orders/' + queryDate, function(res) {
                 that.$set('orders', res.data);
             }).error(function(data, status, request) {
                 console.log('fail' + status + "," + request);
             });
         }
         EventProxy.on('getOrders', getOrders);
-        EventProxy.fire('getOrders',queryDate);
+        EventProxy.fire('getOrders', queryDate);
     },
     data: {
-        date:'2016-01-02',
+        date: '2016-01-02',
         sortparam: '',
         order: {
             dish_name: '',
@@ -126,10 +123,10 @@ var vue=new Vue({
         },
         delOrder: function(order) {
             var that = this;
-            $.get('http://localhost:8000/orders/'+order._id+'/del', function(res) {
+            $.get('http://localhost:8000/orders/' + order._id + '/del', function(res) {
                 console.log(res);
-                if(res.success===1){
-                   that.orders.$remove(order);
+                if (res.success === 1) {
+                    that.orders.$remove(order);
                 }
             }).error(function(data, status, request) {
                 console.log('fail' + status + "," + request);
@@ -141,7 +138,7 @@ var vue=new Vue({
         }
     }
 });
-Vue.filter('dateformat', function (value) {
-    return $.formatDate(new Date(value),"yyyy-MM-dd HH:mm:ss");
+Vue.filter('dateformat', function(value) {
+    return $.formatDate(new Date(value), "yyyy-MM-dd HH:mm:ss");
 });
 </script>
