@@ -1,0 +1,42 @@
+{
+  "name": "Vue-order",
+  "version": "1.0.0",
+  "description": "用Vue.js 开发的简易订餐管理系统",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giscafer/Vue-order"
+  },
+  "keywords": [
+    "Vue",
+    "order",
+    "Webpack",
+    "WebApp"
+  ],
+  "author": "giscafer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/giscafer/Vue-order/issues"
+  },
+  "homepage": "https://github.com/giscafer/Vue-order",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.2",
+    "connect-mongo": "^1.1.0",
+    "ejs-mate": "^2.3.0",
+    "eventproxy": "^0.3.4",
+    "express": "^4.13.3",
+    "loader": "^2.0.0",
+    "moment": "^2.10.6",
+    "mongoose": "^4.3.4",
+    "newrelic": "^1.24.1",
+    "validator": "^4.4.0",
+    "vue-html-loader": "^1.1.0"
+  },
+  "devDependencies": {
+    "errorhandler": "^1.4.2"
+  }
+}
