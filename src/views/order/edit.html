@@ -1,0 +1,108 @@
+<div class="container-fluid fixed" id="VueAapp">
+    <div class="col-md-12" id="content">
+        <div class="heading-buttons">
+            <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
+            <div class="buttons pull-right">
+            </div>
+        </div>
+        <br>
+        <div class="separator bottom line"></div>
+          <ul class="breadcrumb">
+            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
+            <li class="divider"></li>
+            <li><%= title %></li>
+        </ul>
+        <br>
+        <div class="col-md-8 col-md-offset-2">
+            <div id="add-order">
+            <% if (typeof(action) !== 'undefined' && action === 'edit') { %>
+            <form id="create_order_form" action="/orders/<%= order_id %>/edit" method='post' class="form-horizontal">
+              <% } else { %>
+               <form  id="create_order_form" action="/orders/create" method='post' class="form-horizontal">
+                <% } %>
+                    <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
+                        <div class="alert alert-danger">
+                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                            <strong><%= edit_error %></strong>
+                        </div>
+                        <%} %>
+                            <div class="form-group">
+                                <label for="dish_name" class="col-sm-2 control-label">菜名</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="dish_name" id="dish_name" placeholder="请输入菜名"  value="<%= typeof(dish_name) !== 'undefined' && dish_name || '' %>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dish_price" class="col-sm-2 control-label">价格</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="dish_price" name="dish_price" value="<%= typeof(dish_price) !== 'undefined' && dish_price || '' %>" placeholder="请输入价格">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="ispack" checked="<%= typeof(ispack) !== 'undefined' && ispack || false %>"> 打包（如需打包请勾选）
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-block" onclick="editOrder()">保存</button>
+                                </div>
+                            </div>
+                </form>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#orderForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            dish_name: {
+                validators: {
+                    notEmpty: {
+                        message: '菜名不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 8,
+                        message: '菜名字符个数为2~8'
+                    }
+                }
+            },
+            dish_price: {
+                validators: {
+                    notEmpty: {
+                        message: '价格不能为空'
+                    },
+                    numeric: {
+                        message: '只能输入数字'
+                    },
+                    between: {
+                        min: 1,
+                        max: 100,
+                        message: '价格只能在1~100之间'
+                    }
+                }
+            }
+        }
+    });
+});
+function editOrder(){
+    if ($('#create_order_form').data('bootstrapValidator').isValid()) {
+        document.getElementById("create_order_form").submit();
+    }
+}
+</script>

@@ -36,14 +36,19 @@ exports.getOrderById = function(id, callback) {
         }
 
         var user_id = order.user_id;
-        /*User.getUserById(user_id, function (err, user) {
-          if (err) {
-            return callback(err);
-          }
-          order.user = user;
-         
-          return callback(null, order);
-        });*/
+        if(user_id){
+            User.getUserById(user_id, function (err, user) {
+              if (err) {
+                return callback(err);
+              }
+              order.user = user;
+             
+              return callback(null, order);
+            });
+        }else{
+            return callback(err, order);
+        }
+        
     });
 };
 /**

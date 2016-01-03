@@ -12,6 +12,7 @@ var path = require('path');
 var errorhandler = require('errorhandler');
 var Loader = require('loader');
 var express = require('express');
+var errorPageMiddleware      = require("./src/server/common/error_page");
 // var session                  = require('express-session');
 // var passport                 = require('passport');
 // require('./middlewares/mongoose_log'); // 打印 mongodb 查询日志
@@ -41,7 +42,9 @@ app.use('/libs', express.static(staticDir));
 //限制
 app.use(bodyParser.json({limit: '1mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
-//
+//中间件
+app.use(errorPageMiddleware.errorPage);
+//router
 app.use('/', webRouter);
 
 // error handler

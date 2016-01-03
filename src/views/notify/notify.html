@@ -1,0 +1,32 @@
+<div class="container-fluid fixed" id="VueAapp">
+    <div class="col-md-12" id="content">
+        <div class="heading-buttons">
+            <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
+            <div class="buttons pull-right">
+            </div>
+        </div>
+        <br>
+        <div class="separator bottom line"></div>
+          <ul class="breadcrumb">
+            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
+            <li class="divider"></li>
+            <li>提示</li>
+        </ul>
+        <br>
+    <div class='inner'>
+      <% if(typeof(error) !== 'undefined' && error){ %>
+      <div class="alert alert-error">
+        <strong><%= error %></strong>
+      </div>
+      <% } %>
+      <% if(typeof(success) !== 'undefined' && success){ %>
+      <div class="alert alert-success">
+        <strong><%= success %></strong>
+      </div>
+      <% } %>
+
+        <a href="<%- typeof(referer) !== 'undefined' ? referer : '/' %>"><span class="span-common">返回</span></a>
+
+    </div>
+  </div>
+</div>
