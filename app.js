@@ -12,14 +12,21 @@ var path = require('path');
 var errorhandler = require('errorhandler');
 var Loader = require('loader');
 var express = require('express');
-var errorPageMiddleware      = require("./src/server/common/error_page");
+var errorPageMiddleware = require("./src/server/common/error_page");
 // var session                  = require('express-session');
 // var passport                 = require('passport');
 // require('./middlewares/mongoose_log'); // 打印 mongodb 查询日志
-require('./src/server/models');
-var webRouter = require('./src/server/web_router');
-// var _                        = require('lodash');
 var bodyParser = require('body-parser');
+if(config.devMode){
+    process.env.MONGO_DB_STR=config.dev_dbUrl;
+}
+require('./src/server/models');
+// 引用mongoosekeeper
+var mongoosekeeper = require('./src/server/models/mongoosekeeper');
+// 调用更新配置，这里的配置可以去读某个json
+mongoosekeeper.config(config.dbConfig);
+var webRouter = require('./src/server/web_router');
+
 
 // 静态文件目录
 var staticDir = path.join(__dirname, './src/libs');
@@ -40,8 +47,13 @@ app.enable('trust proxy');
 // app.use(Loader.less(__dirname));
 app.use('/libs', express.static(staticDir));
 //限制
-app.use(bodyParser.json({limit: '1mb'}));
-app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
+app.use(bodyParser.json({
+    limit: '1mb'
+}));
+app.use(bodyParser.urlencoded({
+    extended: true,
+    limit: '1mb'
+}));
 //中间件
 app.use(errorPageMiddleware.errorPage);
 //router

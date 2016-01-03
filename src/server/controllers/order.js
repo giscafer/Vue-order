@@ -12,14 +12,15 @@ var tools = require('../common/tools');
  */
 exports.index = function(req, res, next) {
     var queryDate = req.params.qdate;
+    if(!queryDate) return;
     //查询过滤
     var query = {
         "$and": [{
-            "update_at": {
+            "create_at": {
                 "$gt": queryDate + " 0:0:0"
             }
         }, {
-            "update_at": {
+            "create_at": {
                 "$lt": queryDate + " 23:59:59"
             }
         }]
