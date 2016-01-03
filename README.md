@@ -5,4 +5,8 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是首页使
 其他页面因Node.js方便而用了ejs渲染。
 
 
+# OVERVIEW
 
+![][1]
+
+[1]: https://github.com/giscafer/Vue-order-demo/blob/master/src/assets/overview1.0.png

@@ -71,7 +71,8 @@ exports.create = function(req, res, next) {
     dish_name = validator.escape(dish_name);
     var dish_price = validator.trim(req.body.dish_price);
     dish_price = Number(dish_price);
-    // var user_id = validator.trim(req.body.user_id);
+    var user_id = validator.trim(req.body.user_id);
+    var ispack = req.body.ispack;
     if (ispack === 'on') {
         ispack = true;
     } else {
