@@ -13,7 +13,7 @@ router.get('/', function(req, res) {
 });
 router.get('/orders', orderController.index);
 router.get('/orders/:qdate', orderController.index);
-router.post('/orders', orderController.add);
+router.post('/orders/add', orderController.add);
 router.get('/orders/:oid/del', orderController.del);
 // 
 module.exports = router;

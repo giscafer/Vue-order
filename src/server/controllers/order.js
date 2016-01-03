@@ -18,9 +18,6 @@ exports.index = function(req, res, next) {
         "$and": [{"update_at":{"$gt":queryDate+" 0:0:0"}},{"update_at":{"$lt":queryDate+" 23:59:59"}}]
     };
 
-    var ep = new EventProxy();
-    ep.fail(next);
-  
     OrderModel.find(query).exec(function(err, orders) {
         if (err) {
             next(err);
@@ -49,12 +46,12 @@ exports.add = function(req, res, next) {
     } else {
         ispack = false;
     }
-    // 验证
+    // 验证（前端页面使用了bootStrapValidator插件验证，这里其实不需要）
     var editError;
     if (dish_name === '') {
         editError = '菜名不能是空的。';
-    } else if (dish_name.length < 2 || dish_name.length > 6) {
-        editError = '菜名字数太多或太少。';
+    } else if (dish_name.length < 2 || dish_name.length > 8) {
+        editError = '菜名字数太多或太少（2~8个字符）。';
     } else if (dish_price < 0) {
         editError = '价格不能小于0。';
     }
@@ -62,7 +59,7 @@ exports.add = function(req, res, next) {
 
     if (editError) {
         res.status(422);
-        return res.render('order/edit', {
+        return res.render('index', {
             edit_error: editError,
             dish_name: dish_name,
             dish_price: dish_price,

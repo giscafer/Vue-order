@@ -85,7 +85,7 @@ exports.newAndSave = function(dish_name, dish_price, ispack,user_id, callback) {
     }
     order.save(function(err) {
     	if (err) {
-    	  return next(err);
+    	  return callback(err,order);
     	}
         callback(err, order);
     });
