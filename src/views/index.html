@@ -2,12 +2,15 @@
     <div class="col-md-8 col-md-offset-2">
         <h1>Vue Order</h1>
         <div class="well">
-            <form class="form-horizontal">
-                <label for="inputEmail3" class="col-sm-2 control-label">查询：</label> 
-                <div class="col-sm-10 input-prepend input-group">
-                    <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                    <input type="text" style="width: 200px" name="queryDate" id="queryDate" class="form-control" value="2016-01-01" />
+            <form class="form-inline">
+                <label for="queryDate" class="control-label">查询：</label> 
+                <div class="col-sm-8 input-prepend input-group">
+                    <div id="queryDate" class="input-group date form_time"  data-date-format="yyyy-mm-dd">
+                        <input id="queryDateValue" class="form-control" size="16" readonly type="text">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                    </div>
                 </div>
+                <label class="btn btn-success" @click="todayQuery()">查看今天</label> 
             </form>
         </div>
         <div id="app">
@@ -41,8 +44,10 @@
                     </tr>
                 </tbody>
             </table>
+    </div>
+    <div class="col-md-8 col-md-offset-2">
             <div id="add-order">
-                <form action="/orders/add" method='post' id="orderForm">
+                <form action="/orders/add" method='post' id="orderForm"  class="form-horizontal">
                     <legend>订餐</legend>
                     <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
                     <div class="alert alert-danger">
@@ -51,19 +56,31 @@
                     </div>
                     <%} %>
                     <div class="form-group">
-                        <label for="dish_name">菜名</label>
+                        <label for="dish_name" class="col-sm-2 control-label">菜名</label>
+                         <div class="col-sm-10">
                         <input type="text" class="form-control" name="dish_name" id="dish_name" placeholder="请输入菜名" v-model="order.name">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="dish_price">价格</label>
+                        <label for="dish_price" class="col-sm-2 control-label">价格</label>
+                        <div class="col-sm-10">
                         <input type="text" class="form-control" id="dish_price" name="dish_price" v-model="order.price" placeholder="请输入价格">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>
-                            <input type="checkbox" name="ispack"> 打包（如需打包请勾选）
-                        </label>
-                    </div>
-                    <button class="btn btn-primary btn-block" v-on:click="addOrder()">添加</button>
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <div class="checkbox">
+                            <label>
+                               <input type="checkbox" name="ispack"> 打包（如需打包请勾选）
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button class="btn btn-primary btn-block" @click="delOrder()">添加</button>
+                        </div>
+                      </div>
                 </form>
             </div>
             <br>
@@ -73,13 +90,18 @@
 <script type="text/javaScript">
 //表单验证
 $(document).ready(function() {
-    $('#queryDate').daterangepicker({
-        singleDatePicker: true,todayBtn: true
-    }, function(start, end, label) {
-        var queryDate = $.formatDate(new Date(start), "yyyy-MM-dd");
+ $('#queryDate').datetimepicker({
+        language: 'zh-CN', //汉化 
+        todayBtn:  1,
+        autoclose: true,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 'month',
+        forceParse: 0
+    }).on('changeDate', function(ev){
+        var queryDate = $.formatDate(new Date(ev.date.valueOf()), "yyyy-MM-dd");
         EventProxy.fire('getOrders', queryDate);
     });
-
     $('#orderForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -120,12 +142,11 @@ $(document).ready(function() {
 });
 var EventProxy = new EventProxy();
 var vue = new Vue({
-    el: '#app',
+    el: '.container',
     ready: function() {
         var that = this;
         var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
-        $("#queryDate").attr('value', queryDate);
-
+        $("#queryDateValue").val(queryDate);
         function getOrders(queryDate) {
             $.get('http://localhost:8000/orders/' + queryDate, function(res) {
                 that.$set('orders', res.data);
@@ -160,6 +181,11 @@ var vue = new Vue({
     },
 
     methods: {
+        todayQuery:function(){
+            var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
+            $("#queryDateValue").val(queryDate);
+            EventProxy.fire('getOrders', queryDate);
+        },
         addOrder: function() {
           if($('#orderForm').data('bootstrapValidator').isValid()){
             // $('#orderForm').submit();
