@@ -70,7 +70,7 @@ app.use(cookieParser(config.auth_cookie_name));
 app.use(session({
   secret:config.session_secret,
   key: config.auth_cookie_name,//cookie name
-  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+  cookie: {maxAge: 1000 * 60 * 60 * 24},//24 hours
   resave: false,
   saveUninitialized: true,
   store: new MongoStore({

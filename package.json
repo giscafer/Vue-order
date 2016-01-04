@@ -36,6 +36,7 @@
     "express-session": "^1.12.1",
     "ioredis": "^1.13.2",
     "loader": "^2.0.0",
+    "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "mongoose": "^4.3.4",
     "newrelic": "^1.24.1",

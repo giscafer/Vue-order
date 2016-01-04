@@ -6,6 +6,7 @@ var express = require('express');
 var config=require('./config');
 var orderController = require('./controllers/order');
 var sign=require('./controllers/sign');
+var auth=require('./common/auth');
 var router = express.Router();
 // home page
 router.get('/', function(req, res) {
@@ -22,9 +23,9 @@ if (config.allow_sign_up) {
 } else {
   router.get('/signup', configMiddleware.github, passport.authenticate('github'));  // 进行github验证
 }
-router.get('/signout',sign.signout)//登出
-router.get('/signin',sign.showLogin)//进入登录页面
-router.post('/signin',sign.login)//登录校验
+router.get('/signout',sign.signout); //登出
+router.get('/signin',sign.showLogin); //进入登录页面
+router.post('/signin',sign.login); //登录校验
 router.get('/active_account',sign.activeAccount);//账号激活
 
 router.get('/search_pass',sign.showSearchPass);//进入找回密码页面
@@ -34,16 +35,16 @@ router.post('/reset_pass',sign.updatePass);//更新密码
 
 //####订餐####
 router.get('/orders', orderController.index);
-//编辑订餐页
-router.get('/orders/:oid/edit', orderController.showEdit);
 //按日期查询当日订餐记录
 router.get('/orders/:qdate', orderController.index);
+//编辑订餐页
+router.get('/orders/:oid/edit',auth.userRequired, orderController.showEdit);
 //新建订餐
-router.post('/orders/create', orderController.create);
+router.post('/orders/create', auth.userRequired,orderController.create);
 //删除订餐
-router.get('/orders/:oid/del', orderController.del);
+router.get('/orders/:oid/del', auth.userRequired,orderController.del);
 // 更新订餐
-router.post('/orders/:oid/edit', orderController.update);
+router.post('/orders/:oid/edit', auth.userRequired,orderController.update);
 
 //####图表####
 //

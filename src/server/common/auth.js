@@ -1,3 +1,7 @@
+/**
+ * 用户权限控制
+ * @type {[type]}
+ */
 var mongoose = require('mongoose');
 var UserModel = require('../models').User;
 // var Message    = require('../proxy').Message;?
@@ -29,7 +33,8 @@ exports.adminRequired = function(req, res, next) {
  */
 exports.userRequired = function(req, res, next) {
     if (!req.session || !req.session.user) {
-        return res.status(403).send('forbidden!');
+        // return res.status(403).send('forbidden!');
+        return res.render('sign/signin');
     }
 
     next();
@@ -98,7 +103,7 @@ exports.authUser = function(req, res, next) {
 
     if (req.session.user) {
         ep.emit('get_user', req.session.user);
-    } else {
+    } else {//cookie中取出登录信息
 
         var auth_token = req.signedCookies[config.auth_cookie_name];
         if (!auth_token) {

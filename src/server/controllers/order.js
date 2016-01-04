@@ -12,7 +12,7 @@ var tools = require('../common/tools');
  */
 exports.index = function(req, res, next) {
     var queryDate = req.params.qdate;
-    if(!queryDate) return;
+    if (!queryDate) return;
     //查询过滤
     var query = {
         "$and": [{
@@ -25,8 +25,8 @@ exports.index = function(req, res, next) {
             }
         }]
     };
-
-    OrderModel.find(query).exec(function(err, orders) {
+    
+    OrderProxy.getOrdersByQuery(query,null,function(err, orders) {
         if (err) {
             next(err);
         }
@@ -37,26 +37,25 @@ exports.index = function(req, res, next) {
 };
 exports.showEdit = function(req, res, next) {
     var order_id = req.params.oid;
-    console.log(order_id);
     if (order_id) {
         OrderProxy.getOrderById(order_id, function(err, order) {
             if (!order) {
                 res.render404('此话题不存在或已被删除。');
                 return;
             }
-            // if (String(order.user_id) === String(req.session.user._id) || req.session.user.is_admin) {
-            res.render('order/edit', {
-                action: 'edit',
-                title: '编辑订餐',
-                order_id: order._id,
-                dish_name: order.dish_name,
-                dish_price: order.dish_price,
-                ispack: order.ispack,
-            });
+            if (String(order.user_id) === String(req.session.user._id) || req.session.user.is_admin) {
+                res.render('order/edit', {
+                    action: 'edit',
+                    title: '编辑订餐',
+                    order_id: order._id,
+                    dish_name: order.dish_name,
+                    dish_price: order.dish_price,
+                    ispack: order.ispack,
+                });
 
-            // } else {
-            //   res.renderError('对不起，你不能编辑此话题。', 403);
-            // }
+            } else {
+                res.renderError('对不起，你不能编辑此记录。', 403);
+            }
         });
     }
 };
@@ -72,7 +71,8 @@ exports.create = function(req, res, next) {
     dish_name = validator.escape(dish_name);
     var dish_price = validator.trim(req.body.dish_price);
     dish_price = Number(dish_price);
-    var user_id = validator.trim(req.body.user_id);
+    var user_id = req.session.user._id;
+    console.log(user_id);
     var ispack = req.body.ispack;
     if (ispack === 'on') {
         ispack = true;
@@ -119,19 +119,32 @@ exports.create = function(req, res, next) {
  */
 exports.del = function(req, res, next) {
     var order_id = req.params.oid;
-    if (order_id) {
+    //判断
+    OrderProxy.getOrder(order_id, function (err, order) {
+        if (err) {
+          return res.send({ success: false, message: err.message });
+        }
+        if (!order) {
+          res.status(422);
+          return res.send({ success: false, message: '此记录不存在或已被删除。' });
+        }
+        if (!req.session.user.is_admin && !(order.user_id && order.user_id.equals(req.session.user._id))) {
+          res.status(403);
+          return res.send({success: false, message: '无权限'});
+        }
+        //删除
         OrderModel.remove({
             _id: order_id
-        }, function(err, movie) {
+        }, function(err, order) {
             if (err) {
-                console.log(err);
+                return res.send({ success: false, message: err.message });
             } else {
                 res.json({
                     success: 1
                 });
             }
         });
-    }
+    });
 };
 
 exports.update = function(req, res, next) {
@@ -153,8 +166,7 @@ exports.update = function(req, res, next) {
             return;
         }
 
-        // if (order.author_id.equals(req.session.user._id) || req.session.user.is_admin) {
-        if (1==1) {
+        if (order.user_id.equals(req.session.user._id) || req.session.user.is_admin) {
             // 验证
             var editError;
             if (dish_name === '') {

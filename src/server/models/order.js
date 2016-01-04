@@ -2,11 +2,10 @@ var mongoose=require('mongoose');
 var BaseModel = require("./base_model");
 var Schema= mongoose.Schema;
 var ObjectId=Schema.ObjectId;
-// var config=require('../config');
-// var _ =require('lodash');
 
 var OrderSchema=new Schema({
 	user_id: { type: ObjectId }, //用户
+	username:{type:String},
 	dish_name: { type: String }, //菜名
 	dish_price: { type: Number, default: 12 }, //菜价
 	ispack: { type: Boolean, default: false }, //是否打包
