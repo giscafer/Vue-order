@@ -35,6 +35,7 @@ mongoosekeeper.config(config.dbConfig);
 
 // 静态文件目录
 var staticDir = path.join(__dirname, './src/libs');
+var sassetsDir = path.join(__dirname, './src/assets');
 
 config.hostname = config.host;
 
@@ -51,6 +52,7 @@ app.enable('trust proxy');
 // 静态资源
 // app.use(Loader.less(__dirname));
 app.use('/libs', express.static(staticDir));
+app.use('/assets', express.static(sassetsDir));
 //限制
 app.use(bodyParser.json({
     limit: '1mb'
@@ -63,7 +65,7 @@ app.use(bodyParser.urlencoded({
 app.use(errorPageMiddleware.errorPage);
 
 //cookie
-app.use(cookieParser(config.session_secret));
+app.use(cookieParser(config.auth_cookie_name));
 //因为版本问题，这里坑里好一会
 app.use(session({
   secret:config.session_secret,
