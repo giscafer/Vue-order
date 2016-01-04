@@ -11,4 +11,4 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是首页使
 
 ![][1]
 
-[1]: https://github.com/giscafer/Vue-order-demo/blob/master/src/assets/overview1.0.png
+[1]: https://github.com/giscafer/Vue-order/blob/master/src/assets/overview1.0.png
