@@ -1,0 +1,61 @@
+<div class="container-fluid fixed login">
+    <div class="row" id="content">
+            <div  id="login">
+            <% if (typeof(error) !== 'undefined' && error) { %>
+            <div class="alert alert-error">
+              <a class="close" data-dismiss="alert" href="#">&times;</a>
+              <strong><%= error %></strong>
+            </div>
+            <% } %>
+            <% if (typeof(success) !== 'undefined' && success) { %>
+            <div class="alert alert-success">
+              <strong><%= success %></strong>
+               <a href="<%- typeof(referer) !== 'undefined' ? referer : '/' %>"><span class="alert-danger">点击登陆</span></a>
+            </div>
+            <% } else { %>
+
+                <form method="POST" action="/signup" class="form-signin">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="loginname">用户名</label>
+                            <% if (typeof(loginname) !== 'undefined') { %>
+                            <input class='form-control' id='loginname' name='loginname' size='30' type='text' value='<%= loginname %>'/>
+                            <% } else { %>
+                            <input class='form-control  col-md-5' id='loginname' name='loginname' size='30' type='text' value=''/>
+                            <% } %>
+                        </div>
+                        <div class="form-gourp">
+                            <label for="pass">密码</label>
+                            <input class='form-control' id='pass' name='pass' size='30' type='password'/>
+                        </div>
+                        <div class="form-gourp">
+                            <label for="re_pass">确认密码</label>
+                            <input class='form-control' id='re_pass' name='re_pass' size='30' type='password'/>
+                        </div>
+                         <div class="form-gourp">
+                            <label for="email">电子邮箱</label>
+                            <% if (typeof(email) !== 'undefined') { %>
+                            <input class='form-control' id='email' name='email' size='30' type='text' value='<%= email %>'/>
+                            <% } else { %>
+                            <input class='form-control' id='email' name='email' size='30' type='text'/>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">确定</button>
+                    </div>
+                </form>
+                <%}%>
+            </div>
+        </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('body').addClass("login");
+    });
+    function referer_redirect(){
+        setTimeout(function(){
+            window.location.href="http://"+window.location.host+"/signin/"
+        }, 3000);
+    }
+</script>

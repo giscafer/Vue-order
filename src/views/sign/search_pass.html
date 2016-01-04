@@ -1,0 +1,47 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>校园点评网</title>
+    <!-- style -->
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/animation.css">
+    <link rel="stylesheet" type="text/css" href="/public/libs/bootstrap/dist/css/bootstrap.css">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Sjx5MGFrH7W6I8slnt1Zbq1k"></script>
+    <!--配置sea.js模块加载器-->
+    <script type="text/javascript" src="/public/libs/seajs/dist/sea.js"></script>
+    <script type="text/javascript" src="/public/js/seaInit.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <% if(typeof(error) !== 'undefined' && error){ %>
+                    <div class="alert alert-error">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <strong><%= error %></strong>
+                    </div>
+                    <% } %>
+                        <form id="signin_form" method="POST" action="/search_pass">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="email">电子邮箱</label>
+                                    <%if(typeof(email)!=='undefined'){%>
+                                    <input class='form-control' id='email' name='email' size='30' type='text' value='<%=email%>' />
+                                    <%}else{%>
+                                    <input class='form-control' id='email' name='email' size='30' type='text' />
+                                    <% } %>
+                                    <p class='help-block'>请输入您注册帐户时使用的电子邮箱</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">提交</button>
+                            </div>
+                        </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

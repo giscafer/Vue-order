@@ -9,5 +9,7 @@ var config = require('../config');
 });*/
 // models
 require('./order');
+require('./user');
 
 exports.Order = mongoose.model('Order');
+exports.User = mongoose.model('User');

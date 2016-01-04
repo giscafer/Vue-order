@@ -1,0 +1,33 @@
+<div class="container-fluid fixed login">
+    <div class="row" id="content">
+             <div id="login">
+            <% if(typeof(error) !== 'undefined' && error){ %>
+                <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <strong><%= error %></strong>
+                </div>
+                <% } %>
+                <form id="signin_form" method="POST" action="/signin"  class="form-signin">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="loginname">用户名</label>
+                            <input class='form-control' id='loginname' name='loginname' size='30' type='text' value='' />
+                        </div>
+                        <div class="form-gourp">
+                            <label for="pass">密码</label>
+                            <input class='form-control' id='pass' name='pass' size='30' type='password' />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">登录</button>
+                        <a id="forgot_password" href="/search_pass">忘记密码了？</a>
+                    </div>
+                </form>
+        </div>
+        </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('body').addClass("login");
+    });
+</script>

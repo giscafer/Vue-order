@@ -2,6 +2,7 @@
  * 数据库连接
  * @type {[type]}
  */
+'use strict';
 var mongoose = require('mongoose');
 var util = require("util");
 
