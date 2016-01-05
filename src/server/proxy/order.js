@@ -93,7 +93,6 @@ exports.getOrdersByQuery = function (query, opt, callback) {
     proxy.after('order_ready', orders.length, function () {
 
       orders = _.compact(orders); 
-      console.log(orders);
       return callback(null, orders); 
     });
     proxy.fail(callback);

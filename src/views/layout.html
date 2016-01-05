@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/libs/css/theme/style.min.css">
     <link rel="stylesheet" href="/libs/css/theme/glyphicons.css">
 
+    <script src="/libs/common/config.js"></script>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="http://cdn.jsdelivr.net/vue/1.0.7/vue.min.js"></script>
@@ -55,7 +56,7 @@
                     <span class="profile">
             <span>
             <% if (current_user) {%>
-              <strong><%= current_user.loginname %></strong>
+              <strong><%= current_user.name %>（<%= current_user.loginname %>）</strong>
               <a href="/signout">退出</a>
             </span>
             <a class="img" href="#"><img src="/assets/avatar.jpg" style="width:74px;height:74px;" /></a>
