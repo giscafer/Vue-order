@@ -17,12 +17,66 @@ exports.showSignup = function(req, res) {
     res.render('sign/signup');
 };
 /**
+ * 验证昵称是否存在 api接口（ajax请求）
+ * @author giscafer
+ * @version 1.0
+ * @date    2016-01-05T20:23:49+0800
+ */
+exports.validateName_api_v1=function(req, res, next){
+    var name = validator.trim(req.params.name);
+    UserProxy.getUsersByName(name,function(err,users){
+        if(err){
+            return next(err);
+        }
+        var code=0,msg='该昵称可以使用';
+        if (users.length > 0) {
+            code=1;
+            msg='该昵称已被使用';
+        }
+        res.send({
+            status: code,
+            msg:msg
+        });
+    });
+
+};
+/**
+ * 验证昵称是否存在
+ * @author giscafer
+ * @version 1.0
+ * @date    2016-01-05T20:23:49+0800
+ */
+exports.validateName=function(req, res, next){
+    var name = validator.trim(req.body.name);
+    var ep=new EventProxy();
+    ep.fail(next);
+    ep.on('valid_error',function(msg){
+        res.status(422);
+        return res.render('sign/signup', {
+            error: msg,
+            name: name
+        });
+    });
+    UserProxy.getUsersByName(name,function(err,users){
+        if(err){
+            return next(err);
+        }
+        if (users.length > 0) {
+            ep.emit('valid_error', '该昵称已被使用。');
+            return;
+        }
+        next();
+    });
+
+};
+/**
  * 注册入口
  * @param  {HttpRequest}   req  
  * @param  {HttpRequest}   res  
  * @param  {Function} next
  */
 exports.signup = function(req, res, next) {
+    var name = validator.trim(req.body.name);
     var loginname = validator.trim(req.body.loginname).toLowerCase();
     var email = validator.trim(req.body.email).toLowerCase();
     var pass = validator.trim(req.body.pass);
@@ -35,20 +89,21 @@ exports.signup = function(req, res, next) {
         res.status(422);
         res.render('sign/signup', {
             error: msg,
+            name: name,
             loginname: loginname,
             email: email
         });
     });
 
     //START验证信息的正确性
-    if ([loginname, pass, rePass, email].some(function(item) {
+    if ([name,loginname, pass, rePass, email].some(function(item) {
             return item === '';
         })) {
         ep.emit('prop_err', '信息不完整。');
         return;
     }
-    if (loginname.length < 5) {
-        ep.emit('prop_err', '用户名至少需要5个字符。');
+    if (loginname.length < 5 || loginname.length > 12) {
+        ep.emit('prop_err', '用户名要求5~12个字符。');
         return;
     }
     if (!tools.validateId(loginname)) {
@@ -83,7 +138,7 @@ exports.signup = function(req, res, next) {
             if(!config.need_active_mail){
                 active=true;
             }
-            UserProxy.newAndSave(loginname, loginname, passhash, email, active, function(err) {
+            UserProxy.newAndSave(name,loginname, passhash, email, active, function(err) {
                 if (err) {
                     return next(err);
                 }

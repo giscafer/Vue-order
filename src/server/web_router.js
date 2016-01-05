@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 // sign controller
 if (config.allow_sign_up) {
   router.get('/signup', sign.showSignup);  // 跳转到注册页面
-  router.post('/signup', sign.signup);  // 提交注册信息
+  router.post('/signup', sign.validateName,sign.signup);  // 提交注册信息
 } else {
   router.get('/signup', configMiddleware.github, passport.authenticate('github'));  // 进行github验证
 }
@@ -59,5 +59,11 @@ router.get('/about', function(req, res) {
 	    title: '关于站点'
 	});
 });
+
+//api_v1
+router.get('/sign/:name/validname', sign.validateName_api_v1);
+
+
+
 
 module.exports = router;

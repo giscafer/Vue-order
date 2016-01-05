@@ -93,6 +93,7 @@ exports.getOrdersByQuery = function (query, opt, callback) {
     proxy.after('order_ready', orders.length, function () {
 
       orders = _.compact(orders); 
+      console.log(orders);
       return callback(null, orders); 
     });
     proxy.fail(callback);
@@ -104,9 +105,9 @@ exports.getOrdersByQuery = function (query, opt, callback) {
         
         if (user_done) { 
           // order.user=user_done;//赋值失败原因未知（是否需要添加schema字段？） 2016年1月5日02:34:47
-          order.username = user_done.loginname;
+          order.username = user_done.name;
         } else {// 作者可能已被删除
-          order.username = '未知';
+          order.username = '火星人';
         }
 
         proxy.emit('order_ready');

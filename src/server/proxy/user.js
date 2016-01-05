@@ -3,14 +3,28 @@ var User=models.User;
 var uuid=require('node-uuid');
 
 /**
+ * 根据昵称查找用户列表
+ * Callback:
+ * - err, 数据库异常
+ * - users, 用户列表
+ * @param {String} name 账号名列表
+ * @param {Function} callback 回调函数
+ */
+exports.getUsersByName=function(name,callback){
+	if(name==='' || name===undefined){
+		return callback(null,[]);
+	}
+	User.find({name:name},callback);
+};
+/**
  * 根据用户名列表查找用户列表
  * Callback:
  * - err, 数据库异常
  * - users, 用户列表
- * @param {Array} names 用户名列表
+ * @param {Array} names 账号名列表
  * @param {Function} callback 回调函数
  */
-exports.getUsersByNames=function(names,callback){
+exports.getUsersByLoginNames=function(names,callback){
 	if(names.length===0){
 		return callback(null,[]);
 	}
@@ -78,7 +92,7 @@ exports.getUsersByQuery=function(query,opt,callback){
  * Callback:
  * - err, 数据库异常
  * - user, 用户
- * @param {String} name 用户名
+ * @param {String} loginname 账号名
  * @param {String} key 激活码
  * @param {Function} callback 回调函数
  */

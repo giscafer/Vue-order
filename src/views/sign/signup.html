@@ -17,6 +17,15 @@
                 <form method="POST" action="/signup" class="form-signin">
                     <div class="modal-body">
                         <div class="form-group">
+                            <label for="name">昵称</label>
+                            <% if (typeof(name) !== 'undefined') { %>
+                            <input class='form-control' id='name' name='name' size='30' type='text' value='<%= name %>' onblur="sign_validname()"/>
+                            <% } else { %>
+                            <input class='form-control  col-md-5' id='name' name='name' size='30' type='text' value='' onblur="sign_validname()" />
+                            <% } %>
+                            <p class='help-block' id="validname_info" style="display:none;"></p>
+                        </div>
+                        <div class="form-group">
                             <label for="loginname">用户名</label>
                             <% if (typeof(loginname) !== 'undefined') { %>
                             <input class='form-control' id='loginname' name='loginname' size='30' type='text' value='<%= loginname %>'/>
@@ -53,9 +62,18 @@
     $(document).ready(function() {
         $('body').addClass("login");
     });
-    function referer_redirect(){
-        setTimeout(function(){
-            window.location.href="http://"+window.location.host+"/signin/"
-        }, 3000);
+    function sign_validname(){
+        var name=document.getElementById('name').value+'';
+        if(name.trim()===''){
+             $("#validname_info").html('昵称不能为空').css('color','red').show();
+            return;
+        }
+        $.get('/sign/' + name + '/validname/', function(res) {
+            if(res.status!==0){
+                $("#validname_info").html(res.msg).css('color','red').show();
+            }else{
+                $("#validname_info").html(res.msg).css('color','').show();
+            }
+        });
     }
 </script>
