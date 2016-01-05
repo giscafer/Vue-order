@@ -81,58 +81,40 @@ exports.getOrderById = function(id, callback) {
 exports.getOrdersByQuery = function (query, opt, callback) {
  result=[];
   OrderModel.find(query, {}, opt, function (err, orders) {
+
     if (err) {
       return callback(err);
     }
     if (orders.length === 0) {
       return callback(null, []);
     }
-    orders.forEach(function (order, i) {
-      var ep = new EventProxy();
-      ep.all('user_done', function (user) {
-        // 作者可能已被删除
-        if (user) { 
-            //order.user=user;//赋值失败原因未知 2016年1月5日02:34:47
-          order.username = user.loginname;
-        } else {
-          orders[i] = null;
-        }
-        if(i===orders.length-1){
-           orders = _.compact(orders); // 删除不合规的 order
-           return callback(null, orders); 
-        }
-      });
-
-      UserProxy.getUserById(order.user_id, ep.done('user_done'));
-      
-    });
-    
-        
-    /*
-    ////赋值失败，迫不得已在schema中添加了username字段，未知（如果您知道请告知）
+    //
     var proxy = new EventProxy();
     proxy.after('order_ready', orders.length, function () {
-      orders = _.compact(orders); // 删除不合规的 order
+
+      orders = _.compact(orders); 
       return callback(null, orders); 
     });
     proxy.fail(callback);
 
+    //遍历获取用户信息
     orders.forEach(function (order, i) {
       var ep = new EventProxy();
-      ep.on('user', function (user) {
-        // 作者可能已被删除
-       
-        if (user) {
-            //order.user=user;//赋值失败原因未知
-          order.username = user.loginname;
-          result.push(user.loginname);
-        } else {
-          orders[i] = null;
+      ep.all('user_done', function (user_done) {
+        
+        if (user_done) { 
+          // order.user=user_done;//赋值失败原因未知（是否需要添加schema字段？） 2016年1月5日02:34:47
+          order.username = user_done.loginname;
+        } else {// 作者可能已被删除
+          order.username = '未知';
         }
+
+        proxy.emit('order_ready');
       });
-      proxy.emit('order_ready');
-      UserProxy.getUserById(order.user_id, ep.done('user'));
-    });*/
+      UserProxy.getUserById(order.user_id, ep.done('user_done'));
+      
+    });
+    
   });
 };
 /**

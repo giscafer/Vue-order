@@ -34,7 +34,7 @@ router.get('/reset_pass',sign.resetPass);//进入重置密码页面
 router.post('/reset_pass',sign.updatePass);//更新密码
 
 //####订餐####
-router.get('/orders', orderController.index);
+// router.get('/orders', orderController.index);
 //按日期查询当日订餐记录
 router.get('/orders/:qdate', orderController.index);
 //编辑订餐页

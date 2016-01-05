@@ -166,7 +166,7 @@ var vue = new Vue({
         $("#queryDateValue").val(queryDate);
 
         function getOrders(queryDate) {
-            $.get('http://localhost:8000/orders/' + queryDate, function(res) {
+            $.get('http://localhost:18080/orders/' + queryDate, function(res) {
                 that.$set('orders', res.data);
             }).error(function(data, status, request) {
                 console.log('fail' + status + "," + request);
@@ -222,7 +222,7 @@ var vue = new Vue({
                     label: '删除',
                     action: function(dialog) {
                         //删除记录
-                        $.get('http://localhost:8000/orders/' + order._id + '/del', function(res) {
+                        $.get('http://localhost:18080/orders/' + order._id + '/del', function(res) {
                             console.log(res);
                             if (res.success === 1) {
                                 that.orders.$remove(order);
@@ -247,7 +247,7 @@ var vue = new Vue({
         },
         editOrder:function(_id){
             var that = this;
-            $.get('http://localhost:8000/orders/' +_id + '/edit', function(res) {
+            $.get('http://localhost:18080/orders/' +_id + '/edit', function(res) {
                 console.log(res);
                 if (res.success === 1) {
                     that.orders.$remove(order);

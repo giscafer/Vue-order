@@ -51,7 +51,7 @@ var config = {
         port: 25,
         auth: {
             user: 'gisbbs@126.com',
-            pass: 'laohoubin0716'
+            pass: 'laohoubin'
         }
     }
 };

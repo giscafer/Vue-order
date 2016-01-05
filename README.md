@@ -7,6 +7,13 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是首页使
 
 <a href="http://vueorder.duapp.com/" target="_blank">http://vueorder.duapp.com/</a>
 
+# Function
+
+ > 注册+登录（注册含有效验证，激活，密码找回等整套流程）
+ > 订餐功能
+ > 统计功能（开发中……）
+ > 在线实时对话功能（计划……）
+
 # OverView
 
 ![][1]

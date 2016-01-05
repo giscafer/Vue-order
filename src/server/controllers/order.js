@@ -25,10 +25,9 @@ exports.index = function(req, res, next) {
             }
         }]
     };
-    
     OrderProxy.getOrdersByQuery(query,null,function(err, orders) {
         if (err) {
-            next(err);
+           return next(err);
         }
         res.send({
             data: orders
