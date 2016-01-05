@@ -4,11 +4,12 @@
   "description": "用Vue.js 开发的简易订餐管理系统",
   "main": "index.html",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/giscafer/Vue-order-demo"
+    "url": "https://github.com/giscafer/Vue-order"
   },
   "keywords": [
     "Vue",
@@ -26,6 +27,7 @@
     "bcrypt": "^0.8.5",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.14.2",
+    "bson": "^0.4.20",
     "connect-mongo": "^1.1.0",
     "connect-mongodb": "^1.1.5",
     "connect-redis": "^3.0.1",
@@ -43,11 +45,13 @@
     "node-uuid": "^1.4.7",
     "nodemailer": "^1.11.0",
     "nodemailer-smtp-transport": "^1.1.0",
+    "redis": "^2.4.2",
     "utility": "^1.6.0",
     "validator": "^4.4.0"
   },
   "devDependencies": {
-    "node-interceptor": "0.0.2",
-    "errorhandler": "^1.4.2"
+    "errorhandler": "^1.4.2",
+    "node-inspector": "^0.12.5",
+    "node-interceptor": "0.0.2"
   }
 }

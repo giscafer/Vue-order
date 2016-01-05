@@ -1,20 +1,26 @@
 /**
  * config
+ * 此处的数据库配置分为两种，本地和BAE
  */
 var config = {
     // 站点名字
     name: 'Vue Order',
     //调试状态
     debug: true,
+     //开发模式
+    devMode: true,
     //是否允许注册
     allow_sign_up: true,
     //注册是否需要激活邮箱
     need_active_mail:true,
+     /**
+     * URL
+     * 域名地址,如果没有请留空，(!domain || devMode)===true时会读取host+':'+port作为地址
+     */
+    domain: 'vueorder.duapp.com',
     host: '127.0.0.1',
-    port: 8000,
+    port: 18080,
     // mongodb 配置
-    //开发模式
-    devMode: true,
     dev_dbUrl: 'mongodb://127.0.0.1/vue_order_dev',
     //如果devMode=true，则数据库连接使用dev_dbUrl，反之为dbConfig
     dbConfig: {
@@ -30,13 +36,10 @@ var config = {
     cookie_secret: 'vueorder_secret', // session密匙
     auth_cookie_name: 'vueorder_cookie', //cookie名称
 
-    // redis 配置，默认是本地
-    // redis_host: '127.0.0.1',
-    // redis_port: 6379,
-    // redis_db: 0,
-
-    // sessionSecret: 'session_secret', // 务必修改
-    // cookieName: 'vueorder_cookie',
+    // redis 配置，BAE
+    redis_host: 'redis.duapp.com',
+    redis_port: 80,
+    redis_db: 'ywBsVflljSOlNwcXThQo',
     
     admins: {
         // user_login_name: true // admin 可删除话题，编辑标签，设某人为达人
@@ -48,7 +51,7 @@ var config = {
         port: 25,
         auth: {
             user: 'gisbbs@126.com',
-            pass: '####'
+            pass: 'laohoubin0716'
         }
     }
 };

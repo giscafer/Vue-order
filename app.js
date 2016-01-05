@@ -19,18 +19,14 @@ var webRouter = require('./src/server/web_router');
 var mongoosekeeper = require('./src/server/models/mongoosekeeper');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
- 
+var session = require('express-session');
 
-// var RedisStore = require('connect-redis')(session);
 require('./src/server/models');
-
+//开发模式下mongo本地连接设置
 if (config.devMode) {
     process.env.MONGO_DB_STR = config.dev_dbUrl;
 }
-// 引用mongoosekeeper
-// 调用更新配置，这里的配置可以去读某个json
+// 引用mongoosekeeper，链接数据库
 mongoosekeeper.config(config.dbConfig);
 
 // 静态文件目录
@@ -64,29 +60,48 @@ app.use(bodyParser.urlencoded({
 //中间件
 app.use(errorPageMiddleware.errorPage);
 
-//cookie
+//cookie和session 保存注册
 app.use(cookieParser(config.auth_cookie_name));
-//因为版本问题，这里坑里好一会
-app.use(session({
-  secret:config.session_secret,
-  key: config.auth_cookie_name,//cookie name
-  cookie: {maxAge: 1000 * 60 * 60 * 24},//24 hours
-  resave: false,
-  saveUninitialized: true,
-  store: new MongoStore({
-    url: config.dev_dbUrl
-  })
-}));
-//redis保存session
-/*app.use(session({
-    secret: config.sessionSecret,
-    store: new RedisStore({
-        port: config.redis_port,
-        host: config.redis_host,
-    }),
-    resave: true,
-    saveUninitialized: true,
-}));*/
+//开发模式下本地存储session用mongodb，BAE用redis存储session
+if (config.devMode) {
+    var MongoStore = require('connect-mongo')(session);
+    app.use(session({
+        secret: config.session_secret,
+        key: config.auth_cookie_name, //cookie name
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24
+        }, //24 hours
+        resave: false,
+        saveUninitialized: true,
+        store: new MongoStore({
+            url: config.dev_dbUrl
+        })
+    }));
+
+} else {
+    //redis保存session
+    var redis = require('redis');
+    var RedisStore = require('connect-redis')(session);
+    var client = redis.createClient(80, 'redis.duapp.com', {
+        "no_ready_check": true
+    });
+    client.on("error", function(err) {
+        console.log("Error " + err);
+    });
+    // 建立连接后，在进行集合操作前，需要先进行auth验证
+
+    client.auth('a82c2085536e4175bff285baf7839fdb' + '-' + 'e4db12d663f54c1a87a88933a81eee57' + '-' + config.redis_db);
+    app.use(session({
+        secret: config.session_secret,
+        key: config.auth_cookie_name,
+        store: new RedisStore({
+            client: client
+        }),
+        resave: true,
+        saveUninitialized: true
+    }));
+}
+
 //注册自定义中间件
 app.use(authMiddleware.authUser);
 app.locals.current_user = null;
