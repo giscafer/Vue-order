@@ -43,6 +43,7 @@ var config = {
     
     admins: {
         // user_login_name: true // admin 可删除话题，编辑标签，设某人为达人
+        giscafer:true
     },
       // 邮箱配置 need_active_mail为true时，必须设置
     mail_opts: {

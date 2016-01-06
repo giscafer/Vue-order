@@ -216,7 +216,7 @@ var vue = new Vue({
                 title: '提示',
                 type:BootstrapDialog.TYPE_SUCCESS,
                 draggable: true,
-                message: '是否确定删除改记录？',
+                message: '是否确定删除该记录？',
                 buttons: [{
 
                     label: '删除',
@@ -224,7 +224,10 @@ var vue = new Vue({
                         //删除记录
                         $.get(Config.hostUrl+'/orders/' + order._id + '/del', function(res) {
                             console.log(res);
-                            if (res.success === 1) {
+                            if (!res.success) {
+                               dialog.close();
+                               alert(res.message);
+                            }else{
                                 that.orders.$remove(order);
                                 dialog.close();
                             }

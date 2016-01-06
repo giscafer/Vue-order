@@ -10,7 +10,8 @@ var OrderSchema=new Schema({
 	dish_price: { type: Number, default: 12 }, //菜价
 	ispack: { type: Boolean, default: false }, //是否打包
 	create_at: { type: Date, default: Date.now },
-    update_at: { type: Date, default: Date.now }
+    update_at: { type: Date, default: Date.now },
+    deleted: {type: Boolean, default: false} //删除的order
 });
 OrderSchema.plugin(BaseModel);
 OrderSchema.index({create_at: -1});

@@ -10,7 +10,7 @@ var tools = require('../common/tools');
  * @version 1.0
  * @date    2016-01-02T12:11:21+0800
  */
-exports.index = function(req, res, next) {
+exports.index = function (req, res, next) {
     var queryDate = req.params.qdate;
     if (!queryDate) return;
     //查询过滤
@@ -20,24 +20,24 @@ exports.index = function(req, res, next) {
                 "$gt": queryDate + " 0:0:0"
             }
         }, {
-            "create_at": {
-                "$lt": queryDate + " 23:59:59"
-            }
-        }]
+                "create_at": {
+                    "$lt": queryDate + " 23:59:59"
+                }
+            }]
     };
-    OrderProxy.getOrdersByQuery(query,null,function(err, orders) {
+    OrderProxy.getOrdersByQuery(query, null, function (err, orders) {
         if (err) {
-           return next(err);
+            return next(err);
         }
         res.send({
             data: orders
         });
     });
 };
-exports.showEdit = function(req, res, next) {
+exports.showEdit = function (req, res, next) {
     var order_id = req.params.oid;
     if (order_id) {
-        OrderProxy.getOrderById(order_id, function(err, order) {
+        OrderProxy.getOrderById(order_id, function (err, order) {
             if (!order) {
                 res.render404('此话题不存在或已被删除。');
                 return;
@@ -65,7 +65,7 @@ exports.showEdit = function(req, res, next) {
  * @date    2016-01-02T12:11:09+0800
  * @param   {Function}               next 
  */
-exports.create = function(req, res, next) {
+exports.create = function (req, res, next) {
     var dish_name = validator.trim(req.body.dish_name);
     dish_name = validator.escape(dish_name);
     var dish_price = validator.trim(req.body.dish_price);
@@ -100,7 +100,7 @@ exports.create = function(req, res, next) {
         });
     }
 
-    OrderProxy.newAndSave(dish_name, dish_price, ispack, user_id, function(err, order) {
+    OrderProxy.newAndSave(dish_name, dish_price, ispack, user_id, function (err, order) {
         if (err) {
             return next(err);
         }
@@ -116,37 +116,46 @@ exports.create = function(req, res, next) {
  * @version 1.0
  * @date    2016-01-02T15:11:04+0800
  */
-exports.del = function(req, res, next) {
+exports.del = function (req, res, next) {
     var order_id = req.params.oid;
     //判断
     OrderProxy.getOrder(order_id, function (err, order) {
         if (err) {
-          return res.send({ success: false, message: err.message });
+            return res.send({ success: false, message: err.message });
         }
         if (!order) {
-          res.status(422);
-          return res.send({ success: false, message: '此记录不存在或已被删除。' });
+            res.status(422);
+            return res.send({ success: false, message: '此记录不存在或已被删除。' });
         }
         if (!req.session.user.is_admin && !(order.user_id && order.user_id.equals(req.session.user._id))) {
-          res.status(403);
-          return res.send({success: false, message: '无权限'});
+            res.status(403);
+            return res.send({ success: false, message: '无权限' });
         }
+        order.deleted = true;
         //删除
-        OrderModel.remove({
-            _id: order_id
-        }, function(err, order) {
+        // OrderModel.remove({
+        //     _id: order_id
+        // }, function (err, order) {
+        //     if (err) {
+        //         return res.send({ success: false, message: err.message });
+        //     } else {
+        //         res.json({
+        //             success: true
+        //         });
+        //     }
+        // });
+        order.save(function (err) {
             if (err) {
                 return res.send({ success: false, message: err.message });
-            } else {
-                res.json({
-                    success: 1
-                });
             }
+            res.send({ success: true, message: '记录已被删除。' });
         });
     });
 };
-
-exports.update = function(req, res, next) {
+/**
+ * 
+ */
+exports.update = function (req, res, next) {
     var order_id = req.params.oid;
     var dish_name = validator.trim(req.body.dish_name);
     dish_name = validator.escape(dish_name);
@@ -159,7 +168,7 @@ exports.update = function(req, res, next) {
         ispack = false;
     }
 
-    OrderProxy.getOrderById(order_id, function(err, order) {
+    OrderProxy.getOrderById(order_id, function (err, order) {
         if (!order) {
             res.render404('此订餐记录不存在或已被删除。');
             return;
@@ -193,7 +202,7 @@ exports.update = function(req, res, next) {
             order.ispack = ispack;
             order.update_at = new Date();
 
-            order.save(function(err) {
+            order.save(function (err) {
                 if (err) {
                     return next(err);
                 }

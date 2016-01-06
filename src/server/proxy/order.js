@@ -79,7 +79,7 @@ exports.getOrderById = function(id, callback) {
  * @param {Function} callback 回调函数
  */
 exports.getOrdersByQuery = function (query, opt, callback) {
- result=[];
+  query.deleted = false;
   OrderModel.find(query, {}, opt, function (err, orders) {
 
     if (err) {
