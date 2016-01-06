@@ -23,7 +23,7 @@ var session = require('express-session');
 
 require('./src/server/models');
 //开发模式下mongo本地连接设置
-if (config.devMode) {
+if (config.devMode) { //这里应该用process.env.NODE_ENVl来判断
     process.env.MONGO_DB_STR = config.dev_dbUrl;
 }
 // 引用mongoosekeeper，链接数据库
@@ -89,8 +89,7 @@ if (config.devMode) {
         console.log("Error " + err);
     });
     // 建立连接后，在进行集合操作前，需要先进行auth验证
-
-    client.auth('a82c2085536e4175bff285baf7839fdb' + '-' + 'e4db12d663f54c1a87a88933a81eee57' + '-' + config.redis_db);
+    client.auth(config.bae_accesskey + '-' + config.bae_secretkey + '-' + config.redis_db);
     app.use(session({
         secret: config.session_secret,
         key: config.auth_cookie_name,

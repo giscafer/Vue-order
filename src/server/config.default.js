@@ -25,9 +25,9 @@ var config = {
     //如果devMode=true，则数据库连接使用dev_dbUrl，反之为dbConfig
     dbConfig: {
         "host": "mongo.duapp.com",
-        "database": "SKxOiqMPLSnCBzpYNJLv",
-        "userid": "a82c2085536e4175bff285baf7839fdb",
-        "password": "e4db12d663f54c1a87a88933a81eee57",
+        "database": "********",
+        "userid": "a82c2085536e4175bff285ba********",
+        "password": "e4db12d663f54c1a87a8893********",
         "port": 8908
     },
     //session设置
@@ -37,9 +37,13 @@ var config = {
     auth_cookie_name: 'vueorder_cookie', //cookie名称
 
     // redis 配置，BAE
+    //百度应用的	用户名和密码
+    bae_accesskey:'hehehe',
+    bae_secretkey:'hehehe',
+    
     redis_host: 'redis.duapp.com',
     redis_port: 80,
-    redis_db: 'ywBsVflljSOlNwcXThQo',
+    redis_db: 'ywBsVflljSOlNw********',
     
     admins: {
         // user_login_name: true // admin 可删除话题，编辑标签，设某人为达人
