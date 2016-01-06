@@ -86,7 +86,7 @@ if (config.devMode) {
         "no_ready_check": true
     });
     client.on("error", function(err) {
-        console.log("Error " + err);
+        console.log("redis client Error " + err);
     });
     // 建立连接后，在进行集合操作前，需要先进行auth验证
     client.auth(config.bae_accesskey + '-' + config.bae_secretkey + '-' + config.redis_db);
