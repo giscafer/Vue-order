@@ -24,13 +24,12 @@
   },
   "homepage": "https://github.com/giscafer/Vue-order",
   "dependencies": {
-    "bcrypt": "^0.8.5",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.14.2",
     "bson": "^0.4.20",
     "connect-mongo": "^1.1.0",
-    "connect-mongodb": "^1.1.5",
-    "connect-redis": "^3.0.1",
+    "redis": "^2.4.2",
+    "connect-redis": "^2.2.0",
     "cookie-parser": "^1.4.0",
     "ejs-mate": "^2.3.0",
     "eventproxy": "^0.3.4",
@@ -45,7 +44,6 @@
     "node-uuid": "^1.4.7",
     "nodemailer": "^1.11.0",
     "nodemailer-smtp-transport": "^1.1.0",
-    "redis": "^2.4.2",
     "utility": "^1.6.0",
     "validator": "^4.4.0"
   },
