@@ -1,3 +1,6 @@
+/**
+ * 订餐控制器
+ */
 var validator = require('validator');
 var EventProxy = require('eventproxy');
 var OrderProxy = require('../proxy').Order;

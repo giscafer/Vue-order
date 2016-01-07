@@ -59,7 +59,7 @@ function gen_session(user, res) {
     var opts = {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30,
-        signed: true,
+        signed: true, //加密
         httpOnly: true
     };
     res.cookie(config.auth_cookie_name, auth_token, opts); //cookie 有效期30天
