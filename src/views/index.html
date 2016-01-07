@@ -28,7 +28,9 @@
                         <th class="text-center" @click="sortBy('dish_price')">价格(元)</th>
                         <th class="text-center" @click="sortBy('ispack')">是否打包</th>
                         <th class="text-center" @click="sortBy('update_at')">修改时间</th>
+                        <% if (current_user) { %>
                         <th class="text-center">操作</th>
+                        <% } %>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,10 +45,19 @@
                         {{order.ispack?'打包':'堂吃'}}
                         </td>
                         <td class="text-center">{{order.update_at | dateformat}}</td>
+                        <% if (current_user) { %>
                         <td class="text-center">
-                            <a  class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                        <% if (current_user.is_admin) { %>
+                              <a  class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
                              <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                        <% } else { %>
+                        <% if (current_user._id.equals(order.user_id)) { %>
+                              <a  class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                             <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                          <% } %>
+                        <% } %>
                         </td>
+                        <% } %>
                     </tr>
                     <tr>
                         <td class="text-right" colspan="8">
