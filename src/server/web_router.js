@@ -4,9 +4,10 @@
  */
 var express = require('express');
 var config=require('./config');
-var orderController = require('./controllers/order');
-var sign=require('./controllers/sign');
 var auth=require('./common/auth');
+var orderController = require('./controllers/order');
+var signController=require('./controllers/sign');
+var userController=require('./controllers/user');
 var router = express.Router();
 // home page
 router.get('/', function(req, res) {
@@ -16,23 +17,24 @@ router.get('/', function(req, res) {
 });
 //#### 登录注册 ####
 
-// sign controller
+// signController controller
 if (config.allow_sign_up) {
-  router.get('/signup', sign.showSignup);  // 跳转到注册页面
-  router.post('/signup', sign.validateName,sign.signup);  // 提交注册信息
+  router.get('/signup', signController.showSignup);  // 跳转到注册页面
+  router.post('/signup', signController.validateName,signController.signup);  // 提交注册信息
 } else {
-  router.get('/signup', configMiddleware.github, passport.authenticate('github'));  // 进行github验证
+//   router.get('/signup', configMiddleware.github, passport.authenticate('github'));  // 进行github验证
 }
-router.get('/signout',sign.signout); //登出
-router.get('/signin',sign.showLogin); //进入登录页面
-router.post('/signin',sign.login); //登录校验
-router.get('/active_account',sign.activeAccount);//账号激活
+router.get('/signout',signController.signout); //登出
+router.get('/signin',signController.showLogin); //进入登录页面
+router.post('/signin',signController.login); //登录校验
+router.get('/active_account',signController.activeAccount);//账号激活
 
-router.get('/search_pass',sign.showSearchPass);//进入找回密码页面
-router.post('/search_pass',sign.updateSearchPass);//密码找回申请
-router.get('/reset_pass',sign.resetPass);//进入重置密码页面
-router.post('/reset_pass',sign.updatePass);//更新密码
+router.get('/search_pass',signController.showSearchPass);//进入找回密码页面
+router.post('/search_pass',signController.updateSearchPass);//密码找回申请
+router.get('/reset_pass',signController.resetPass);//进入重置密码页面
+router.post('/reset_pass',signController.updatePass);//更新密码
 
+router.get('/setting',userController.showSetting); //账号信息设置
 //####订餐####
 // router.get('/orders', orderController.index);
 //按日期查询当日订餐记录
@@ -61,7 +63,7 @@ router.get('/about', function(req, res) {
 });
 
 //api_v1
-router.get('/sign/:name/validname', sign.validateName_api_v1);
+router.get('/signController/:name/validname', signController.validateName_api_v1);
 
 
 

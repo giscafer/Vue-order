@@ -31,10 +31,10 @@
                 <div class="span12 relativeWrap">
                     <ul id="menu" class="hidden-phone">
                         <li class="active">
-                            <a href="/" class="menuToggle">Order</a>
+                            <a href="/" class="menuToggle">订餐</a>
                         </li>
                         <li>
-                            <a href="/charts" class="menuToggle">Charts</a>
+                            <a href="/charts" class="menuToggle">统计</a>
                          <!--    <ul class="menu hide">
                              <li class=""><a href="finances.html"><span>Finances</span></a></li>
                              <li class="hasSubmenu">
@@ -50,14 +50,14 @@
                          </ul> -->
                         </li>
                         <li>
-                            <a href="/about" class="menuToggle">About</a>
+                            <a href="/about" class="menuToggle">关于</a>
                         </li>
                     </ul>
                     <span class="profile">
             <span>
             <% if (current_user) {%>
-              <strong><%= current_user.name %>（<%= current_user.loginname %>）</strong>
-              <a href="/signout">退出</a>
+              <strong><%= current_user.name %>（<%= current_user.loginname %>）</strong><br>
+              <a href="/setting" style="margin-right:20px">设置</a><a href="/signout" style="margin-right:10px">退出</a>
             </span>
             <a class="img" href="#"><img src="/assets/avatar.jpg" style="width:74px;height:74px;" /></a>
             <% } else { %>

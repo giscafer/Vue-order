@@ -1,0 +1,94 @@
+<div class="container-fluid fixed">
+    <div id="content">
+        <ul class="breadcrumb">
+            <li><a href="/" class="glyphicons home"><i></i>Order</a></li>
+            <li class="divider"></li>
+            <li>用户</li>
+            <li class="divider"></li>
+            <li>设置</li>
+        </ul>
+        <div class="separator"></div>
+        <!-- <h3 class="glyphicons user"><i></i> My Account</h3> -->
+        <div class="widget widget-2 widget-tabs widget-tabs-2 tabs-right border-bottom-none">
+            <div class="widget-head">
+                <ul>
+                    <li  class="active"><a class="glyphicons user" href="#account-details" data-toggle="tab"><i></i>账号详情</a></li>
+                    <li><a class="glyphicons settings" href="#account-settings" data-toggle="tab"><i></i>密码修改</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" style="padding: 0;">
+            <div class="tab-pane  active" id="account-details">
+                <form class="form-horizontal" method="POST">
+                    <div class="row-fluid">
+                        <div class="col-sm-6">
+                            <label for="name">昵称</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            data-toggle="tooltip" data-placement="top" data-original-title="用来展示"><i></i></span>
+                            <input type="text" value="" name="name" id="name" class="form-control" />
+                            <div class="separator"></div>
+                            <label>所在地点</label>
+                            <input type="text" value="" class="form-control"  placeholder="如：北京" />
+                            <div class="separator"></div>
+                            <label>职业</label>
+                            <input type="text" id="job" class="form-control" value=""  placeholder="如：开发工程师" />
+                        </div>
+                        <div class="col-sm-6">
+                            <label>性别</label>
+                            <div class="from-group">
+                                <select class="form-control">
+                                    <option />男
+                                    <option />女
+                                </select>
+                            </div>
+                            <div class="separator"></div>
+                            <label>年龄</label>
+                            <input type="text" value="25" class="form-control" />
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="separator"></div>
+                             <label>个性签名</label>
+                            <textarea id="mustHaveId" class="wysihtml5 form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <hr class="separator bottom" />
+                    <div class="form-actions col-sm-12" style="float:right">
+                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Save changes</button>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane" id="account-settings">
+                <form action="/setting" class="form-horizontal" method="POST">
+                    <div class="row-fluid">
+                        <div class="col-sm-3">
+                            <strong>更改密码</strong>
+                            <p class="muted">忘记原来密码？<a id="forgot_password" href="/search_pass">点此</a></p>
+                        </div>
+                        <div class="col-sm-9">
+                            <label for="inputUsername">账号</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            data-toggle="tooltip" data-placement="top" data-original-title="Username can't be changed"><i></i></span>
+                            <input type="text" id="inputUsername" class="form-control" value="john.doe2012" disabled="disabled" />
+
+                            <div class="separator"></div>
+                            <label for="inputPasswordOld">旧密码</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            data-toggle="tooltip" data-placement="top" data-original-title="Leave empty if you don't wish to change the password"><i></i></span>
+                            <input type="password" id="inputPasswordOld" class="form-control" value="" placeholder="请输入旧密码" />
+
+                            <div class="separator"></div>
+                            <label for="inputPasswordNew">新密码</label>
+                            <input type="password" id="inputPasswordNew" class="form-control" value="" placeholder="请输入新密码" />
+                            <div class="separator"></div>
+                            <label for="inputPasswordNew2">再次输入新密码</label>
+                            <input type="password" id="inputPasswordNew2" class="form-control" value="" placeholder="请重复输入新密码" />
+                            <div class="separator"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions" style="padding-right: 0;">
+                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok pull-right" style="margin-bottom: 20px; "><i></i>Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
