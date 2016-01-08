@@ -8,6 +8,18 @@
             <li>设置</li>
         </ul>
         <div class="separator"></div>
+      <% if(typeof(error) !== 'undefined' && error){ %>
+      <div class="alert alert-error">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <strong><%= error %></strong>
+      </div>
+      <% } %>
+       <% if (typeof(success) !== 'undefined' && success) { %>
+      <div class="alert alert-success">
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <strong><%= success %></strong>
+      </div>
+      <% } %>
         <!-- <h3 class="glyphicons user"><i></i> My Account</h3> -->
         <div class="widget widget-2 widget-tabs widget-tabs-2 tabs-right border-bottom-none">
             <div class="widget-head">
@@ -20,71 +32,69 @@
 
         <div class="tab-content" style="padding: 0;">
             <div class="tab-pane  active" id="account-details">
-                <form class="form-horizontal" method="POST">
+                <form id='setting_form' class="form-horizontal" method="POST" action="/setting">
                     <div class="row-fluid">
                         <div class="col-sm-6">
-                            <label for="name">昵称</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            <label for="name">昵称</label>
+                            <span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
                             data-toggle="tooltip" data-placement="top" data-original-title="用来展示"><i></i></span>
-                            <input type="text" value="" name="name" id="name" class="form-control" />
+                            <input type="text" name="name" id="name" value="<%= name %>"  class="form-control" />
                             <div class="separator"></div>
                             <label>所在地点</label>
-                            <input type="text" value="" class="form-control"  placeholder="如：北京" />
+                            <input type="text" id="location" name="location" value="<%= typeof(location) !== 'undefined' ? location : '' %>" class="form-control"  placeholder="如：北京" />
                             <div class="separator"></div>
                             <label>职业</label>
-                            <input type="text" id="job" class="form-control" value=""  placeholder="如：开发工程师" />
+                            <input type="text" id="job" name="job" class="form-control" value="<%= typeof(job) !== 'undefined' ? job : '' %>"  placeholder="如：开发工程师" />
+                            
                         </div>
                         <div class="col-sm-6">
-                            <label>性别</label>
-                            <div class="from-group">
-                                <select class="form-control">
-                                    <option />男
-                                    <option />女
-                                </select>
-                            </div>
-                            <div class="separator"></div>
-                            <label>年龄</label>
-                            <input type="text" value="25" class="form-control" />
+                            <label>手机号</label>
+                           <input type="text" id="phone" name="phone" class="form-control" value="<%= typeof(phone) !== 'undefined' ? phone : '' %>" />
+                           <div class="separator"></div>
+                            <label>电子邮箱</label>
+                            <input type="text" id="email" class="form-control" name='email' size='30' value="<%= email %>" placeholder="123@163.com"  disabled="disabled"/>
                         </div>
                         <div class="col-sm-12">
                             <div class="separator"></div>
                              <label>个性签名</label>
-                            <textarea id="mustHaveId" class="wysihtml5 form-control" rows="2"></textarea>
+                            <textarea id='signature' name='signature' class="wysihtml5 form-control" rows="2"><%= typeof(signature) !== 'undefined' ? signature : "" %></textarea>
                         </div>
                     </div>
-                    <hr class="separator bottom" />
+                     <input type='hidden' id='action' name='action' value='change_setting'/>
                     <div class="form-actions col-sm-12" style="float:right">
-                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Save changes</button>
+                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok" data-loading-text="保存中.."><i></i>保存设置</button>
                     </div>
                 </form>
             </div>
             <div class="tab-pane" id="account-settings">
-                <form action="/setting" class="form-horizontal" method="POST">
+                <form id='change_pass_form' action="/setting" class="form-horizontal" method="POST">
                     <div class="row-fluid">
                         <div class="col-sm-3">
                             <strong>更改密码</strong>
-                            <p class="muted">忘记原来密码？<a id="forgot_password" href="/search_pass">点此</a></p>
+                            <p class="muted">还可以通过邮箱找回：<a id="forgot_password" href="/search_pass">点此</a></p>
                         </div>
                         <div class="col-sm-9">
-                            <label for="inputUsername">账号</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            <label for="loginname">账号</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
                             data-toggle="tooltip" data-placement="top" data-original-title="Username can't be changed"><i></i></span>
-                            <input type="text" id="inputUsername" class="form-control" value="john.doe2012" disabled="disabled" />
+                            <input type="text" id="loginname" name="loginname" class="form-control" value="<%= loginname %>" disabled="disabled" />
 
                             <div class="separator"></div>
-                            <label for="inputPasswordOld">旧密码</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
+                            <label for="inputPasswordOld">当前密码</label><span style="margin: 0;" class="btn-action single glyphicons circle_question_mark"
                             data-toggle="tooltip" data-placement="top" data-original-title="Leave empty if you don't wish to change the password"><i></i></span>
-                            <input type="password" id="inputPasswordOld" class="form-control" value="" placeholder="请输入旧密码" />
+                            <input type="password" id='old_pass' name='old_pass' size='30' class="form-control" value="" placeholder="请输入当前密码" />
 
                             <div class="separator"></div>
                             <label for="inputPasswordNew">新密码</label>
-                            <input type="password" id="inputPasswordNew" class="form-control" value="" placeholder="请输入新密码" />
+                            <input type="password" id='new_pass' name='new_pass' size='30'class="form-control" value="" placeholder="请输入新密码" />
                             <div class="separator"></div>
                             <label for="inputPasswordNew2">再次输入新密码</label>
-                            <input type="password" id="inputPasswordNew2" class="form-control" value="" placeholder="请重复输入新密码" />
+                            <input type="password" id='re_new_pass' name='re_new_pass' class="form-control" value="" placeholder="请重复输入新密码" />
                             <div class="separator"></div>
+                            <input type='hidden' id='action' name='action' value='change_password'/>
                         </div>
                     </div>
                     <div class="form-actions" style="padding-right: 0;">
-                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok pull-right" style="margin-bottom: 20px; "><i></i>Save changes</button>
+                        <button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok pull-right" data-loading-text="更改中.." style="margin-bottom: 20px; "><i></i>更改密码</button>
                     </div>
                 </form>
             </div>

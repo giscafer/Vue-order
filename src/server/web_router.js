@@ -34,7 +34,8 @@ router.post('/search_pass',signController.updateSearchPass);//密码找回申请
 router.get('/reset_pass',signController.resetPass);//进入重置密码页面
 router.post('/reset_pass',signController.updatePass);//更新密码
 
-router.get('/setting',userController.showSetting); //账号信息设置
+router.get('/setting', auth.userRequired,userController.showSetting); //账号信息设置
+router.post('/setting', auth.userRequired,userController.setting); //账号信息设置
 //####订餐####
 // router.get('/orders', orderController.index);
 //按日期查询当日订餐记录

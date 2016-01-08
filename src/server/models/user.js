@@ -8,9 +8,10 @@ var UserSchema=new Schema({
 	pass:{type:String},
 	email:{type:String},
 	phone:{type:String},
+	job:{type:String},
+	location:{type:String},
 	role:{type:Number,
 		default:0},
-	shop_id:[{type:ObjectId,ref:'Shop'}],
 	profile_image_url:{type:String},
 	signature:{type:String},
 	score:{type:Number, default: 0},
@@ -24,7 +25,7 @@ var UserSchema=new Schema({
 	retrieve_time: {type: Number},
 	retrieve_key: {type: String},
 
-	accessToken: {type: String}
+	accessToken: {type: String} //可用来生成二维码图片扫描授权
 });
 
 UserSchema.plugin(BaseModel);
