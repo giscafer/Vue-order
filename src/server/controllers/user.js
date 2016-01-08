@@ -81,14 +81,14 @@ exports.setting = function (req, res, next) {
         var old_pass = validator.trim(req.body.old_pass);
         var new_pass = validator.trim(req.body.new_pass);
         var re_new_pass = validator.trim(req.body.re_new_pass);
-        if (!old_pass || !new_pass || !re_new_pass) {
-            return res.send('旧密码或新密码不得为空');
-        }
-        if (new_pass !== re_new_pass) {
-            return res.send('两次新密码输入的不一致');
-        }
-        UserProxy.getUserById(req.session.user._id, ep.done(function (user) {
 
+        UserProxy.getUserById(req.session.user._id, ep.done(function (user) {
+            if (!old_pass || !new_pass || !re_new_pass) {
+                return showMessage('旧密码或新密码不得为空', user);
+            }
+            if (new_pass !== re_new_pass) {
+                return showMessage('两次新密码输入的不一致', user);
+            }
             tools.bcompare(old_pass, user.pass, ep.done(function (bool) {
                 if (!bool) {
                     return showMessage('当前密码不正确', user);
