@@ -60,22 +60,36 @@ exports.setting = function (req, res, next) {
         location = validator.escape(location);
         var signature = validator.trim(req.body.signature);
         signature = validator.escape(signature);
-            
-        //更新
-        UserProxy.getUserById(req.session.user._id, ep.done(function (user) {
-            user.name = name;
-            user.location = location;
-            user.signature = signature;
-            user.job = job;
-            user.phone = phone;
-            user.save(function (err) {
-                if (err) {
-                    return next(err);
-                }
-                req.session.user = user.toObject({ virtual: true });
-                return res.redirect('/setting?save=success');
-            });
-        }));
+        UserProxy.getUsersByName(name, function (err, users) {
+            if (err) {
+                return next(err);
+            }
+            if (users.length > 0 && users[0]._id.toString()!==req.session.user._id.toString()) {
+                return showMessage('该昵称已经被使用！', {
+                    phone:phone,
+                    job:job,
+                    location:location,
+                    signature:signature
+                });
+            } else {
+                //更新
+                UserProxy.getUserById(req.session.user._id, ep.done(function (user) {
+                    user.name = name;
+                    user.location = location;
+                    user.signature = signature;
+                    user.job = job;
+                    user.phone = phone;
+                    user.save(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        req.session.user = user.toObject({ virtual: true });
+                        return res.redirect('/setting?save=success');
+                    });
+                }));
+            }
+        });
+
     }
     if (action === 'change_password') {
         var old_pass = validator.trim(req.body.old_pass);
