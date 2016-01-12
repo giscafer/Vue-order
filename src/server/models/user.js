@@ -16,10 +16,10 @@ var UserSchema=new Schema({
 	signature:{type:String},
 	score:{type:Number, default: 0},
 	level:{type:String},
-	comments_count:{ type: Number, default: 0 },
+	reply_count:{ type: Number, default: 0 },
 	create_at:{type:Date,default:Date.now},
 	update_at: { type: Date, default: Date.now },
-
+    
 	active: { type: Boolean, default: false },
 
 	retrieve_time: {type: Number},
@@ -29,6 +29,10 @@ var UserSchema=new Schema({
 });
 
 UserSchema.plugin(BaseModel);
+UserSchema.virtual('avatar_url').get(function () {
+ var url = this.avatar || ('http://vueorder.duapp.com/assets/avatar.jpg?size=48');
+  return url;
+});
 
 UserSchema.virtual('isAdvanced').get(function () {
   // 积分高于 700 则认为是高级用户

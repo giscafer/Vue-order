@@ -1,0 +1,77 @@
+<div class="container-fluid fixed" id="VueAapp">
+    <div class="col-md-12" id="content">
+        <ul class="breadcrumb">
+            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
+            <li class="divider"></li>
+            <li>
+                <%=pageTitle%>
+            </li>
+        </ul>
+        <div class="separator bottom line"></div>
+
+        <div class='inner' id="docs_icons">
+            <h3><a href="#" class="glyphicons no-js circle_exclamation_mark"  style="font-size:18px;"><i></i><%=pageTitle%></a></h3>
+            <p class="h4"><strong>初衷：</strong>由在地林每天中午吃饭订餐而来，加上最近了解学习Vue.js，相当于作为练手的demo，欢迎提建议！</p>
+            <p class="h4"><strong>使用技术：</strong>nodejs+mongodb+ejs+Vue.js+Bootstrap3</p>
+            <p class="h4"><strong>源码：</strong><a class="btn btn-link" href="https://github.com/giscafer/Vue-order" target="_blank">Github</a></p>
+            <div class="separator"></div>
+            <h3><a href="#" class="glyphicons no-js pinboard" style="font-size:18px;"><i></i>更新日志</a></h3>
+
+            <ul style="font-size:18px">
+                <li>添加用户信息设置功能，可对一般信息和密码修改 --- 2016年1月9日00:40:17</li>
+            </ul>
+            <br>
+            <h3><a href="#" class="glyphicons no-js circle_info" style="font-size:18px;"><i></i>建议留言</a></h3>
+            <p>（即将开放留言板功能）</p>
+        </div>
+    </div>
+    <% if (message_board.replies && message_board.replies.length > 0) { %>
+        <div class='panel success'>
+            <div class='panel-heading'>
+                <span class='panel-title'><%= message_board.replies.length %> 回复</span>
+            </div>
+            <%- partial('../reply/reply', message_board.replies) %>
+        </div>
+        <% } %>
+            <% if (current_user) { %>
+                <div class='panel success col-md-12'>
+                    <div class='panel-heading'>
+                        <h4 class='panel-title'>添加回复</h4>
+                    </div>
+                    <div class='panel-body'>
+                        <form id='reply_form' action='/messageboard/reply' method='post' class="form-horizontal">
+                            <div class="form-group">
+                                <textarea class='editor  col-md-12' name='r_content' rows='4'></textarea>
+                            </div>
+                            <div>
+                                <input class='btn btn-primary' type="submit" data-loading-text="回复中.." value="回复">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <% } %>
+</div>
+
+<script>
+$(document).ready(function () {
+          
+    // 评论回复
+    $('#content').on('click', '.reply2_btn', function (event) {
+        var $btn = $(event.currentTarget);
+        var parent = $btn.closest('.reply_area');
+        var editorWrap = parent.find('.reply2_form');
+        parent.find('.reply2_area').prepend(editorWrap);
+        var textarea = editorWrap.find('textarea.editor');
+        var user = $btn.closest('.author_content').find('.reply_author').text().trim();
+        var editor = textarea.data('editor');
+        editorWrap.show('fast', function () {
+            var cm = editor.codemirror;
+            cm.focus();
+            if (cm.getValue().indexOf('@' + user) < 0) {
+                editor.push('@' + user + ' ');
+            }
+        });
+    });
+});
+
+</script>

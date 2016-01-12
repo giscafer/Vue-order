@@ -10,6 +10,10 @@ var config = require('../config');
 // models
 require('./order');
 require('./user');
+require('./Reply');
+require('./Message');
 
 exports.Order = mongoose.model('Order');
 exports.User = mongoose.model('User');
+exports.Reply = mongoose.model('Reply');
+exports.Message = mongoose.model('Message');

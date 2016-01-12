@@ -8,6 +8,8 @@ var auth=require('./common/auth');
 var orderController = require('./controllers/order');
 var signController=require('./controllers/sign');
 var userController=require('./controllers/user');
+var staticController=require('./controllers/static');
+var replyController=require('./controllers/reply');//reply controller
 var router = express.Router();
 // home page
 router.get('/', function(req, res) {
@@ -56,12 +58,17 @@ router.get('/charts',function(req, res) {
 	    title: '图表统计'
 	});
 });
-//###其他页面###
-router.get('/about', function(req, res) {
-	res.render('about', {
-	    title: '关于站点'
-	});
-});
+// static
+router.get('/about', staticController.about);
+
+//回复
+// reply controller
+router.post('/:object_id/reply', auth.userRequired, replyController.messageboard_add); // 提交一级回复
+// router.get('/reply/:reply_id/edit', auth.userRequired, replyController.showEdit); // 修改自己的评论页
+// router.post('/reply/:reply_id/edit', auth.userRequired, replyController.update); // 修改某评论
+// router.post('/reply/:reply_id/delete', auth.userRequired, replyController.delete); // 删除某评论
+// router.post('/reply/:reply_id/up', auth.userRequired, replyController.up); // 为评论点赞
+
 
 //api_v1
 router.get('/signController/:name/validname', signController.validateName_api_v1);
