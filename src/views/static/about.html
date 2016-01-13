@@ -18,11 +18,11 @@
             <h3><a href="#" class="glyphicons no-js pinboard" style="font-size:18px;"><i></i>更新日志</a></h3>
 
             <ul style="font-size:18px">
-                <li>添加用户信息设置功能，可对一般信息和密码修改 --- 2016年1月9日00:40:17</li>
+                <li>新增：用户信息设置功能，可对一般信息和密码修改 --- 2016年1月9日00:40:17</li>
+                <li>新增：评论回复功能 --- 2016年1月14日00:16:53</li>
             </ul>
             <br>
             <h3><a href="#" class="glyphicons no-js circle_info" style="font-size:18px;"><i></i>建议留言</a></h3>
-            <p>（即将开放留言板功能）</p>
         </div>
     </div>
     <% if (message_board.replies && message_board.replies.length > 0) { %>
@@ -37,7 +37,6 @@
             <% if (current_user) { %>
                 <div class='panel success col-md-12'>
                     <div class='panel-heading'>
-              
                         <h4 class='panel-title'>添加回复</h4>
                     </div>
                     <div class='panel-body'>
