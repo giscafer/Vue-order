@@ -1,4 +1,4 @@
-<div class="container-fluid fixed" id="VueAapp">
+<div class="container-fluid fixed" id="messageboard">
     <div class="col-md-12" id="content">
         <ul class="breadcrumb">
             <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
@@ -26,16 +26,18 @@
         </div>
     </div>
     <% if (message_board.replies && message_board.replies.length > 0) { %>
-        <div class='panel success'>
+        <div class='panel success' style="box-shadow: none;">
             <div class='panel-heading'>
                 <span class='panel-title'><%= message_board.replies.length %> 回复</span>
             </div>
             <%- partial('../reply/reply', message_board.replies) %>
         </div>
+         
         <% } %>
             <% if (current_user) { %>
                 <div class='panel success col-md-12'>
                     <div class='panel-heading'>
+              
                         <h4 class='panel-title'>添加回复</h4>
                     </div>
                     <div class='panel-body'>
@@ -53,22 +55,21 @@
 </div>
 
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
           
     // 评论回复
-    $('#content').on('click', '.reply2_btn', function (event) {
+    $('#messageboard .reply2_btn').on('click',function (event) {
+        console.log(event)
         var $btn = $(event.currentTarget);
         var parent = $btn.closest('.reply_area');
-        var editorWrap = parent.find('.reply2_form');
-        parent.find('.reply2_area').prepend(editorWrap);
-        var textarea = editorWrap.find('textarea.editor');
-        var user = $btn.closest('.author_content').find('.reply_author').text().trim();
-        var editor = textarea.data('editor');
+        var editorWrap = parent.find('.reply2_area');
+        // parent.find('.reply2_area').prepend(editorWrap);
+        var user = $btn.closest('.user_content').find('.reply_user').text().trim();
         editorWrap.show('fast', function () {
-            var cm = editor.codemirror;
-            cm.focus();
-            if (cm.getValue().indexOf('@' + user) < 0) {
-                editor.push('@' + user + ' ');
+            var $at=$btn.closest('.reply_area').find('.reply_editor')
+            $at.focus();
+            if ($at.html().indexOf('@' + user) < 0) {
+                $at.html('@' + user + ' ');
             }
         });
     });

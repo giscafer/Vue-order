@@ -2746,6 +2746,12 @@ blockquote small {
     height: 5px;
     background: #ededed;
 }
+.separator.sm-line {
+    margin: 15px 0;
+    padding: 0;
+    height: 2px;
+    background: #ededed;
+}
 
 .separator.bottom {
     margin: 0 0 20px;

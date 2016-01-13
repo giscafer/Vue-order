@@ -1,4 +1,4 @@
-<div class="media  col-sm-12" id="reply<%= indexInCollection+1 %>" reply_id="<%= reply._id %>"
+<div class="reply_area media  col-sm-12" id="reply<%= indexInCollection+1 %>" reply_id="<%= reply._id %>"
 reply_to_id="<%= reply.reply_id || '' %>">
     <a class="anchor" id="<%= reply._id %>"></a>
     <div class="media-left">
@@ -8,7 +8,7 @@ reply_to_id="<%= reply.reply_id || '' %>">
         </a>
     </div>
      
-    <div class="media-body">
+    <div class="media-body user_content">
         <div class='media-heading'">
             <a class='dark reply_user' href="/user/<%= reply.user.loginname %>">
                 <%= reply.user.loginname %>
@@ -19,25 +19,23 @@ reply_to_id="<%= reply.reply_id || '' %>">
                  %>
             </a>
            <div class='media-body' style="float:right">
-                <span  style="margin-left:800px">
+                <span  style="margin-left:700px">
                     <a class="glyphicons glyphicons-sm no-js thumbs_up" title="喜欢"><i></i></a>
                     <span class="up-count">
                     <%= reply.ups && reply.ups.length ? reply.ups.length : '' %>
                     </span>
                 </span>
-                    <% if (current_user && current_user.is_admin ||
-                (current_user && current_user._id.toString() == reply.user._id.toString())
+                 <% if (current_user && current_user.is_admin ||
+                     (current_user && current_user._id.toString() == reply.user._id.toString())
                 ) { %>
-                    <a href='/reply/<%= reply._id %>/edit' class='edit_reply_btn'>
-                        <i class="fa fa-pencil-square-o" title='编辑'></i>
-                    </a>
-                    <a href='javascript:void(0);' class='delete_reply_btn'>
+                     <a href='/reply/<%= reply._id %>/edit' class="glyphicons glyphicons-sm no-js edit edit_reply_btn" title="编辑"><i></i></a>
+                    <a href='javascript:void(0);' class='glyphicons glyphicons-sm no-js delete delete_reply_btn'>
                         <i class="fa fa-trash" title='删除'></i>
                     </a>
                     <% } %>
                         <span>
                 <% if (current_user){ %>
-                <i class="fa fa-reply reply2_btn" title="回复"></i>
+                <a class="glyphicons glyphicons-sm no-js new_window reply2_btn" title="回复"><i></i></a>
                 <% } %>
              </span>
         </div>
@@ -45,8 +43,8 @@ reply_to_id="<%= reply.reply_id || '' %>">
         <div class="col-sm-12">
             <%=reply.content%>
         </div>
-
     </div>
+    <div class="separator sm-line"></div>
 
     <div class='clearfix'>
         <div class='reply2_area' style="display:none">
@@ -56,10 +54,11 @@ reply_to_id="<%= reply.reply_id || '' %>">
 
                     <div class='markdown_editor in_editor'>
                         <div class='markdown_in_editor'>
-                            <textarea class='span8 editor reply_editor' id="reply2_editor_<%= reply._id %>" name='r_content' rows='4'></textarea>
-
-                            <div class='editor_buttons'>
-                                <input class='span-primary reply2_submit_btn submit_btn' type="submit" data-id='<%= reply._id %>' data-loading-text="回复中.."
+                            <div class='form-group'>
+                            <textarea class='span8 editor reply_editor  col-sm-12' style="resize:none;" id="reply2_editor_<%= reply._id %>" name='r_content' rows='4'></textarea>
+                            </div>
+                            <div>
+                                <input class='btn btn-primary reply2_submit_btn submit_btn' type="submit" data-id='<%= reply._id %>' data-loading-text="回复中.."
                                 value="回复">
                             </div>
                         </div>
@@ -71,4 +70,3 @@ reply_to_id="<%= reply.reply_id || '' %>">
         </div>
     </div>
 </div>
-<!--<div class="separator line"></div>-->
