@@ -20,7 +20,7 @@ reply_to_id="<%= reply.reply_id || '' %>">
             </a>
            <div class='media-body' style="float:right">
                 <span  style="margin-left:700px">
-                    <a class="glyphicons glyphicons-sm no-js thumbs_up" title="喜欢"><i></i></a>
+                    <a class="glyphicons glyphicons-sm no-js thumbs_up up_btn <%= (!reply.ups || !reply.ups.length) ? 'invisible' : '' %>" title="大赞！！！"><i></i></a>
                     <span class="up-count">
                     <%= reply.ups && reply.ups.length ? reply.ups.length : '' %>
                     </span>

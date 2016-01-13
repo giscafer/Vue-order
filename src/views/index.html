@@ -29,8 +29,8 @@
                         <th class="text-center" @click="sortBy('ispack')">是否打包</th>
                         <th class="text-center" @click="sortBy('update_at')">修改时间</th>
                         <% if (current_user) { %>
-                        <th class="text-center">操作</th>
-                        <% } %>
+                            <th class="text-center">操作</th>
+                            <% } %>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,20 +42,20 @@
                         <td class="text-center">{{order.username}}</td>
                         <td class="text-center">{{order.dish_price}}</td>
                         <td class="text-center" v-bind:class="{ 'important':order.ispack}">
-                        {{order.ispack?'打包':'堂吃'}}
+                            {{order.ispack?'打包':'堂吃'}}
                         </td>
                         <td class="text-center">{{order.update_at | dateformat}}</td>
                         <% if (current_user) { %>
-                        <td class="text-center">
-                        <% if (current_user.is_admin) { %>
-                              <a  class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
-                             <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
-                        <% } else { %>
-                              <a  class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
-                             <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
-                        <% } %>
-                        </td>
-                        <% } %>
+                            <td class="text-center">
+                                <% if (current_user.is_admin) { %>
+                                    <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                    <% } else { %>
+                                        <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                        <% } %>
+                            </td>
+                            <% } %>
                     </tr>
                     <tr>
                         <td class="text-right" colspan="8">
@@ -65,7 +65,7 @@
             </table>
         </div>
         <div class="separator bottom line"></div>
-          <ul class="breadcrumb">
+        <ul class="breadcrumb">
             <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
             <li class="divider"></li>
             <li>我要订餐</li>
@@ -115,7 +115,7 @@
     </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function() {
     $('#queryDate').datetimepicker({
         language: 'zh-CN', //汉化 
         todayBtn: 1,
@@ -242,6 +242,10 @@ var vue = new Vue({
                             }
                         }).error(function(data, status, request) {
                             console.log('fail' + status + "," + request);
+                        }).fail(function (xhr) {
+                            if (xhr.status === 403) {
+                                alert('您没有权限删除该记录，'+xhr.statusText);
+                            }
                         });
                     }
                 }, {
@@ -279,4 +283,5 @@ var vue = new Vue({
 Vue.filter('dateformat', function(value) {
     return $.formatDate(new Date(value), "yyyy-MM-dd HH:mm:ss");
 });
+
 </script>

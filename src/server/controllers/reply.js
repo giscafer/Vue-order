@@ -80,3 +80,39 @@ exports.delete = function (req, res, next) {
 
     });
 };
+/**
+ * 评论置顶
+ */
+exports.up = function (req, res, next) {
+  var replyId = req.params.reply_id;
+  var userId = req.session.user._id;
+  ReplyProxy.getReplyById(replyId, function (err, reply) {
+    if (err) {
+      return next(err);
+    }
+    if (reply.user_id.equals(userId) && !config.debug) {
+      // 不能帮自己点赞
+      res.send({
+        success: false,
+        message: '做人要谦虚，不能给自己点赞。',
+      });
+    } else {
+      var action;
+      reply.ups = reply.ups || [];
+      var upIndex = reply.ups.indexOf(userId);
+      if (upIndex === -1) {
+        reply.ups.push(userId);
+        action = 'up';
+      } else {
+        reply.ups.splice(upIndex, 1);
+        action = 'down';
+      }
+      reply.save(function () {
+        res.send({
+          success: true,
+          action: action
+        });
+      });
+    }
+  });
+};

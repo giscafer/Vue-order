@@ -33,8 +33,10 @@ exports.adminRequired = function(req, res, next) {
  */
 exports.userRequired = function(req, res, next) {
     if (!req.session || !req.session.user) {
-        // return res.status(403).send('forbidden!');
-        return res.render('sign/signin');
+        return res.status(403).send('forbidden!');
+        // return res.render('sign/signin',{
+        //     status:403
+        // });
     }
 
     next();

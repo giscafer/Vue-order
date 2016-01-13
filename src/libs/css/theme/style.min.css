@@ -2732,7 +2732,9 @@ blockquote p {
 blockquote small {
     color: #BAAC98;
 }
-
+.up-count{
+    margin-right: 15px;
+}
 .separator {
     margin: 0;
     padding: 10px 0;
