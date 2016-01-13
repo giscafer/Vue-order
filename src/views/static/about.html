@@ -73,6 +73,28 @@
             }
         });
     });
+    // 删除回复
+    $('#messageboard').on('click', '.delete_reply_btn, .delete_reply2_btn', function (event) {
+      var $me = $(event.currentTarget);
+      if (confirm('确定要删除此回复吗？')) {
+        var reply_id = null;
+        if ($me.hasClass('delete_reply_btn')) {
+          reply_id = $me.closest('.reply_item').attr('reply_id');
+        }
+        var data = {
+          reply_id: reply_id
+        };
+        $.post('/reply/' + reply_id + '/delete', data, function (data) {
+          if (data.status === 'success') {
+            if ($me.hasClass('delete_reply_btn')) {
+              $me.closest('.reply_item').remove();
+            }
+          }
+        }, 'json');
+      }
+      return false;
+    });
+    // END 删除回复
 });
 
 </script>

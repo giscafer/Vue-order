@@ -25,8 +25,8 @@ exports.messageboard_add = function (req, res, next) {
     var ep = EventProxy.create();
     ep.fail(next);
 
-    ReplyProxy.newAndSave(content, objId, req.session.user._id, reply_id,function (err,reply) {
-        if(err) return next(err);
+    ReplyProxy.newAndSave(content, objId, req.session.user._id, reply_id, function (err, reply) {
+        if (err) return next(err);
         ep.emit('reply_saved', reply);
     });
 
@@ -41,5 +41,42 @@ exports.messageboard_add = function (req, res, next) {
 
     ep.all('reply_saved', 'score_saved', function (reply) {
         res.redirect('/about#' + reply._id);
+    });
+};
+/**
+ * 删除回复
+ */
+exports.delete = function (req, res, next) {
+    var reply_id = req.params.reply_id;
+    if (!reply_id) return next();
+    ReplyProxy.getReplyById(reply_id, function (err, reply) {
+        if (err) {
+            return next(err);
+        }
+        if (!reply) {
+            res.status(422);
+            res.json({ status: '该回复 ' + reply_id + ' 不存在' });
+            return;
+        }
+        //判断是否是本人回复
+        if (reply.user_id.toString() === req.session.user._id.toString() || req.session.user.is_admin) {
+            reply.deleted = true;
+            reply.save(function (err) {
+                if(err){
+                    return next(err);
+                }
+                res.json({status:'success'});
+                
+                if(!reply.reply_id){ //如果回复下没有回复
+                    reply.user.score-=5;
+                    reply.user.reply_count-=1;
+                    reply.user.save();
+                }
+            });
+        }else{
+            res.json({status:'failed'});
+            return;
+        }
+
     });
 };

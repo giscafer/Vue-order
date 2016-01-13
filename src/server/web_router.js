@@ -64,9 +64,9 @@ router.get('/about', staticController.about);
 //回复
 // reply controller
 router.post('/:object_id/reply', auth.userRequired, replyController.messageboard_add); // 提交一级回复
+router.post('/reply/:reply_id/delete', auth.userRequired, replyController.delete); // 删除某评论
 // router.get('/reply/:reply_id/edit', auth.userRequired, replyController.showEdit); // 修改自己的评论页
 // router.post('/reply/:reply_id/edit', auth.userRequired, replyController.update); // 修改某评论
-// router.post('/reply/:reply_id/delete', auth.userRequired, replyController.delete); // 删除某评论
 // router.post('/reply/:reply_id/up', auth.userRequired, replyController.up); // 为评论点赞
 
 
