@@ -1,3 +1,6 @@
+/**
+ * 评论回复控制器
+ */
 var validator = require('validator');
 var _ = require('lodash');
 var at = require('../common/at');
@@ -113,6 +116,58 @@ exports.up = function (req, res, next) {
           action: action
         });
       });
+    }
+  });
+};
+/**
+ * 修改评论页
+ */
+exports.showEdit = function (req, res, next) {
+  var reply_id = req.params.reply_id;
+
+  ReplyProxy.getReplyById(reply_id, function (err, reply) {
+    if (!reply) {
+      return res.render404('此回复不存在或已被删除。');
+    }
+    if (req.session.user._id.equals(reply.user_id) || req.session.user.is_admin) {
+      res.render('reply/edit', {
+        reply_id: reply._id,
+        content: reply.content
+      });
+    } else {
+      return res.renderError('对不起，你不能编辑此回复。', 403);
+    }
+  });
+};
+
+/** 
+ * 更新编辑回复
+*/
+exports.update = function (req, res, next) {
+  var reply_id = req.params.reply_id;
+  var content = req.body.t_content;
+
+  ReplyProxy.getReplyById(reply_id, function (err, reply) {
+    if (!reply) {
+      return res.render404('此回复不存在或已被删除。');
+    }
+
+    if (String(reply.user_id) === req.session.user._id.toString() || req.session.user.is_admin) {
+
+      if (content.trim().length > 0) {
+        reply.content = content;
+        reply.save(function (err) {
+          if (err) {
+            return next(err);
+          }
+          //目前写死跳转留言板
+          res.redirect('/about#' + reply._id);
+        });
+      } else {
+        return res.renderError('回复的字数太少。', 400);
+      }
+    } else {
+      return res.renderError('对不起，你不能编辑此回复。', 403);
     }
   });
 };
