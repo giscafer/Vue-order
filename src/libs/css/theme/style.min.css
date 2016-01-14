@@ -885,7 +885,17 @@ body.login .container-fluid.fixed {
     color: #cccccc;
     font-size: 17px;
 }
-
+#main {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 960px;
+    margin: 15px auto;
+    min-height: 400px;
+    position: relative
+}
+.sep10 {
+    height: 10px;
+}
 /*#content {
     padding: 20px;
 }
@@ -905,15 +915,8 @@ body.login .container-fluid.fixed {
     border-right: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
 }
+#sidebar .inner ol{margin:4px 0;list-style:none}
 
-#main {
-    width: 90%;
-    max-width: 1400px;
-    min-width: 960px;
-    margin: 15px auto;
-    min-height: 400px;
-    position: relative
-}
 
 .menu-hidden #menu {
     display: none;
