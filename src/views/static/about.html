@@ -23,6 +23,9 @@
             </ul>
             <br>
             <h3><a href="#" class="glyphicons no-js circle_info" style="font-size:18px;"><i></i>建议留言</a></h3>
+            <% if (!current_user) { %>
+                <span>留言需要登录</span>
+            <%}%>
         </div>
     </div>
     <% if (message_board.replies && message_board.replies.length > 0) { %>
