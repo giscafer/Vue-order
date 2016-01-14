@@ -32,6 +32,8 @@ exports.index = function (req, res, next) {
         if (err) {
             return next(err);
         }
+        //不缓存，解决IE问题
+        res.setHeader("Cache-Control", "no-cache");
         res.send({
             data: orders
         });
