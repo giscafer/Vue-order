@@ -124,7 +124,9 @@ li.center,
 .container-fluid.documentation {
     background: #fff;
 }
-
+body{
+    background-color: #e1e1e1
+}
 body.login {
     background: #171b19;
 }
@@ -884,8 +886,33 @@ body.login .container-fluid.fixed {
     font-size: 17px;
 }
 
+/*#content {
+    padding: 20px;
+}
+ */
 #content {
     padding: 20px;
+    margin-right: 305px
+}
+
+#sidebar {
+        padding: 20px;
+    width: 290px;
+    font-size: 14px;
+    float: right;
+    margin-bottom: 20px;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+#main {
+    width: 90%;
+    max-width: 1400px;
+    min-width: 960px;
+    margin: 15px auto;
+    min-height: 400px;
+    position: relative
 }
 
 .menu-hidden #menu {

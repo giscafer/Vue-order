@@ -119,5 +119,22 @@ exports.setting = function (req, res, next) {
         }));
     }
 
-
+};
+/**
+ * 获取积分排行在10名前的
+ */
+exports.top10 = function (req, res, next) {
+  var opt = {limit: 10, sort: '-score'};
+  UserProxy.getUsersByQuery({'$or': [
+    {is_block: {'$exists': false}},
+    {is_block: false},
+  ]}, opt, function (err, tops) {
+    if (err) {
+      return next(err);
+    }
+    res.render('user/top10', {
+      users: tops,
+      pageTitle: 'top10',
+    });
+  });
 };

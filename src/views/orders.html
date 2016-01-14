@@ -1,0 +1,287 @@
+<div class="container-fluid fixed" id="VueAapp">
+    <div class="col-md-12" id="content">
+        <div class="heading-buttons">
+            <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
+            <div class="buttons pull-right">
+            </div>
+        </div>
+        <br>
+        <div class="well">
+            <form class="form-inline">
+                <label for="queryDate" class="control-label">查询：</label>
+                <div class="col-sm-8 input-prepend input-group">
+                    <div id="queryDate" class="input-group date form_time" data-date-format="yyyy-mm-dd">
+                        <input id="queryDateValue" class="form-control" size="16" readonly type="text">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                    </div>
+                </div>
+                <label class="btn btn-success" @click="todayQuery()">查看今天</label>
+            </form>
+        </div>
+        <div>
+            <table class="table table-condensed table-primary table-vertical-center table-thead-simple" v-cloak>
+                <thead>
+                    <tr>
+                        <th class="text-center" @click="sortBy('$index')">序号</th>
+                        <th class="text-center" @click="sortBy('dish_name')">菜名</th>
+                        <th class="text-center" @click="sortBy('user_id')">用户</th>
+                        <th class="text-center" @click="sortBy('dish_price')">价格(元)</th>
+                        <th class="text-center" @click="sortBy('ispack')">是否打包</th>
+                        <th class="text-center" @click="sortBy('update_at')">修改时间</th>
+                        <% if (current_user) { %>
+                            <th class="text-center">操作</th>
+                            <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders">
+                        <td class="text-center">{{$index+1}}</td>
+                        <td class="text-center">
+                            {{order.dish_name}}
+                        </td>
+                        <td class="text-center">{{order.username}}</td>
+                        <td class="text-center">{{order.dish_price}}</td>
+                        <td class="text-center" v-bind:class="{ 'important':order.ispack}">
+                            {{order.ispack?'打包':'堂吃'}}
+                        </td>
+                        <td class="text-center">{{order.update_at | dateformat}}</td>
+                        <% if (current_user) { %>
+                            <td class="text-center">
+                                <% if (current_user.is_admin) { %>
+                                    <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                    <% } else { %>
+                                        <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                        <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                        <% } %>
+                            </td>
+                            <% } %>
+                    </tr>
+                    <tr>
+                        <td class="text-right" colspan="8">
+                            <h4>总数：{{count}}（份） ，总价：{{sum}}（元）</h4></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="separator bottom line"></div>
+        <ul class="breadcrumb">
+            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
+            <li class="divider"></li>
+            <li>我要订餐</li>
+        </ul>
+        <br>
+        <div class="col-md-8 col-md-offset-2">
+            <div id="add-order">
+                <form action="/orders/create" method='post' id="orderForm" class="form-horizontal">
+                    <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
+                        <div class="alert alert-danger">
+                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                            <strong><%= edit_error %></strong>
+                        </div>
+                        <%} %>
+                            <div class="form-group">
+                                <label for="dish_name" class="col-sm-2 control-label">菜名</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="dish_name" id="dish_name" placeholder="请输入菜名" v-model="order.name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dish_price" class="col-sm-2 control-label">价格</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="dish_price" name="dish_price" v-model="order.price" placeholder="请输入价格">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="ispack"> 打包（如需打包请勾选）
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-primary btn-block" @click="addOrder()">订餐</button>
+                                </div>
+                            </div>
+                </form>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#queryDate').datetimepicker({
+        language: 'zh-CN', //汉化 
+        todayBtn: 1,
+        autoclose: true,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 'month',
+        forceParse: 0
+    }).on('changeDate', function(ev) {
+        var queryDate = $.formatDate(new Date(ev.date.valueOf()), "yyyy-MM-dd");
+        EventProxy.fire('getOrders', queryDate);
+    });
+    $('#orderForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            dish_name: {
+                validators: {
+                    notEmpty: {
+                        message: '菜名不能为空'
+                    },
+                    stringLength: {
+                        min: 2,
+                        max: 8,
+                        message: '菜名字符个数为2~8'
+                    }
+                }
+            },
+            dish_price: {
+                validators: {
+                    notEmpty: {
+                        message: '价格不能为空'
+                    },
+                    numeric: {
+                        message: '只能输入数字'
+                    },
+                    between: {
+                        min: 1,
+                        max: 100,
+                        message: '价格只能在1~100之间'
+                    }
+                }
+            }
+        }
+    });
+});
+var EventProxy = new EventProxy();
+var vue = new Vue({
+    el: '#VueAapp',
+    ready: function() {
+        var that = this;
+        var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
+        $("#queryDateValue").val(queryDate);
+
+        function getOrders(queryDate) {
+            $.get(Config.hostUrl+'/orders/' + queryDate, function(res) {
+                that.$set('orders', res.data);
+            }).error(function(data, status, request) {
+                console.log('fail' + status + "," + request);
+            });
+        }
+        EventProxy.on('getOrders', getOrders);
+        EventProxy.fire('getOrders', queryDate);
+    },
+    data: {
+        date: '2016-01-02',
+        sortparam: '',
+        order: {
+            dish_name: '',
+            dish_price: '',
+            ispack: ''
+        },
+        orders: ''
+    },
+    computed: {
+        sum: function() {
+            var result = 0;
+            for (var i = 0; i < this.orders.length; i++) {
+                result = Number(this.orders[i].dish_price) + result;
+            }
+            return result;
+        },
+        count: function() {
+            return this.orders.length;
+        }
+    },
+
+    methods: {
+        todayQuery: function() {
+            var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
+            $("#queryDateValue").val(queryDate);
+            EventProxy.fire('getOrders', queryDate);
+        },
+        addOrder: function() {
+            if ($('#orderForm').data('bootstrapValidator').isValid()) {
+                // $('#orderForm').submit();
+                document.getElementById("orderForm").submit();
+            }
+        },
+        delOrder: function(order) {
+            var that = this;
+            BootstrapDialog.show({
+                title: '提示',
+                type:BootstrapDialog.TYPE_SUCCESS,
+                draggable: true,
+                message: '是否确定删除该记录？',
+                buttons: [{
+
+                    label: '删除',
+                    action: function(dialog) {
+                        //删除记录
+                        $.get(Config.hostUrl+'/orders/' + order._id + '/del', function(res) {
+                            console.log(res);
+                            if (!res.success) {
+                               dialog.close();
+                               alert(res.message);
+                            }else{
+                                that.orders.$remove(order);
+                                dialog.close();
+                            }
+                        }).error(function(data, status, request) {
+                            console.log('fail' + status + "," + request);
+                        }).fail(function (xhr) {
+                            if (xhr.status === 403) {
+                                alert('您没有权限删除该记录，'+xhr.statusText);
+                            }
+                        });
+                    }
+                }, {
+                    label: '取消',
+                    action: function(dialog) {
+                        dialog.close();
+                    }
+                }]
+            });
+            //未知的两个遮罩层
+            setTimeout(function() {
+                $('.modal-backdrop.fade.in').css('z-index', '0');
+            }, 300);
+
+        },
+        editOrder:function(_id){
+            var that = this;
+            $.get(Config.hostUrl+'/orders/' +_id + '/edit', function(res) {
+                console.log(res);
+                if (res.success === 1) {
+                    that.orders.$remove(order);
+                    dialog.close();
+                }
+            }).error(function(data, status, request) {
+                console.log('fail' + status + "," + request);
+            });
+        },
+        sortBy: function(sortparam) {
+
+            this.sortparam = sortparam;
+        }
+    }
+});
+//过滤器，格式化日期
+Vue.filter('dateformat', function(value) {
+    return $.formatDate(new Date(value), "yyyy-MM-dd HH:mm:ss");
+});
+
+</script>
