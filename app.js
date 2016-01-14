@@ -104,6 +104,7 @@ if (config.devMode) {
 //注册自定义中间件
 app.use(authMiddleware.authUser);
 app.locals.current_user = null;
+app.locals.current_page = null;
 //router
 app.use('/', webRouter);
 

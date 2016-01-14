@@ -30,10 +30,10 @@
             <div class="row">
                 <div class="span12 relativeWrap">
                     <ul id="menu" class="hidden-phone">
-                        <li class="active">
+                        <li class=" <%= current_page==='order' ? 'active' : '' %>">
                             <a href="/" class="menuToggle">订餐</a>
                         </li>
-                        <li>
+                        <li class=" <%= current_page==='charts' ? 'active' : '' %>">
                             <a href="/charts" class="menuToggle">统计</a>
                          <!--    <ul class="menu hide">
                              <li class=""><a href="finances.html"><span>Finances</span></a></li>
@@ -49,7 +49,7 @@
                              <li class=""><a href="bookings.html"><span>Bookings</span></a></li>
                          </ul> -->
                         </li>
-                        <li>
+                        <li class="<%= current_page==='about' ? 'active' : '' %>">
                             <a href="/about" class="menuToggle">关于</a>
                         </li>
                     </ul>

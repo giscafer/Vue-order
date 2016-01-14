@@ -13,6 +13,7 @@ var replyController=require('./controllers/reply');//reply controller
 var router = express.Router();
 // home page
 router.get('/', function(req, res) {
+    res.locals.current_page='order'
 	res.render('index', {
 	    title: '首页'
 	});
@@ -54,6 +55,7 @@ router.post('/orders/:oid/edit', auth.userRequired,orderController.update);
 //####图表####
 //
 router.get('/charts',function(req, res) {
+     res.locals.current_page='charts'
 	res.render('charts/charts', {
 	    title: '图表统计'
 	});
