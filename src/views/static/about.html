@@ -14,12 +14,6 @@
             <p class="h4"><strong>初衷：</strong>由在地林每天中午吃饭订餐而来，加上最近了解学习Vue.js，相当于作为练手的demo，欢迎提建议！</p>
             <p class="h4"><strong>使用技术：</strong>nodejs+mongodb+ejs+Vue.js+Bootstrap3</p>
             <p class="h4"><strong>源码：</strong><a class="btn btn-link" href="https://github.com/giscafer/Vue-order" target="_blank">Github</a></p>
-            <div id="donate">
-            <span class="wrapper" style="width: 72px">
-              <img src="/assets/img/weixinpay.png">
-              <a>打个赏</a>
-            </span>
-        </div>
             <div class="separator"></div>
             <h3><a href="#" class="glyphicons no-js pinboard" style="font-size:18px;"><i></i>更新日志</a></h3>
 
@@ -61,36 +55,8 @@
                 </div>
                 <% } %>
 </div>
-<div id="qrcode" class="hidden">
-    <h3>微信打赏，支持作者:)</h3>
-    <img src="/assets/img/qrcode_forpay.jpg">
- </div>
+
 <script>
- // donate
-(function () {
-  var code = document.getElementById('qrcode')
-  var isOpen = false
-
-  document.getElementById('donate').addEventListener('click', function (e) {
-    e.stopPropagation()
-    if (isOpen) return
-    isOpen = true
-    code.style.display = 'block'
-    var f = code.offsetHeight
-    code.classList.remove('hidden')
-  })
-
-  document.body.addEventListener('click', function () {
-    if (isOpen) {
-      isOpen = false
-      code.classList.add('hidden')
-      setTimeout(function () {
-        code.style.display = ''
-      }, 250)
-    }
-  })
-})()
-
     $(document).ready(function () {
           
     // 评论回复

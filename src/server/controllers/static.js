@@ -18,7 +18,6 @@ exports.about = function (req, res, next) {
             return next(err);
         }
         message_board.replies=replies;
-        res.locals.current_page='about'
         res.render('static/about', {
             object_id:'messageboard',
             message_board:message_board,

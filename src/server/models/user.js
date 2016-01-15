@@ -16,7 +16,6 @@ var UserSchema=new Schema({
 	signature:{type:String},
 	score:{type:Number, default: 0},
 	level:{type:String},
-    is_block: {type: Boolean, default: false},
 	reply_count:{ type: Number, default: 0 },
 	create_at:{type:Date,default:Date.now},
 	update_at: { type: Date, default: Date.now },

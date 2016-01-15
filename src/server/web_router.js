@@ -10,10 +10,13 @@ var signController=require('./controllers/sign');
 var userController=require('./controllers/user');
 var staticController=require('./controllers/static');
 var replyController=require('./controllers/reply');//reply controller
-var siteController=require('./controllers/site');//reply controller
 var router = express.Router();
 // home page
-router.get('/', siteController.index);
+router.get('/', function(req, res) {
+	res.render('index', {
+	    title: '首页'
+	});
+});
 //#### 登录注册 ####
 
 // signController controller
@@ -33,14 +36,12 @@ router.post('/search_pass',signController.updateSearchPass);//密码找回申请
 router.get('/reset_pass',signController.resetPass);//进入重置密码页面
 router.post('/reset_pass',signController.updatePass);//更新密码
 
-//用户相关
 router.get('/setting', auth.userRequired,userController.showSetting); //账号信息设置
 router.post('/setting', auth.userRequired,userController.setting); //账号信息设置
-router.get('/users/top10',userController.top10); //用户积分排行榜
 //####订餐####
-router.get('/orders', orderController.index);
+// router.get('/orders', orderController.index);
 //按日期查询当日订餐记录
-router.get('/orders/:qdate', orderController.query);
+router.get('/orders/:qdate', orderController.index);
 //编辑订餐页
 router.get('/orders/:oid/edit',auth.userRequired, orderController.showEdit);
 //新建订餐
@@ -53,7 +54,6 @@ router.post('/orders/:oid/edit', auth.userRequired,orderController.update);
 //####图表####
 //
 router.get('/charts',function(req, res) {
-     res.locals.current_page='charts'
 	res.render('charts/charts', {
 	    title: '图表统计'
 	});
