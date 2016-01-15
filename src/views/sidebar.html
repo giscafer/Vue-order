@@ -9,7 +9,22 @@
     </div>
   </div>
   <% } %>
-
+<% if (typeof(lasts) !== 'undefined') { %>
+  <div class='panel panel-default'>
+    <div class='panel-heading'>
+      <span class='col_fade'>最新加入</span>
+    </div>
+    <div class='inner'>
+      <% if (lasts.length > 0) { %>
+      <ol>
+        <%- partial('user/last', { collection: lasts, as: 'user' }) %>
+      </ol>
+      <% } else { %>
+      <p>无</p>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
   <% if (typeof(tops) !== 'undefined') { %>
   <div class='panel panel-default'>
     <div class='panel-heading'>
@@ -51,11 +66,18 @@
   </div>
   <div class='panel panel-default'>
     <div class='panel-heading'>
+      <span class='col_fade'>Web全栈（微信公众号webfsd）</span>
+    </div>
+    <div class='inner cnode-app-download'>
+      <img src="/assets/img/qrcode_for_webfsd.jpg">
+    </div>
+  </div>
+<div class='panel panel-default'>
+    <div class='panel-heading'>
       <span class='col_fade'>作者微博</span>
     </div>
     <div class='inner cnode-app-download'>
       <img src="/assets/img/weibo.jpg">
     </div>
   </div>
-
 </div>

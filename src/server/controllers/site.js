@@ -10,7 +10,19 @@ var UserProxy = require('../proxy').User;
 exports.index = function (req, res, next) {
     var proxy = new EventProxy();
     proxy.fail(next);
-  
+
+      //最新加入
+    UserProxy.getUsersByQuery(
+        {'$or': [
+          {is_block: {'$exists': false}},
+          {is_block: false}
+        ]},
+        { limit: 10, sort: '-create_at'},
+        proxy.done('lasts', function (lasts) {
+          return lasts;
+        })
+      );
+        //积分排行榜
     UserProxy.getUsersByQuery(
         {'$or': [
           {is_block: {'$exists': false}},
@@ -21,10 +33,10 @@ exports.index = function (req, res, next) {
           return tops;
         })
       );
-      
-    proxy.all('tops',function (tops) {
+    proxy.all('lasts','tops',function (lasts,tops) {
       res.locals.current_page='index';
       res.render('index', {
+        lasts: lasts,
         tops: tops,
         pageTitle:'首页'
       });
