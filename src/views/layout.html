@@ -38,22 +38,16 @@
                         </li>
                         <li class=" <%= current_page==='charts' ? 'active' : '' %>">
                             <a href="/charts" class="menuToggle">统计</a>
-                         <!--    <ul class="menu hide">
-                             <li class=""><a href="finances.html"><span>Finances</span></a></li>
-                             <li class="hasSubmenu">
-                                 <a data-toggle="collapse" href="#menu_ecommerce"><span>Online Shop<i class="icon-chevron-right icon-white"></i></span></a>
-                                 <ul class="collapse" id="menu_ecommerce">
-                                     <li class=""><a href="products.html"><span>Products</span></a></li>
-                                     <li class=""><a href="product_edit.html"><span>Add product</span></a></li>
-                                 </ul>
-                             </li>
-                             <li class=""><a href="pages.html"><span>Site Pages</span></a></li>
-                             <li class=""><a href="gallery.html"><span>Photo Gallery</span></a></li>
-                             <li class=""><a href="bookings.html"><span>Bookings</span></a></li>
-                         </ul> -->
+                          
                         </li>
                         <li class="<%= current_page==='about' ? 'active' : '' %>">
                             <a href="/about" class="menuToggle">关于</a>
+                        </li>
+                         <li class="<%= current_page==='admin' ? 'active' : '' %>">
+                            <a href="/about" class="menuToggle">管理</a>
+                            <ul class="menu hide">
+                             <li class=""><a href="/admin/user"><span>用户管理</span></a></li>
+                         </ul>
                         </li>
                     </ul>
                     <span class="profile">
@@ -76,6 +70,7 @@
     <div id='main'>
         <%- body %>
     </div>
+    <script src="/libs/js/theme/load.js"></script>
 </body>
 <br>
 <footer class="footer navbar-fixed-bottom col-md-offset-10">

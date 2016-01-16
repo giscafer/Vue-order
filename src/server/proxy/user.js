@@ -100,6 +100,17 @@ exports.getUserByNameAndKey=function(loginname,key,callback){
 	User.findOne({loginname:loginname,retrieve_key:key},callback);
 };
 /**
+ * 获取用户数量
+ * Callback:
+ * - err, 数据库错误
+ * - count, 主题数量
+ * @param {String} query 搜索关键词
+ * @param {Function} callback 回调函数
+ */
+exports.getCountByQuery = function (query, callback) {
+  User.count(query, callback);
+};
+/**
  * 保存注册用户
  * @param  {String}   name      昵称
  * @param  {String}   loginname 用户名

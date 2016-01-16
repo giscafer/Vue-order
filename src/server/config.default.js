@@ -58,7 +58,9 @@ var config = {
             user: 'gisbbs@126.com',
             pass: 'laohoubin'
         }
-    }
+    },
+    
+    list_user_count:10
 };
 
 module.exports = config;

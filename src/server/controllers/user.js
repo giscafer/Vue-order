@@ -5,6 +5,8 @@ var UserProxy = require('../proxy').User;
 var EventProxy = require('eventproxy');
 var validator = require('validator');
 var tools = require('../common/tools');
+var config=require('../config');
+var moment=require('moment');
 /**
  * 展示用户设置页面
  */
@@ -137,4 +139,39 @@ exports.top10 = function (req, res, next) {
       pageTitle: 'top10',
     });
   });
+};
+
+
+//admin start
+exports.admin_userlist=function(req,res,next){
+    //分页页数
+    var page = parseInt(req.query.page, 10) || 1;
+    page = page > 0 ? page : 1;
+    
+    var proxy=new EventProxy();
+    proxy.fail(next);
+    var query = {},limit=config.list_user_count;
+    //分页查询
+    var opt = { skip: (page - 1) * limit, limit: limit, sort: '-create_at'};
+    UserProxy.getUsersByQuery(query, opt,proxy.done('users',function (users) {
+        users.map(function (user) {
+            user.createAt=moment(user.create_at).format('YYYY-MM-DD HH:mm:ss');
+        });
+       return users;
+    }));
+    UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
+        var pages = Math.ceil(all_user_count / limit);
+        proxy.emit('pages', pages);
+    }));
+    proxy.all('users','pages',function(users,pages){
+        res.render('admin/user/list', {
+        users: users,
+        current_page: page,
+        list_user_count: limit,
+        pages: pages,
+        base:'/admin/user/',
+        pageTitle: '用户管理'
+      });
+    });
+    
 };

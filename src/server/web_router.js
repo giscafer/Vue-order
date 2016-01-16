@@ -70,6 +70,19 @@ router.get('/reply/:reply_id/edit', auth.userRequired, replyController.showEdit)
 router.post('/reply/:reply_id/edit', auth.userRequired, replyController.update); // 修改某评论
 
 
+
+// admin
+router.get('/admin/user',auth.adminRequired,userController.admin_userlist);
+
+
+
+
+
+
+
+
+
+
 //api_v1
 router.get('/signController/:name/validname', signController.validateName_api_v1);
 
