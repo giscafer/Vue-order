@@ -119,7 +119,7 @@ exports.create = function (req, res, next) {
             return next(err);
         }
         // res.redirect('/order/' + order._id);
-        res.redirect('/order');
+        res.redirect('/orders');
     });
 
 };
