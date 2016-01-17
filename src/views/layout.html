@@ -43,12 +43,14 @@
                         <li class="<%= current_page==='about' ? 'active' : '' %>">
                             <a href="/about" class="menuToggle">关于</a>
                         </li>
+                         <% if (current_user && current_user.is_admin) {%>
                          <li class="<%= current_page==='admin' ? 'active' : '' %>">
-                            <a href="/about" class="menuToggle">管理</a>
+                            <a href="#" class="menuToggle">管理</a>
                             <ul class="menu hide">
-                             <li class=""><a href="/admin/user"><span>用户管理</span></a></li>
-                         </ul>
+                                <li class=""><a href="/admin/user"><span>用户管理</span></a></li>
+                            </ul>
                         </li>
+                         <% } %>
                     </ul>
                     <span class="profile">
             <span>

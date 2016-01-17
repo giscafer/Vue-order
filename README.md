@@ -31,3 +31,19 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是首页使
 ![][1]
 
 [1]: https://github.com/giscafer/Vue-order/blob/master/src/assets/overview1.0.png
+
+
+# 使用
+
+**1、配置文件**
+
+`src/server/config.default.js`重命名为`config.js`，然后根据注释说明修改即可。
+管理员权限需要在`config.js`里边配置
+```
+     //超级管理员账户（user_login_name: true ）
+    admins: {
+        giscafer:true
+    }
+
+```
+只有配置了超级管理员权限的用户登录才能看到管理员权限的相关功能模块
