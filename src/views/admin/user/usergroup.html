@@ -1,0 +1,183 @@
+<div id="content" class="container-fluid fixed">
+    <h4 class="heading"><%=pageTitle%></h4>
+    <div class="bars pull-left"><div id="toolbar">
+        <button id="remove" class="btn btn-danger" disabled="">
+            <i class="glyphicon glyphicon-remove"></i> Delete
+        </button>
+    </div></div>
+    <table id="table" data-toggle="table" data-show-columns="true" data-search="true" data-show-refresh="true" data-show-toggle="true"
+    data-pagination="true" data-height="550"  data-toolbar="#toolbar" data-show-export="true" data-row-style="rowStyle">
+        <thead>
+            <tr>
+                <th data-field="" data-checkbox="true"></th>
+                <th data-formatter="rowIndex">序号</th>
+                <th data-field="name">昵称</th>
+                <th data-field="loginname">账户名</th>
+                <th data-field="email">注册邮箱</th>
+                <th data-field="create_at" data-sortable="true" data-formatter="timeFormatter">注册时间</th>
+                <th data-field="active" data-sortable="true" data-formatter="activeFormat">激活状态</th>
+                <th data-field="is_block" data-sortable="true" data-formatter="blockFormat">锁定状态</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    $(function () {
+        $.post('/admin/usergroup',function(users){
+            $('#table').bootstrapTable('destroy').bootstrapTable({
+                // columns: columns,
+                data:users
+            });
+        });
+         var $table = $('#table'),
+        $remove = $('#remove'),
+        selections = [];
+         $table.on('check.bs.table uncheck.bs.table ' +
+                'check-all.bs.table uncheck-all.bs.table', function () {
+            $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+
+            // save your data, here just save the current page
+            selections = getIdSelections();
+            // push or splice the selections if you want to save all data selections
+        });
+        
+        $remove.click(function () {
+            var ids = getIdSelections();
+            console.log(ids)
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: ids
+            });
+            $remove.prop('disabled', true);
+        });
+    });
+    function rowIndex(value,row,index){
+        return index+1;
+    }
+    function timeFormatter(value) {
+       return $.formatDate(new Date(value),'yyyy-MM-dd HH:mm:ss');
+    }
+    function activeFormat(value) {
+       if(value==true){
+           return '激活';
+       }else{
+           return '未激活';
+       }
+    }
+    function blockFormat(value) {
+       if(value==true){
+           return '锁定';
+       }else{
+           return '正常';
+       }
+    }
+   //渲染表格样式
+    function rowStyle(row, index) {
+        var classes = ['active', 'success', 'info', 'warning', 'danger'];
+        
+        if(row.is_block){
+            return {
+                classes: classes[4]
+            };
+        }
+        if(!row.active){
+            return {
+                classes: classes[0]
+            };
+        }
+
+        return {};
+    }
+    var $table = $('#table');
+
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row.loginname
+        });
+    }
+    //列渲染
+    function blockFormatbtn(value, row, index) {
+        return [
+            '<a class="like" href="javascript:void(0)" title="Like">',
+            '<i class="glyphicon glyphicon-heart"></i>',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0)" title="Remove">',
+            '<i class="glyphicon glyphicon-remove"></i>',
+            '</a>'
+        ].join('');
+    }
+    //按钮绑定事件data-events
+    window.operateEvents = {
+        'click .like': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+    //学习
+    // $(function () {
+    //     var scripts = [
+    //             location.search.substring(1) || 'assets/bootstrap-table/src/bootstrap-table.js',
+    //             'assets/bootstrap-table/src/extensions/export/bootstrap-table-export.js',
+    //             'http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js',
+    //             'assets/bootstrap-table/src/extensions/editable/bootstrap-table-editable.js',
+    //             'http://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/js/bootstrap-editable.js'
+    //         ],
+    //         eachSeries = function (arr, iterator, callback) {
+    //             callback = callback || function () {};
+    //             if (!arr.length) {
+    //                 return callback();
+    //             }
+    //             var completed = 0;
+    //             var iterate = function () {
+    //                 iterator(arr[completed], function (err) {
+    //                     if (err) {
+    //                         callback(err);
+    //                         callback = function () {};
+    //                     }
+    //                     else {
+    //                         completed += 1;
+    //                         if (completed >= arr.length) {
+    //                             callback(null);
+    //                         }
+    //                         else {
+    //                             iterate();
+    //                         }
+    //                     }
+    //                 });
+    //             };
+    //             iterate();
+    //         };
+
+    //     eachSeries(scripts, getScript, initTable);
+    // });
+
+    // function getScript(url, callback) {
+    //     var head = document.getElementsByTagName('head')[0];
+    //     var script = document.createElement('script');
+    //     script.src = url;
+
+    //     var done = false;
+    //     // Attach handlers for all browsers
+    //     script.onload = script.onreadystatechange = function() {
+    //         if (!done && (!this.readyState ||
+    //                 this.readyState == 'loaded' || this.readyState == 'complete')) {
+    //             done = true;
+    //             if (callback)
+    //                 callback();
+
+    //             // Handle memory leak in IE
+    //             script.onload = script.onreadystatechange = null;
+    //         }
+    //     };
+
+    //     head.appendChild(script);
+
+    //     // We handle everything using the script element injection
+    //     return undefined;
+    // }
+</script>

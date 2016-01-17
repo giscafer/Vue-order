@@ -177,6 +177,32 @@ exports.admin_userlist=function(req,res,next){
     });
     
 };
+//usergroup_list
+exports.showusergroup_list=function(req,res,next){
+   
+   res.render('admin/user/usergroup', {
+        pageTitle: '分组管理'
+    });
+    
+};
+//usergroup_list
+exports.usergroup_list=function(req,res,next){
+    var proxy=new EventProxy();
+    proxy.fail(next);
+    var query = {};
+    //分页查询
+    var opt = { sort: '-create_at'};
+    UserProxy.getUsersByQuery(query, opt,function (err,users) {
+        if(err){
+             return next(err);
+        }
+        proxy.fire('users',users);
+    });
+    proxy.on('users',function(users){
+        return res.send(users);
+    });
+    
+};
 /**
  * 激活用户
  */
