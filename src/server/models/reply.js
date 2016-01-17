@@ -1,6 +1,6 @@
 
 /**
- * 点评Schema
+ * 回复表
  */
 var mongoose = require("mongoose");
 var BaseModel = require("./base_model");

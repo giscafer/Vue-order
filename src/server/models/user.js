@@ -1,3 +1,6 @@
+/**
+ * 用户表
+ */
 var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
 var BaseModel=require('./base_model');
@@ -10,18 +13,17 @@ var UserSchema=new Schema({
 	phone:{type:String},
 	job:{type:String},
 	location:{type:String},
-	role:{type:Number,
-		default:0},
-	profile_image_url:{type:String},
-	signature:{type:String},
-	score:{type:Number, default: 0},
-	level:{type:String},
-    is_block: {type: Boolean, default: false},
+	role:{type:Number,default:0}, //角色，没有使用
+	profile_image_url:{type:String}, //头像url
+	signature:{type:String}, //签名
+	score:{type:Number, default: 0}, //积分
+	groupid:{type:ObjectId}, //所属用户组
+    is_block: {type: Boolean, default: false},//是否ban
 	reply_count:{ type: Number, default: 0 },
 	create_at:{type:Date,default:Date.now},
 	update_at: { type: Date, default: Date.now },
     
-	active: { type: Boolean, default: false },
+	active: { type: Boolean, default: false }, //状态
 
 	retrieve_time: {type: Number},
 	retrieve_key: {type: String},
