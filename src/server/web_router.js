@@ -72,8 +72,9 @@ router.post('/reply/:reply_id/edit', auth.userRequired, replyController.update);
 
 
 // admin
-router.get('/admin/user',auth.adminRequired,userController.admin_userlist);
-
+router.get('/admin/user',auth.adminRequired,userController.admin_userlist); //用户列表
+router.get('/admin/user/:userId/active',auth.adminRequired,userController.active);//激活用户
+router.get('/admin/user/:userId/:action/block',auth.adminRequired,userController.block);//激活用户
 
 
 

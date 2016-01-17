@@ -147,7 +147,7 @@ exports.admin_userlist=function(req,res,next){
     //分页页数
     var page = parseInt(req.query.page, 10) || 1;
     page = page > 0 ? page : 1;
-    
+    var totalCount=0;
     var proxy=new EventProxy();
     proxy.fail(next);
     var query = {},limit=config.list_user_count;
@@ -161,6 +161,7 @@ exports.admin_userlist=function(req,res,next){
     }));
     UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
         var pages = Math.ceil(all_user_count / limit);
+        totalCount=all_user_count;
         proxy.emit('pages', pages);
     }));
     proxy.all('users','pages',function(users,pages){
@@ -168,10 +169,65 @@ exports.admin_userlist=function(req,res,next){
         users: users,
         current_page: page,
         list_user_count: limit,
+        all_user_count: totalCount,
         pages: pages,
         base:'/admin/user/',
         pageTitle: '用户管理'
       });
     });
     
+};
+/**
+ * 激活用户
+ */
+exports.active=function(req,res,next){
+    var userId=req.params.userId;
+    if(!req.session.user.is_admin){
+        return res.send({success:false,message:'无权限'});
+    }
+    UserProxy.getUserById(userId,function(err,user){
+        if(err){
+             return next(err);
+        }
+        if (!user) {
+            return next(new Error('user is not exists'));
+        }
+        user.active=true;
+        user.save(function(err){
+            if(err){
+                return res.send({sucess:false,message:err.message});
+            }
+            return res.redirect('/admin/user');
+        });
+    });
+};
+/**
+ * 锁定用户
+ */
+exports.block=function(req,res,next){
+    var userId=req.params.userId;
+    var action=req.params.action;
+    if(!req.session.user.is_admin){
+        return res.send({success:false,message:'无权限'});
+    }
+    UserProxy.getUserById(userId,function(err,user){
+        if(err){
+             return next(err);
+        }
+        if (!user) {
+            return next(new Error('user is not exists'));
+        }
+        if(action==='lock'){
+           user.is_block=true;
+        }else{
+           user.is_block=false;
+        }
+     
+        user.save(function(err){
+            if(err){
+                return res.send({sucess:false,message:err.message});
+            }
+            return res.redirect('/admin/user');
+        });
+    });
 };
