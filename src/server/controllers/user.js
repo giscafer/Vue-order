@@ -142,51 +142,51 @@ exports.top10 = function (req, res, next) {
 };
 
 
-//admin start
-exports.admin_userlist=function(req,res,next){
-    //分页页数
-    var page = parseInt(req.query.page, 10) || 1;
-    page = page > 0 ? page : 1;
-    var totalCount=0;
-    var proxy=new EventProxy();
-    proxy.fail(next);
-    var query = {},limit=config.list_user_count;
-    //分页查询
-    var opt = { skip: (page - 1) * limit, limit: limit, sort: '-create_at'};
-    UserProxy.getUsersByQuery(query, opt,proxy.done('users',function (users) {
-        users.map(function (user) {
-            user.createAt=moment(user.create_at).format('YYYY-MM-DD HH:mm:ss');
-        });
-       return users;
-    }));
-    UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
-        var pages = Math.ceil(all_user_count / limit);
-        totalCount=all_user_count;
-        proxy.emit('pages', pages);
-    }));
-    proxy.all('users','pages',function(users,pages){
-        res.render('admin/user/list', {
-        users: users,
-        current_page: page,
-        list_user_count: limit,
-        all_user_count: totalCount,
-        pages: pages,
-        base:'/admin/user/',
-        pageTitle: '用户管理'
-      });
-    });
+/////////////////////////////////////////admin start///////////////////////////////////
+// exports.user_list=function(req,res,next){
+//     //分页页数
+//     var page = parseInt(req.query.page, 10) || 1;
+//     page = page > 0 ? page : 1;
+//     var totalCount=0;
+//     var proxy=new EventProxy();
+//     proxy.fail(next);
+//     var query = {},limit=config.list_user_count;
+//     //分页查询
+//     var opt = { skip: (page - 1) * limit, limit: limit, sort: '-create_at'};
+//     UserProxy.getUsersByQuery(query, opt,proxy.done('users',function (users) {
+//         users.map(function (user) {
+//             user.createAt=moment(user.create_at).format('YYYY-MM-DD HH:mm:ss');
+//         });
+//        return users;
+//     }));
+//     UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
+//         var pages = Math.ceil(all_user_count / limit);
+//         totalCount=all_user_count;
+//         proxy.emit('pages', pages);
+//     }));
+//     proxy.all('users','pages',function(users,pages){
+//         res.render('admin/user/list', {
+//         users: users,
+//         current_page: page,
+//         list_user_count: limit,
+//         all_user_count: totalCount,
+//         pages: pages,
+//         base:'/admin/user/',
+//         pageTitle: '用户管理'
+//       });
+//     });
     
-};
-//usergroup_list
-exports.showusergroup_list=function(req,res,next){
+// };
+//showuser_list
+exports.showuser_list=function(req,res,next){
    
-   res.render('admin/user/usergroup', {
-        pageTitle: '分组管理'
+   res.render('admin/user/userlist', {
+        pageTitle: '用户管理'
     });
     
 };
-//usergroup_list
-exports.usergroup_list=function(req,res,next){
+//user_list
+exports.user_list=function(req,res,next){
     var proxy=new EventProxy();
     proxy.fail(next);
     var query = {};
@@ -223,7 +223,8 @@ exports.active=function(req,res,next){
             if(err){
                 return res.send({sucess:false,message:err.message});
             }
-            return res.redirect('/admin/user');
+            // return res.redirect('/admin/user');
+            return exports.user_list(req,res,next);
         });
     });
 };
@@ -253,7 +254,10 @@ exports.block=function(req,res,next){
             if(err){
                 return res.send({sucess:false,message:err.message});
             }
-            return res.redirect('/admin/user');
+            // return res.redirect('/admin/user');
+             return exports.user_list(req,res,next);
         });
     });
 };
+
+/////////////////////////////////////////admin end///////////////////////////////////

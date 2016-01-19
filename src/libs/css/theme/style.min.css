@@ -2238,10 +2238,10 @@ p.glyphicons.envelope i:before {
     -moz-box-shadow: 0 0 0 1px #fff inset;
 }
 
-.table-primary tbody tr:nth-child(odd) td,
+/*.table-primary tbody tr:nth-child(odd) td,
 .table-primary tbody tr:nth-child(odd) th {
     background: #fff;
-}
+}*/
 
 .table-primary tbody tr.selectable td {
     cursor: pointer;

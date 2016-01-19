@@ -1,0 +1,134 @@
+<div id="content" class="container-fluid fixed">
+    <h4 class="heading"><%=pageTitle%></h4>
+    <div class="bars pull-left"><div id="toolbar">
+        <button id="userblock" class="btn btn-danger" disabled="">
+            <i class="glyphicon glyphicon-ban-circle"></i> 锁定
+        </button>
+        <button id="userunblock" class="btn btn-danger" disabled="" style="display:none;">
+            <i class="glyphicon glyphicon-ok-circle"></i> 解锁
+        </button>
+        <button id="active" class="btn btn-info" disabled="">
+            <i class="glyphicon glyphicon-flash"></i> 激活
+        </button>
+    </div></div>
+    <table id="table" class="dynamicTable table table-primary table-condensed" data-toggle="table" data-show-columns="true" data-search="true" data-show-toggle="true"
+    data-pagination="true" data-height="650"  data-toolbar="#toolbar" data-show-export="true" data-row-style="rowStyle" data-single-select="true">
+        <thead>
+            <tr>
+                <th data-field="" data-checkbox="true"></th>
+                <th data-formatter="rowIndex">序号</th>
+                <th data-field="name">昵称</th>
+                <th data-field="loginname">账户名</th>
+                <th data-field="email">注册邮箱</th>
+                <th data-field="create_at" data-sortable="true" data-formatter="timeFormatter">注册时间</th>
+                <th data-field="active" data-sortable="true" data-formatter="activeFormat">激活状态</th>
+                <th data-field="is_block" data-sortable="true" data-formatter="blockFormat">锁定状态</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<script>
+    $(function () {
+        $.post('/admin/userlist',function(users){
+            $('#table').bootstrapTable('destroy').bootstrapTable({
+                // columns: columns,
+                data:users
+            });
+        });
+         var $table = $('#table'),
+        $userblock = $('#userblock'),
+        $userunblock = $('#userunblock'),
+        $active = $('#active'),
+        selections = [];
+         $table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
+            $userblock.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            $userunblock.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            
+            selections = getIdSelections();
+            $userunblock.hide();
+            $userblock.show();
+            if(selections[0].is_block){
+                $userblock.hide();
+                $userunblock.show();
+            }else{
+                $userunblock.hide();
+                $userblock.show();
+            }
+            if(!selections[0].active){
+                $active.prop('disabled', !$table.bootstrapTable('getSelections').length);
+            }
+        });
+        $active.click(function () {
+            var rows = getIdSelections();
+            if(confirm('是否确定激活该用户？')){
+                $.get('/admin/user/'+rows[0]._id+'/active',function(users){
+                     $('#table').bootstrapTable('destroy').bootstrapTable({data:users});
+                });
+            }
+            $userblock.prop('disabled', true);
+        });
+        $userunblock.click(function () {
+           var rows = getIdSelections();
+            if(confirm('是否确定取消锁定该用户？')){
+                $.get('/admin/user/'+rows[0]._id+'/unlock/block',function(users){
+                     $('#table').bootstrapTable('destroy').bootstrapTable({data:users});
+                });
+            }
+            $userblock.prop('disabled', true);
+        });
+        $userblock.click(function () {
+           var rows = getIdSelections();
+            if(confirm('是否确定锁定该用户？')){
+                $.get('/admin/user/'+rows[0]._id+'/lock/block',function(users){
+                     $('#table').bootstrapTable('destroy').bootstrapTable({data:users});
+                });
+            }
+            $userblock.prop('disabled', true);
+        });
+    });
+    var $table = $('#table');
+    function rowIndex(value,row,index){
+        return index+1;
+    }
+    function timeFormatter(value) {
+       return $.formatDate(new Date(value),'yyyy-MM-dd HH:mm:ss');
+    }
+    function activeFormat(value) {
+       if(value==true){
+           return '激活';
+       }else{
+           return '未激活';
+       }
+    }
+    function blockFormat(value) {
+       if(value==true){
+           return '锁定';
+       }else{
+           return '正常';
+       }
+    }
+   //渲染表格样式
+    function rowStyle(row, index) {
+        var classes = ['active', 'success', 'info', 'warning', 'danger'];
+        
+        if(row.is_block){
+            return {
+                classes: classes[4]
+            };
+        }
+        if(!row.active){
+            return {
+                classes: classes[0]
+            };
+        }
+
+        return {};
+    }
+  
+    function getIdSelections() {
+        return $.map($table.bootstrapTable('getSelections'), function (row) {
+            return row;
+        });
+    }
+  
+</script>

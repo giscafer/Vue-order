@@ -10,7 +10,8 @@ var signController=require('./controllers/sign');
 var userController=require('./controllers/user');
 var staticController=require('./controllers/static');
 var replyController=require('./controllers/reply');//reply controller
-var siteController=require('./controllers/site');//reply controller
+var siteController=require('./controllers/site');//site controller
+var userGpController=require('./controllers/usergroup');//usergroup controller
 var router = express.Router();
 // home page
 router.get('/', siteController.index);
@@ -72,11 +73,12 @@ router.post('/reply/:reply_id/edit', auth.userRequired, replyController.update);
 
 
 // admin
-router.get('/admin/user',auth.adminRequired,userController.admin_userlist); //用户列表
+router.get('/admin/userlist',auth.adminRequired,userController.showuser_list); //用户列表页
+router.post('/admin/userlist',auth.adminRequired,userController.user_list);//获取用户列表
 router.get('/admin/user/:userId/active',auth.adminRequired,userController.active);//激活用户
 router.get('/admin/user/:userId/:action/block',auth.adminRequired,userController.block);//激活用户
-router.get('/admin/usergroup',auth.adminRequired,userController.showusergroup_list);//激活用户
-router.post('/admin/usergroup',auth.adminRequired,userController.usergroup_list);//激活用户
+router.get('/admin/usergroup',auth.adminRequired,userGpController.group_list);//分组列表
+router.post('/admin/group/create',auth.adminRequired,userGpController.create);//激活用户
 
 
 

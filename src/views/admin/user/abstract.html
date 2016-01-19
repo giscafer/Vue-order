@@ -1,17 +1,8 @@
 <tr class="gradeX selectable">
     <td class="text-center"><%=indexInCollection+1%></td>
-    <td class="text-center"><%=user.name%></td>
-    <td class="text-center"><%=user.loginname%></td>
-    <td class="text-center"><%=user.email%></td>
-    <td class="text-center"><%=user.createAt%></td>
+    <td class="text-center"><%=group.grouptitle%></td>
     <td class="text-center">
-        <%if(!user.active){%>
-            <a href="/admin/user/<%=user._id%>/active" class="btn btn-info btn-sm">激活</a> 
-        <%}%>  
-         <%if(!user.is_block){%>
-            <a href="/admin/user/<%=user._id%>/lock/block" class="btn btn-success btn-sm">锁定</a>    
-            <%}else{%> 
-                <a href="/admin/user/<%=user._id%>/unlock/block" class="btn btn-danger btn-sm">解锁</a>    
-            <%}%> 
+        <a href="/admin/group/<%=group._id%>/edit" class="btn btn-info btn-sm">编辑</a> 
+        <a href="/admin/group/<%=group._id%>/del" class="btn btn-danger btn-sm">删除</a>    
     </td>
 </tr>
