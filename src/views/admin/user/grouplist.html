@@ -22,7 +22,7 @@
 <div class='dataTables_paginate paging_bootstrap pagination' current_page='<%= current_page %>'>
   <ul class="pagination">
     <% var base_url = base + (base.indexOf('?') < 0 ? '?' : '&')+ '&page='; %>
-    <% if (current_page == 1) { %>
+    <% if (all_group_count===0 || current_page == 1) { %>
     <li class='prev disabled'><a>← Previous</a></li>
     <% } else { %>
     <li class='prev'><a href="<%= base_url + (current_page-1)%>">← Previous</a></li>
@@ -49,7 +49,7 @@
     <li><a>...</a></li>
     <% } %>
 
-    <% if (current_page == pages) { %>
+    <% if (current_page == pages || all_group_count===0) { %>
     <li class='next disabled'><a>Next → </a></li>
     <% } else { %>
     <li class="next"><a href='<%= base_url + (current_page+1) %>'>Next → </a></li>
@@ -77,7 +77,7 @@
   function addgroup(){
      $('.bootstrap-dialog-message #grouptitle').remove();
      BootstrapDialog.show({
-        title: '提示',
+        title: '新增分组',
         type:BootstrapDialog.TYPE_SUCCESS,
         draggable: true,
         message: '<input type="text" class="form-control" id="grouptitle" placeholder="请输入分组名称">',
@@ -89,10 +89,10 @@
                 //新增分组
                 $.post(Config.hostUrl+'/admin/group/create',{grouptitle:grouptTitle}, function(res) {
                     if (!res.success) {
-                        dialog.close();
+                        // dialog.close();
                         alert(res.message);
                     }else{
-                        location.host=location.host+'/admin/usergroup';
+                        history.go(0);
                         dialog.close();
                     }
                 }).error(function(data, status, request) {
@@ -115,5 +115,63 @@
         $('.modal-backdrop.fade.in').css('z-index', '0');
     }, 300);
   }
-
+  function editgroup(gid,title){
+     $('.bootstrap-dialog-message #grouptitle').remove();
+     BootstrapDialog.show({
+        title: '编辑分组',
+        type:BootstrapDialog.TYPE_SUCCESS,
+        draggable: true,
+        message: '<input type="text" class="form-control" id="grouptitle" placeholder="'+title+'">',
+        buttons: [{
+            label: '确定',
+            action: function(dialog) {
+                var grouptTitle=$('#grouptitle').val();
+                console.log(grouptTitle);
+                //新增分组
+                $.post(Config.hostUrl+'/admin/group/'+gid+'/edit',{grouptitle:grouptTitle}, function(res) {
+                    if (!res.success) {
+                        // dialog.close();
+                        alert(res.message);
+                    }else{
+                         history.go(0);
+                        dialog.close();
+                    }
+                }).error(function(data, status, request) {
+                    console.log('fail' + status + "," + request);
+                }).fail(function (xhr) {
+                    if (xhr.status === 403) {
+                        alert('您没有权限，'+xhr.statusText);
+                    }
+                });
+            }
+        }, {
+            label: '取消',
+            action: function(dialog) {
+                dialog.close();
+            }
+        }]
+    });
+    //未知的两个遮罩层
+    setTimeout(function() {
+        $('.modal-backdrop.fade.in').css('z-index', '0');
+    }, 300);
+  }
+  function delgroup(gid){
+      if(confirm('是否确定删除该分组？')){
+          $.post(Config.hostUrl+'/admin/group/'+gid+'/del',null, function(res) {
+                if (!res.success) {
+                    alert(res.message);
+                }else{
+                     history.go(0);
+                    dialog.close();
+                }
+            }).error(function(data, status, request) {
+                console.log('fail' + status + "," + request);
+            }).fail(function (xhr) {
+                if (xhr.status === 403) {
+                    alert('您没有权限，'+xhr.statusText);
+                }
+            });
+      }
+  }
 </script>

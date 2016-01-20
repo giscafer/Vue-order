@@ -52,6 +52,12 @@ exports.getGroupsByQuery=function(query,opt,callback){
 	UserGroupModel.find(query,'',opt,callback);
 };
 /**
+ * 删除分组
+ */
+exports.removeById=function(id,callback){
+    UserGroupModel.remove({_id:id},callback);
+};
+/**
  * 保存接口
  */
 exports.newAndSave=function(grouptitle,callback){

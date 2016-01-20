@@ -42,6 +42,17 @@ exports.getUserByLoginName=function(loginName,callback){
 	User.findOne({'loginname':loginName},callback);
 };
 /**
+ * 根据分组名称查找用户
+ * Callback:
+ * - err, 数据库异常
+ * - users, 用户
+ * @param {String} loginName 登录名
+ * @param {Function} callback 回调函数
+ */
+exports.getUserByGroupId=function(groupid,callback){
+	User.find({'groupid':groupid},callback);
+};
+/**
  * 根据用户ID，查找用户
  * Callback:
  * - err, 数据库异常

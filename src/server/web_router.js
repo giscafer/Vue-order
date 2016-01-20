@@ -79,6 +79,8 @@ router.get('/admin/user/:userId/active',auth.adminRequired,userController.active
 router.get('/admin/user/:userId/:action/block',auth.adminRequired,userController.block);//激活用户
 router.get('/admin/usergroup',auth.adminRequired,userGpController.group_list);//分组列表
 router.post('/admin/group/create',auth.adminRequired,userGpController.create);//激活用户
+router.post('/admin/group/:gid/del',auth.adminRequired,userGpController.del);//激活用户
+router.post('/admin/group/:gid/edit',auth.adminRequired,userGpController.edit);//激活用户
 
 
 

@@ -85,7 +85,7 @@ exports.create = function (req, res, next) {
     var dish_price = validator.trim(req.body.dish_price);
     dish_price = Number(dish_price);
     var user_id = req.session.user._id;
-    console.log(user_id);
+    // console.log(user_id);
     var ispack = req.body.ispack;
     if (ispack === 'on') {
         ispack = true;

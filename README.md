@@ -3,7 +3,7 @@
 基于vue.js+node.js+mongodb开发的订餐系统，代码注释详细，适合初学者.
 
 
-PS：并不是所有页面都是用Vue.js做前台数据绑定，只是首页使用了Vue.js做数据的展示；
+PS：并不是所有页面都是用Vue.js做前台数据绑定，只是**订餐页**使用了Vue.js做数据的展示；
 其他页面因Node.js方便而用了ejs渲染，样式使用Boostrap3。
 
 **本版本还在继续开发中……在线演示版本为**[bae分支](https://github.com/giscafer/Vue-order/tree/bae)
