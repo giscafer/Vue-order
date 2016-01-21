@@ -54,7 +54,7 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是**订餐�
 # SCREENSHOT
 
 ![overview][1]
-![manager][2]
+![manger][2]
 ![userlist][3]
 ![setting][4]
 
