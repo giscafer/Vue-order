@@ -221,7 +221,7 @@ exports.update = function (req, res, next) {
                     return next(err);
                 }
                 //跳转订餐页
-                res.redirect('/order');
+                res.redirect('/orders');
             });
         } else {
             res.renderError('对不起，你不能编辑此记录。', 403);
