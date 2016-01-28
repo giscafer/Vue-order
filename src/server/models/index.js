@@ -12,8 +12,10 @@ require('./order');
 require('./user');
 require('./reply');
 require('./message');
+require('./usergroup');
 
 exports.Order = mongoose.model('Order');
 exports.User = mongoose.model('User');
 exports.Reply = mongoose.model('Reply');
 exports.Message = mongoose.model('Message');
+exports.UserGroup = mongoose.model('UserGroup');

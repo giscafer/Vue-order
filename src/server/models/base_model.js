@@ -1,6 +1,6 @@
 /**
- * 给所有的 Model 扩展功能
- * http://mongoosejs.com/docs/plugins.html
+ * 基表，给所有的 Model 扩展功能
+ * 详细见：http://mongoosejs.com/docs/plugins.html
  */
 var tools=require('../common/tools');
 module.exports = function (schema) {

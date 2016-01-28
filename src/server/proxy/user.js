@@ -42,6 +42,17 @@ exports.getUserByLoginName=function(loginName,callback){
 	User.findOne({'loginname':loginName},callback);
 };
 /**
+ * 根据分组名称查找用户
+ * Callback:
+ * - err, 数据库异常
+ * - users, 用户
+ * @param {String} loginName 登录名
+ * @param {Function} callback 回调函数
+ */
+exports.getUserByGroupId=function(groupid,callback){
+	User.find({'groupid':groupid},callback);
+};
+/**
  * 根据用户ID，查找用户
  * Callback:
  * - err, 数据库异常
@@ -98,6 +109,17 @@ exports.getUsersByQuery=function(query,opt,callback){
  */
 exports.getUserByNameAndKey=function(loginname,key,callback){
 	User.findOne({loginname:loginname,retrieve_key:key},callback);
+};
+/**
+ * 获取用户数量
+ * Callback:
+ * - err, 数据库错误
+ * - count, 主题数量
+ * @param {String} query 搜索关键词
+ * @param {Function} callback 回调函数
+ */
+exports.getCountByQuery = function (query, callback) {
+  User.count(query, callback);
 };
 /**
  * 保存注册用户

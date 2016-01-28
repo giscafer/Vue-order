@@ -15,7 +15,8 @@
                         <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                     </div>
                 </div>
-                <label class="btn btn-success" @click="todayQuery()">查看今天</label>
+                <label class="btn btn-success" @click="todayQuery()">查看今天</label>&nbsp;&nbsp;&nbsp;
+                <label class="btn btn-success" @click="copyTheOrder()">复制</label>
             </form>
         </div>
         <div>
@@ -212,6 +213,23 @@ var vue = new Vue({
             var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
             $("#queryDateValue").val(queryDate);
             EventProxy.fire('getOrders', queryDate);
+        },
+        copyTheOrder:function(){
+            var orders=this.$get('orders');
+            var str="老板，订餐：";
+            var len=orders.length;
+            for(var i=0;i<len;i++){
+                if(orders[i].ispack===true){
+                    str+=orders[i].dish_name+"（打包）";
+                }else{
+                    str+=orders[i].dish_name;
+                }
+                 str+="、";
+            }
+            str=str.substring(0,str.length-1);
+            str+="；共"+len+"份！";
+            console.log(str);
+            confirm(str);
         },
         addOrder: function() {
             if ($('#orderForm').data('bootstrapValidator').isValid()) {

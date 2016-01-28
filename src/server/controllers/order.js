@@ -76,7 +76,7 @@ exports.create = function (req, res, next) {
     var dish_price = validator.trim(req.body.dish_price);
     dish_price = Number(dish_price);
     var user_id = req.session.user._id;
-    console.log(user_id);
+    // console.log(user_id);
     var ispack = req.body.ispack;
     if (ispack === 'on') {
         ispack = true;
@@ -110,7 +110,11 @@ exports.create = function (req, res, next) {
             return next(err);
         }
         // res.redirect('/order/' + order._id);
+<<<<<<< HEAD
         res.redirect('/');
+=======
+        res.redirect('/orders');
+>>>>>>> temp
     });
 
 };
@@ -211,8 +215,13 @@ exports.update = function (req, res, next) {
                 if (err) {
                     return next(err);
                 }
+<<<<<<< HEAD
                 //跳转首页
                 res.redirect('/');
+=======
+                //跳转订餐页
+                res.redirect('/orders');
+>>>>>>> temp
             });
         } else {
             res.renderError('对不起，你不能编辑此记录。', 403);

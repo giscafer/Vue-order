@@ -5,6 +5,8 @@ var UserProxy = require('../proxy').User;
 var EventProxy = require('eventproxy');
 var validator = require('validator');
 var tools = require('../common/tools');
+var config=require('../config');
+var moment=require('moment');
 /**
  * 展示用户设置页面
  */
@@ -119,5 +121,148 @@ exports.setting = function (req, res, next) {
         }));
     }
 
+<<<<<<< HEAD
 
 };
+=======
+};
+/**
+ * 获取积分排行在10名前的
+ */
+exports.top10 = function (req, res, next) {
+  var opt = {limit: 10, sort: '-score'};
+  UserProxy.getUsersByQuery({'$or': [
+    {is_block: {'$exists': false}},
+    {is_block: false},
+  ]}, opt, function (err, tops) {
+    if (err) {
+      return next(err);
+    }
+    res.render('user/top10', {
+      users: tops,
+      pageTitle: 'top10',
+    });
+  });
+};
+
+
+/////////////////////////////////////////admin start///////////////////////////////////
+// exports.user_list=function(req,res,next){
+//     //分页页数
+//     var page = parseInt(req.query.page, 10) || 1;
+//     page = page > 0 ? page : 1;
+//     var totalCount=0;
+//     var proxy=new EventProxy();
+//     proxy.fail(next);
+//     var query = {},limit=config.list_user_count;
+//     //分页查询
+//     var opt = { skip: (page - 1) * limit, limit: limit, sort: '-create_at'};
+//     UserProxy.getUsersByQuery(query, opt,proxy.done('users',function (users) {
+//         users.map(function (user) {
+//             user.createAt=moment(user.create_at).format('YYYY-MM-DD HH:mm:ss');
+//         });
+//        return users;
+//     }));
+//     UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
+//         var pages = Math.ceil(all_user_count / limit);
+//         totalCount=all_user_count;
+//         proxy.emit('pages', pages);
+//     }));
+//     proxy.all('users','pages',function(users,pages){
+//         res.render('admin/user/list', {
+//         users: users,
+//         current_page: page,
+//         list_user_count: limit,
+//         all_user_count: totalCount,
+//         pages: pages,
+//         base:'/admin/user/',
+//         pageTitle: '用户管理'
+//       });
+//     });
+    
+// };
+//showuser_list
+exports.showuser_list=function(req,res,next){
+   
+   res.render('admin/user/userlist', {
+        pageTitle: '用户管理'
+    });
+    
+};
+//user_list
+exports.user_list=function(req,res,next){
+    var proxy=new EventProxy();
+    proxy.fail(next);
+    var query = {};
+    //分页查询
+    var opt = { sort: '-create_at'};
+    UserProxy.getUsersByQuery(query, opt,function (err,users) {
+        if(err){
+             return next(err);
+        }
+        proxy.fire('users',users);
+    });
+    proxy.on('users',function(users){
+        return res.send(users);
+    });
+    
+};
+/**
+ * 激活用户
+ */
+exports.active=function(req,res,next){
+    var userId=req.params.userId;
+    if(!req.session.user.is_admin){
+        return res.send({success:false,message:'无权限'});
+    }
+    UserProxy.getUserById(userId,function(err,user){
+        if(err){
+             return next(err);
+        }
+        if (!user) {
+            return next(new Error('user is not exists'));
+        }
+        user.active=true;
+        user.save(function(err){
+            if(err){
+                return res.send({sucess:false,message:err.message});
+            }
+            // return res.redirect('/admin/user');
+            return exports.user_list(req,res,next);
+        });
+    });
+};
+/**
+ * 锁定用户
+ */
+exports.block=function(req,res,next){
+    var userId=req.params.userId;
+    var action=req.params.action;
+    if(!req.session.user.is_admin){
+        return res.send({success:false,message:'无权限'});
+    }
+    UserProxy.getUserById(userId,function(err,user){
+        if(err){
+             return next(err);
+        }
+        if (!user) {
+            return next(new Error('user is not exists'));
+        }
+        if(action==='lock'){
+           user.is_block=true;
+        }else{
+           user.is_block=false;
+        }
+     
+        user.save(function(err){
+            if(err){
+                return res.send({sucess:false,message:err.message});
+            }
+            // return res.redirect('/admin/user');
+             return exports.user_list(req,res,next);
+        });
+    });
+};
+
+/////////////////////////////////////////admin end///////////////////////////////////
+>>>>>>> temp
