@@ -13,21 +13,12 @@ var UserSchema=new Schema({
 	phone:{type:String},
 	job:{type:String},
 	location:{type:String},
-<<<<<<< HEAD
-	role:{type:Number,
-		default:0},
-	profile_image_url:{type:String},
-	signature:{type:String},
-	score:{type:Number, default: 0},
-	level:{type:String},
-=======
 	role:{type:Number,default:0}, //角色，没有使用
 	profile_image_url:{type:String}, //头像url
 	signature:{type:String}, //签名
 	score:{type:Number, default: 0}, //积分
 	groupid:{type:ObjectId}, //所属用户组
     is_block: {type: Boolean, default: false},//是否ban
->>>>>>> temp
 	reply_count:{ type: Number, default: 0 },
 	create_at:{type:Date,default:Date.now},
 	update_at: { type: Date, default: Date.now },

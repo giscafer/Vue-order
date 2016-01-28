@@ -8,12 +8,21 @@ var OrderModel = require('../models').Order;
 var tools = require('../common/tools');
 
 /**
- * 首页，按日期查询当日记录
+ * 首页
+ */
+exports.index=function(req, res) {
+    res.locals.current_page='orders'
+	res.render('orders', {
+	    title: '首页'
+	});
+};
+/**
+ * 按日期查询当日记录
  * @author giscafer
  * @version 1.0
  * @date    2016-01-02T12:11:21+0800
  */
-exports.index = function (req, res, next) {
+exports.query = function (req, res, next) {
     var queryDate = req.params.qdate;
     if (!queryDate) return;
     //查询过滤
@@ -32,7 +41,7 @@ exports.index = function (req, res, next) {
         if (err) {
             return next(err);
         }
-          //不缓存，解决IE问题
+        //不缓存，解决IE问题
         res.setHeader("Cache-Control", "no-cache");
         res.send({
             data: orders
@@ -110,11 +119,7 @@ exports.create = function (req, res, next) {
             return next(err);
         }
         // res.redirect('/order/' + order._id);
-<<<<<<< HEAD
-        res.redirect('/');
-=======
         res.redirect('/orders');
->>>>>>> temp
     });
 
 };
@@ -215,13 +220,8 @@ exports.update = function (req, res, next) {
                 if (err) {
                     return next(err);
                 }
-<<<<<<< HEAD
-                //跳转首页
-                res.redirect('/');
-=======
                 //跳转订餐页
                 res.redirect('/orders');
->>>>>>> temp
             });
         } else {
             res.renderError('对不起，你不能编辑此记录。', 403);

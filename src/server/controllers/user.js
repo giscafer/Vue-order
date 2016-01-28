@@ -121,10 +121,6 @@ exports.setting = function (req, res, next) {
         }));
     }
 
-<<<<<<< HEAD
-
-};
-=======
 };
 /**
  * 获取积分排行在10名前的
@@ -265,4 +261,3 @@ exports.block=function(req,res,next){
 };
 
 /////////////////////////////////////////admin end///////////////////////////////////
->>>>>>> temp
