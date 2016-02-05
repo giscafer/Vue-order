@@ -1,21 +1,112 @@
-<div class="container-fluid fixed" id="VueAapp">
+
+<div class="container-fluid fixed">
     <div class="col-md-12" id="content">
         <div class="heading-buttons">
-            <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
+            <h3><%=title%></h3>
             <div class="buttons pull-right">
             </div>
         </div>
         <br>
         <div class="separator bottom line"></div>
-          <ul class="breadcrumb">
-            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
-            <li class="divider"></li>
-            <li><%=title%></li>
-        </ul>
-        <br>
-    <div class='inner'>
-    	<h3>尚未开发……</h3>
-        <a href="/"><span class="span-common">返回</span></a>
+        <div class='inner'>
+            <ul class="breadcrumb">
+                <li>热门排行榜</li>
+            </ul>
+            <br>
+            <div id="hotOrdersChart"></div>
+            <br>
+           
+             <% if (current_user) { %>
+                <ul class="breadcrumb">
+                    <li>个人常吃统计</li>
+                </ul>
+                <br>
+                <div id="personalOrderChart"></div>
+            <% } %>
+            <br>
+        </div>
     </div>
-  </div>
 </div>
+<script>
+$(function () {
+    //全部
+    $.post(Config.hostUrl+'/orders/all/statistics', function(res) {
+        var options={};
+        options.title='热门订餐统计';
+        options.divId='hotOrdersChart';
+        var orders=res.data;
+        
+        resultHandler(orders,options);
+        personalStatic();
+    }).error(function(data, status, request) {
+        console.log('fail' + status + "," + request);
+    });
+    //个人
+    function personalStatic(){
+        var $personalDiv=$("#personalOrderChart");
+        if(!$personalDiv.length) return;
+        $.post(Config.hostUrl+'/orders/personal/statistics', function(res) {
+            var options={};
+            options.title='个人常吃统计';
+            options.divId='personalOrderChart';
+            var orders=res.data;
+            resultHandler(orders,options);
+        }).error(function(data, status, request) {
+            console.log('fail' + status + "," + request);
+        });
+    }
+});
+function resultHandler(orders,options){
+        if(!orders.length){
+            $("#personalOrderChart").html('无订餐数据');
+            return;
+        }
+        var dataItems = [];
+        for(var i=0;i<orders.length;i++){
+            var obj={
+                name:orders[i]._id,
+                y:orders[i].value.count || 1
+            }
+            dataItems[dataItems.length]=obj;
+        }
+        options.dataItems=dataItems;
+        createChart(options);
+    }
+
+    
+     function createChart(options) {
+        $('#'+options.divId).highcharts({
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: options.title
+            },
+            tooltip: {
+                pointFormat: '订单次数：<b>{point.y}</b><br>{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '占比',
+                data:options.dataItems
+            }]
+        });
+    }
+
+</script>

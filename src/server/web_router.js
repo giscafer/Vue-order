@@ -41,7 +41,7 @@ router.get('/users/top10',userController.top10); //用户积分排行榜
 //####订餐####
 router.get('/orders', orderController.index);
 //按日期查询当日订餐记录
-router.get('/orders/:qdate', orderController.query);
+router.get('/orders/:qdate/query', orderController.query);
 //编辑订餐页
 router.get('/orders/:oid/edit',auth.userRequired, orderController.showEdit);
 //新建订餐
@@ -51,14 +51,7 @@ router.get('/orders/:oid/del', auth.userRequired,orderController.del);
 // 更新订餐
 router.post('/orders/:oid/edit', auth.userRequired,orderController.update);
 
-//####图表####
-//
-router.get('/charts',function(req, res) {
-     res.locals.current_page='charts'
-	res.render('charts/charts', {
-	    title: '图表统计'
-	});
-});
+
 // static
 router.get('/about', staticController.about);
 
@@ -82,8 +75,16 @@ router.post('/admin/group/create',auth.adminRequired,userGpController.create);//
 router.post('/admin/group/:gid/del',auth.adminRequired,userGpController.del);//激活用户
 router.post('/admin/group/:gid/edit',auth.adminRequired,userGpController.edit);//激活用户
 
-
-
+//####图表####
+//
+router.get('/charts',function(req, res,next) {
+    res.locals.current_page='charts'
+	res.render('charts/charts', {
+	    title: '图表统计'
+	});
+});
+//statistics统计
+router.post('/orders/:type/statistics',orderController.statistics); //订餐统计
 
 
 

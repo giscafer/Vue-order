@@ -118,6 +118,27 @@ exports.getOrdersByQuery = function (query, opt, callback) {
   });
 };
 /**
+ * 查询统计mapReduce方法
+ * https://docs.mongodb.org/manual/core/map-reduce/
+ * 
+ * Model.mapReduce(o, [callback]) :http://mongoosejs.com/docs/api.html
+ */
+exports.queryByMapReduce=function(obj,options,callback){
+   var query=options.query || null;
+   var opt=options.opt || {};
+    OrderModel.mapReduce(obj,function(err, model, stats){
+        if(err){
+            return callback(err,[]);
+        }
+        model.find(query,'',opt,function(err,orders){
+            if(err){
+                return callback(err,[]);
+            }
+            return callback(null,orders);
+        });
+    });
+}
+/**
  * 创建并保存一条订单信息
  * @param {String} dish_name 菜名
  * @param {Number} dish_price 价格

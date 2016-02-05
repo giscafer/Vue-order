@@ -176,7 +176,7 @@ var vue = new Vue({
         $("#queryDateValue").val(queryDate);
 
         function getOrders(queryDate) {
-            $.get(Config.hostUrl+'/orders/' + queryDate, function(res) {
+            $.get(Config.hostUrl+'/orders/' + queryDate+'/query', function(res) {
                 that.$set('orders', res.data);
             }).error(function(data, status, request) {
                 console.log('fail' + status + "," + request);
