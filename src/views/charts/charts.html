@@ -43,7 +43,7 @@ $(function () {
         var orders=res.data;
         
         resultHandler(orders,options);
-        personalStatic();
+        richStatis();
     }).error(function(data, status, request) {
         console.log('fail' + status + "," + request);
     });
@@ -57,7 +57,6 @@ $(function () {
             options.divId='personalOrderChart';
             var orders=res.data;
             resultHandler(orders,options);
-            richStatis();
         }).error(function(data, status, request) {
             console.log('fail' + status + "," + request);
         });
@@ -69,6 +68,7 @@ $(function () {
             options.divId='richOrdersChart';
             var orders=res.data;
             richResultHandler(orders,options);
+            personalStatic();
         }).error(function(data, status, request) {
             console.log('fail' + status + "," + request);
         });
