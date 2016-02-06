@@ -5,6 +5,15 @@ var EventProxy = require('eventproxy');
 var OrderProxy = require('../proxy').Order;
 var UserProxy = require('../proxy').User;
 /**
+ * 统计页
+ */
+exports.index=function(req,res,next){
+    res.locals.current_page='charts'
+	res.render('charts/charts', {
+	    title: '图表统计'
+	});
+};
+/**
  * 订餐查询统计
  */
 exports.statistics=function(req,res,next){

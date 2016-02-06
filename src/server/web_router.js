@@ -77,13 +77,7 @@ router.post('/admin/group/:gid/del',auth.adminRequired,userGpController.del);//�
 router.post('/admin/group/:gid/edit',auth.adminRequired,userGpController.edit);//激活用户
 
 //####图表####
-//
-router.get('/charts',function(req, res,next) {
-    res.locals.current_page='charts'
-	res.render('charts/charts', {
-	    title: '图表统计'
-	});
-});
+router.get('/charts',chartController.index);
 //statistics统计
 router.post('/charts/:type/statistics',chartController.statistics); //订餐统计
 
