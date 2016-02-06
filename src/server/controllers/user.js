@@ -1,7 +1,9 @@
 /**
  * 用户信息控制器
  */
-var UserProxy = require('../proxy').User;
+var Proxy = require('../proxy');
+var UserProxy = Proxy.User;
+var OrderProxy = Proxy.Order;
 var EventProxy = require('eventproxy');
 var validator = require('validator');
 var tools = require('../common/tools');
@@ -127,56 +129,45 @@ exports.setting = function (req, res, next) {
  */
 exports.top10 = function (req, res, next) {
   var opt = {limit: 10, sort: '-score'};
-  UserProxy.getUsersByQuery({'$or': [
+  var query={'$or': [
     {is_block: {'$exists': false}},
     {is_block: false},
-  ]}, opt, function (err, tops) {
-    if (err) {
-      return next(err);
-    }
-    res.render('user/top10', {
-      users: tops,
-      pageTitle: 'top10',
-    });
+  ]};
+ 
+  UserProxy.getUsersByQuery(query, opt, function(err,tops){
+      if(err){
+          next(err);
+      }
+      if(tops.length===0){
+          return res.render('user/top10', {
+            users: [],
+            pageTitle: 'top10',
+        });
+      }
+      var proxy=new EventProxy();
+      proxy.fail(next);
+      proxy.after('top10_ready', tops.length, function () {
+          //返回结果
+         res.render('user/top10', {
+            users: tops,
+            pageTitle: 'top10',
+        }); 
+     });
+     //遍历查询每个人的订单数量
+     tops.forEach(function(user,i){
+        var ep=new EventProxy();
+        ep.on('order_count',function(order_count){
+            user.order_count=order_count || 0;
+            proxy.emit('top10_ready');
+        }); 
+        //根据用户ID查询订餐数
+        OrderProxy.getCountByQuery({user_id:user._id},ep.done('order_count'));
+     });
   });
 };
 
 
 /////////////////////////////////////////admin start///////////////////////////////////
-// exports.user_list=function(req,res,next){
-//     //分页页数
-//     var page = parseInt(req.query.page, 10) || 1;
-//     page = page > 0 ? page : 1;
-//     var totalCount=0;
-//     var proxy=new EventProxy();
-//     proxy.fail(next);
-//     var query = {},limit=config.list_user_count;
-//     //分页查询
-//     var opt = { skip: (page - 1) * limit, limit: limit, sort: '-create_at'};
-//     UserProxy.getUsersByQuery(query, opt,proxy.done('users',function (users) {
-//         users.map(function (user) {
-//             user.createAt=moment(user.create_at).format('YYYY-MM-DD HH:mm:ss');
-//         });
-//        return users;
-//     }));
-//     UserProxy.getCountByQuery(query, proxy.done(function (all_user_count) {
-//         var pages = Math.ceil(all_user_count / limit);
-//         totalCount=all_user_count;
-//         proxy.emit('pages', pages);
-//     }));
-//     proxy.all('users','pages',function(users,pages){
-//         res.render('admin/user/list', {
-//         users: users,
-//         current_page: page,
-//         list_user_count: limit,
-//         all_user_count: totalCount,
-//         pages: pages,
-//         base:'/admin/user/',
-//         pageTitle: '用户管理'
-//       });
-//     });
-    
-// };
 //showuser_list
 exports.showuser_list=function(req,res,next){
    

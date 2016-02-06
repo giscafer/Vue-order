@@ -118,6 +118,17 @@ exports.getOrdersByQuery = function (query, opt, callback) {
   });
 };
 /**
+ * 获取订单数量
+ * Callback:
+ * - err, 数据库错误
+ * - count, 订餐数量
+ * @param {String} query 搜索关键词
+ * @param {Function} callback 回调函数
+ */
+exports.getCountByQuery = function (query, callback) {
+  OrderModel.count(query, callback);
+};
+/**
  * 查询统计mapReduce方法
  * https://docs.mongodb.org/manual/core/map-reduce/
  * 

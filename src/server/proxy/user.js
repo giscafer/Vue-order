@@ -114,7 +114,7 @@ exports.getUserByNameAndKey=function(loginname,key,callback){
  * 获取用户数量
  * Callback:
  * - err, 数据库错误
- * - count, 主题数量
+ * - count, 会员数量
  * @param {String} query 搜索关键词
  * @param {Function} callback 回调函数
  */
