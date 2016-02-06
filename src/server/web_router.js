@@ -12,6 +12,7 @@ var staticController=require('./controllers/static');
 var replyController=require('./controllers/reply');//reply controller
 var siteController=require('./controllers/site');//site controller
 var userGpController=require('./controllers/usergroup');//usergroup controller
+var chartController=require('./controllers/chart');//usergroup controller
 var router = express.Router();
 // home page
 router.get('/', siteController.index);
@@ -76,15 +77,9 @@ router.post('/admin/group/:gid/del',auth.adminRequired,userGpController.del);//�
 router.post('/admin/group/:gid/edit',auth.adminRequired,userGpController.edit);//激活用户
 
 //####图表####
-//
-router.get('/charts',function(req, res,next) {
-    res.locals.current_page='charts'
-	res.render('charts/charts', {
-	    title: '图表统计'
-	});
-});
+router.get('/charts',chartController.index);
 //statistics统计
-router.post('/orders/:type/statistics',orderController.statistics); //订餐统计
+router.post('/charts/:type/statistics',chartController.statistics); //订餐统计
 
 
 
