@@ -2,11 +2,11 @@
   <td><b><%= indexInCollection+1 %></b></td>
   <td>
     <a class='user_avatar' href="/user/<%= user.loginname %>">
-      <img src="<%= user.avatar_url %>" title="<%= user.loginname %>"/>
+      <img  style="width:30px;height:30px" src="<%= user.avatar_url %>" title="<%= user.loginname %>"/>
     </a>
     <span class='sp10'></span>
     <a href='/user/<%= user.loginname %>'><%= user.loginname %></a></td>
   <td><%= user.score %></td>
-  <td><%= user.topic_count %></td>
+  <td><%= user.order_count %></td>
   <td><%= user.reply_count %></td>
 </tr>

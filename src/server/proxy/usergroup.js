@@ -32,7 +32,7 @@ exports.getGroupsByIds=function(ids,callback){
  * 获取分组数量
  * Callback:
  * - err, 数据库错误
- * - count, 主题数量
+ * - count, 分组数量
  * @param {String} query 搜索关键词
  * @param {Function} callback 回调函数
  */
