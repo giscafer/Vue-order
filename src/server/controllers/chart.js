@@ -56,7 +56,7 @@ exports.statistics=function(req,res,next){
     //model find条件
     var options={
        query:null,
-       opt: {limit:5,sort: '-value.count'}
+       opt: {limit:10,sort: '-value.count'}
     }
     if(type==='rich'){
         options.opt.limit=10;
