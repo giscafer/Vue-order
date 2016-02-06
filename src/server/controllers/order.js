@@ -4,6 +4,7 @@
 var validator = require('validator');
 var EventProxy = require('eventproxy');
 var OrderProxy = require('../proxy').Order;
+var UserProxy = require('../proxy').User;
 var OrderModel = require('../models').Order;
 var tools = require('../common/tools');
 
@@ -85,8 +86,8 @@ exports.create = function (req, res, next) {
     var dish_price = validator.trim(req.body.dish_price);
     dish_price = Number(dish_price);
     var user_id = req.session.user._id;
-    // console.log(user_id);
     var ispack = req.body.ispack;
+    
     if (ispack === 'on') {
         ispack = true;
     } else {
@@ -113,15 +114,25 @@ exports.create = function (req, res, next) {
             user_id: user_id
         });
     }
-
+    var ep=new EventProxy();
+    ep.fail(next);
+    //保存订单
     OrderProxy.newAndSave(dish_name, dish_price, ispack, user_id, function (err, order) {
         if (err) {
             return next(err);
         }
-        // res.redirect('/order/' + order._id);
-        res.redirect('/orders');
+        ep.emit('order_saved');
     });
-
+    //更新用户积分
+    UserProxy.getUserById(user_id,ep.done(function(user){
+       user.score+=2;
+       user.save();
+       ep.emit('score_saved');
+    }));
+    //跳转
+    ep.all('order_saved','score_saved',function(order){
+         res.redirect('/orders');
+    });
 };
 
 /**
@@ -132,6 +143,8 @@ exports.create = function (req, res, next) {
  */
 exports.del = function (req, res, next) {
     var order_id = req.params.oid;
+     var ep=new EventProxy();
+     ep.fail(next);
     //判断
     OrderProxy.getOrder(order_id, function (err, order) {
         if (err) {
@@ -146,7 +159,7 @@ exports.del = function (req, res, next) {
             return res.send({ success: false, message: '无权限' });
         }
         order.deleted = true;
-        //删除
+        //删除（目前不真实删除）
         // OrderModel.remove({
         //     _id: order_id
         // }, function (err, order) {
@@ -162,6 +175,16 @@ exports.del = function (req, res, next) {
             if (err) {
                 return res.send({ success: false, message: err.message });
             }
+            ep.emit('order_saved');
+        });
+         //更新用户积分
+        UserProxy.getUserById(order.user_id,ep.done(function(user){
+            user.score-=2;
+            user.save();
+            ep.emit('score_saved');
+        }));
+         //跳转
+        ep.all('order_saved','score_saved',function(order){
             res.send({ success: true, message: '记录已被删除。' });
         });
     });
