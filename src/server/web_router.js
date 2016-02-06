@@ -12,6 +12,7 @@ var staticController=require('./controllers/static');
 var replyController=require('./controllers/reply');//reply controller
 var siteController=require('./controllers/site');//site controller
 var userGpController=require('./controllers/usergroup');//usergroup controller
+var chartController=require('./controllers/chart');//usergroup controller
 var router = express.Router();
 // home page
 router.get('/', siteController.index);
@@ -84,7 +85,7 @@ router.get('/charts',function(req, res,next) {
 	});
 });
 //statistics统计
-router.post('/orders/:type/statistics',orderController.statistics); //订餐统计
+router.post('/charts/:type/statistics',chartController.statistics); //订餐统计
 
 
 

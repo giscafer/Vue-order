@@ -30,7 +30,7 @@
 <script>
 $(function () {
     //全部
-    $.post(Config.hostUrl+'/orders/all/statistics', function(res) {
+    $.post(Config.hostUrl+'/charts/all/statistics', function(res) {
         var options={};
         options.title='热门订餐统计';
         options.divId='hotOrdersChart';
@@ -45,7 +45,7 @@ $(function () {
     function personalStatic(){
         var $personalDiv=$("#personalOrderChart");
         if(!$personalDiv.length) return;
-        $.post(Config.hostUrl+'/orders/personal/statistics', function(res) {
+        $.post(Config.hostUrl+'/charts/personal/statistics', function(res) {
             var options={};
             options.title='个人常吃统计';
             options.divId='personalOrderChart';
