@@ -1,4 +1,4 @@
-
+<script src="/libs/common/charts.js"></script>
 <div class="container-fluid fixed">
     <div class="col-md-12" id="content">
         <div class="heading-buttons">
@@ -9,13 +9,19 @@
         <br>
         <div class="separator bottom line"></div>
         <div class='inner'>
+             <ul class="breadcrumb">
+                <li>土豪排行榜</li>
+            </ul>
+            <br>
+                <div id="richOrdersChart"></div>
+            <br>
             <ul class="breadcrumb">
                 <li>热门排行榜</li>
             </ul>
             <br>
             <div id="hotOrdersChart"></div>
             <br>
-           
+            
              <% if (current_user) { %>
                 <ul class="breadcrumb">
                     <li>个人常吃统计</li>
@@ -37,7 +43,7 @@ $(function () {
         var orders=res.data;
         
         resultHandler(orders,options);
-        personalStatic();
+        richStatis();
     }).error(function(data, status, request) {
         console.log('fail' + status + "," + request);
     });
@@ -55,58 +61,51 @@ $(function () {
             console.log('fail' + status + "," + request);
         });
     }
-});
-function resultHandler(orders,options){
-        if(!orders.length){
-            $("#personalOrderChart").html('无订餐数据');
-            return;
-        }
-        var dataItems = [];
-        for(var i=0;i<orders.length;i++){
-            var obj={
-                name:orders[i]._id,
-                y:orders[i].value.count || 1
-            }
-            dataItems[dataItems.length]=obj;
-        }
-        options.dataItems=dataItems;
-        createChart(options);
-    }
-
-    
-     function createChart(options) {
-        $('#'+options.divId).highcharts({
-            chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 45,
-                    beta: 0
-                }
-            },
-            title: {
-                text: options.title
-            },
-            tooltip: {
-                pointFormat: '订单次数：<b>{point.y}</b><br>{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    depth: 35,
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name}'
-                    }
-                }
-            },
-            series: [{
-                type: 'pie',
-                name: '占比',
-                data:options.dataItems
-            }]
+    function richStatis(){
+       $.post(Config.hostUrl+'/charts/rich/statistics', function(res) {
+            var options={};
+            options.title='土豪排行统计';
+            options.divId='richOrdersChart';
+            var orders=res.data;
+            richResultHandler(orders,options);
+            personalStatic();
+        }).error(function(data, status, request) {
+            console.log('fail' + status + "," + request);
         });
     }
+});
+function richResultHandler(orders,options){
+    if(!orders.length){
+         $("#richOrdersChart").html('无数据');
+            return;
+    }
+    var xAxis=[];
+    var series=[{name:'消费',data:[],danwei:'元'},{name:'菜数',data:[],danwei:'盘'}];
+    orders.forEach(function(item,i){
+       xAxis[i]=item.username;
+       series[0].data[i]=item.value.cost;
+       series[1].data[i]=item.value.count;
+    });
+    options.xAxis=xAxis;
+    options.series=series;
+    options.ytitle="金额（元）";
+    ChartsUtil.createColumn(options);
+}
+function resultHandler(orders,options){
+    if(!orders.length){
+        $("#personalOrderChart").html('无订餐数据');
+        return;
+    }
+    var dataItems = [];
+    for(var i=0;i<orders.length;i++){
+        var obj={
+            name:orders[i]._id,
+            y:orders[i].value.count || 1
+        }
+        dataItems[dataItems.length]=obj;
+    }
+    options.dataItems=dataItems;
+    ChartsUtil.createPie(options);
+}
 
 </script>
