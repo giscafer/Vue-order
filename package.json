@@ -44,13 +44,18 @@
     "node-uuid": "^1.4.7",
     "nodemailer": "^1.11.0",
     "nodemailer-smtp-transport": "^1.1.0",
+    "ready": "^0.1.1",
     "redis": "^2.4.2",
     "utility": "^1.6.0",
     "validator": "^4.4.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "errorhandler": "^1.4.2",
     "node-inspector": "^0.12.5",
-    "node-interceptor": "0.0.2"
+    "node-interceptor": "0.0.2",
+    "pedding": "^1.0.0",
+    "should": "^8.2.2",
+    "supertest": "^1.2.0"
   }
 }
