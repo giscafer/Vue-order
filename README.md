@@ -1,4 +1,5 @@
 # Vue-order
+[![Coverage Status](https://coveralls.io/repos/github/giscafer/Vue-order/badge.svg?branch=master)](https://coveralls.io/github/giscafer/Vue-order?branch=master)
 
 基于vue.js+node.js+mongodb开发的订餐系统，代码注释详细，适合初学者.
 
