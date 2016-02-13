@@ -58,6 +58,11 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是**订餐�
 ![userlist][3]
 ![setting][4]
 
+## License
+
+MIT © 2015-2016 Nickbing Lao
+
+
 [1]: https://github.com/giscafer/Vue-order/blob/master/src/assets/overview1.0.png
 [2]: https://github.com/giscafer/Vue-order/blob/master/src/assets/manger.png
 [3]: https://github.com/giscafer/Vue-order/blob/master/src/assets/userlist.png
