@@ -7,7 +7,7 @@
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "mocha": "./node_modules/.bin/mocha -u bdd",
-    "cov":"./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "cov": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",
@@ -53,7 +53,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.6",
     "errorhandler": "^1.4.2",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.4.5",
     "node-inspector": "^0.12.5",
     "node-interceptor": "0.0.2",
     "pedding": "^1.0.0",
