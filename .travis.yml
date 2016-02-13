@@ -8,5 +8,5 @@ sudo: false
 script: npm run mocha
 # script: npm test --cover
 # cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+after_script: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 # after_script: npm run cov
