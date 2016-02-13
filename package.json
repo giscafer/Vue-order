@@ -55,6 +55,8 @@
     "chai": "^3.5.0",
     "coveralls": "^2.11.6",
     "errorhandler": "^1.4.2",
+    "gulp": "^3.9.1",
+    "gulp-watch": "^4.3.5",
     "istanbul": "^0.4.2",
     "mocha": "^2.4.5",
     "node-inspector": "^0.12.5",
