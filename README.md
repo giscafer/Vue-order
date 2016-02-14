@@ -33,8 +33,11 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是**订餐�
 
 ## 使用
 **1、安装**
+mongoDB version: 3.0.3
 
-本地安装`MongoDB`数据库和`Node`环境后（开发node版本为5.3，使用stable版本也可以，其他版本未测试），进入项目根目录下使用`npm install`下载依赖包。
+Node version:5.3.0（使用stable版本也可以，其他版本未测试）
+
+本地安装`MongoDB`数据库和`Node`环境后，进入项目根目录下使用`npm install`下载依赖包。
 
 **2、配置文件**
 
