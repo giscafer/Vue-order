@@ -228,6 +228,9 @@ exports.block=function(req,res,next){
     if(!req.session.user.is_admin){
         return res.send({success:false,message:'无权限'});
     }
+    if(userId){
+        userId=userId.toString();
+    }
     UserProxy.getUserById(userId,function(err,user){
         if(err){
              return next(err);

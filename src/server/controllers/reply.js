@@ -19,7 +19,7 @@ exports.messageboard_add = function (req, res, next) {
     var reply_id = req.body.reply_id;
     //留言板object_id写死了
     var objId = new mongoose.Types.ObjectId(tools.stringToHex('messageboard'));
-    console.log(objId);
+    // console.log(objId);
     var str = validator.trim(content);
     if (str === '') {
         return res.renderError('回复内容不能为空!', 422);

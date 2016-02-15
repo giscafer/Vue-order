@@ -33,6 +33,7 @@ PS：并不是所有页面都是用Vue.js做前台数据绑定，只是**订餐�
 
 ## 使用
 **1、安装**
+
 mongoDB version: 3.0.3
 
 Node version:5.3.0（使用stable版本也可以，其他版本未测试）
