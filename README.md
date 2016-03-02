@@ -57,12 +57,6 @@ Node version:5.3.0（使用stable版本也可以，其他版本未测试）
 
     node app.js
 
-## SCREENSHOT
-
-![overview][1]
-![manger][2]
-![userlist][3]
-![setting][4]
 
 ## License
 
