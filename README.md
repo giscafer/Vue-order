@@ -1,8 +1,6 @@
 # Vue-order
 
-项目重构中……（4月份福建出差，计划延后）
-
-*将使用webpack+Vue*
+项目重构中……（2016年5月份）
 
 在线演示[bae分支](https://github.com/giscafer/Vue-order/tree/bae)
 

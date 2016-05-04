@@ -3,5 +3,5 @@ node_modules
 # /src/server/config.js
 coverage
 npm-debug.log
-
+ele/
 src/server/config_backup.js
