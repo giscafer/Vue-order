@@ -1,6 +1,5 @@
 # Vue-order
 
-项目重构中……（2016年5月份）
 
 在线演示[bae分支](https://github.com/giscafer/Vue-order/tree/bae)
 
