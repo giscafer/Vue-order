@@ -1,11 +1,40 @@
 
 <div id="main">
-<%- partial('sidebar') %>
-    <div id="content">
+    <div id="content" class="container">
         <div class="panel">
-            <hr>
-            <h3>本项目计划重构，前端将全部使用Vue.js+Webpack实现</h3>
-            <hr>
+            <div class="row">
+                <div class="panel-title col-lg-6"><%= locationMap!='undefine' ? '您当前位置：'+locationMap.content.formatted_address : '没有获取您的位置' %></div>
+                <div class="form-group col-lg-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default-justified " type="button">search</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel-body col-lg-12" style="height:520px;" id="orderMap"></div>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $.post(Config.hostUrl+'/index/initMap', function(res) {
+            var location=res.data;
+            var address = location.content.address_component.city||"北京";
+            var point = location.content.location||{lng:116.404,lat:39.915};
+            var map = new BMap.Map("orderMap");    // 创建Map实例
+            map.centerAndZoom(new BMap.Point(point.lng, point.lat), 15);  // 初始化地图,设置中心点坐标和地图级别
+            map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+            map.setCurrentCity(address);          // 设置地图显示的城市 此项是必须设置的
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+            var pointMarker = new BMap.Marker(point); 
+            map.addOverlay(pointMarker); 
+        }).error(function(data, status, request) {
+            console.log('fail' + status + "," + request);
+        });
+        
+    })
+</script>

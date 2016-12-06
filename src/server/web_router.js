@@ -13,6 +13,7 @@ var replyController=require('./controllers/reply');//reply controller
 var siteController=require('./controllers/site');//site controller
 var userGpController=require('./controllers/usergroup');//usergroup controller
 var chartController=require('./controllers/chart');//usergroup controller
+var mapController=require('./controllers/map');//map controller
 var router = express.Router();
 // home page
 router.get('/', siteController.index);
@@ -80,6 +81,8 @@ router.post('/admin/group/:gid/edit',auth.adminRequired,userGpController.edit);/
 router.get('/charts',chartController.index);
 //statistics统计
 router.post('/charts/:type/statistics',chartController.statistics); //订餐统计
+//获取用户位置
+router.post('/index/initMap',siteController.initMap); //订餐统计
 
 
 

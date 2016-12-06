@@ -8,7 +8,7 @@ var UserProxy = require('../proxy').User;
  * 统计页
  */
 exports.index=function(req,res,next){
-    res.locals.current_page='charts'
+    res.locals.current_page='charts';
 	res.render('charts/charts', {
 	    title: '图表统计'
 	});
@@ -27,23 +27,23 @@ exports.statistics=function(req,res,next){
          o.map = function () { 
             var cate=this.user_id;
             emit(cate,{price:this.dish_price});
-        }
+        };
     }else{
          o.map = function () { 
             var cate=this.dish_name;
             emit(cate,{price:this.dish_price});
-        }
+        };
     }
    //默认是all，热门排行统计
     o.reduce = function (k, vals) {
         var sum=0;
         var totalCost=0;
         vals.forEach(function(order){
-            sum+=1
+            sum+=1;
             totalCost+=order.price;
         });
         return {count:sum,cost:totalCost};
-    }
+    };
     o.out = { replace: 'order_results' };
     
     if(userId){
@@ -57,7 +57,7 @@ exports.statistics=function(req,res,next){
     var options={
        query:null,
        opt: {limit:10,sort: '-value.count'}
-    }
+    };
     if(type==='rich'){
         options.opt.limit=10;
         options.opt.sort='-value.cost';
@@ -94,6 +94,4 @@ exports.statistics=function(req,res,next){
             res.send({data:docs});
         });
     }
-    
-    
-}
+};
