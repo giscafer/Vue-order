@@ -48,6 +48,7 @@ exports.index = function (req, res, next) {
 exports.initMap = function(req, res, next){
     // var clientIp = map.getClientIP(req);
     var responseJson = map.userLocation();
+    // var cateJson = map.getNearbyCate();
     if (responseJson.result.error == 161) {
           // 如果返回正常解析数据
           res.send({data:responseJson});

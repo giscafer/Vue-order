@@ -3,10 +3,11 @@
  * 订餐控制器
  */
 var request = require('sync-request');
-var os = require('os');  
+var os = require('os');
+var baiduApiKey =  'K1jRXLt19Dbtuc6A1f4nlUZS4WG1egtx';
 
 exports.userLocation = function(){
-    var path = 'https://api.map.baidu.com/highacciploc/v1?extensions=1&qterm=pc&ak=K1jRXLt19Dbtuc6A1f4nlUZS4WG1egtx&coord=bd09ll';
+    var path = 'https://api.map.baidu.com/highacciploc/v1?extensions=1&qterm=pc&ak='+baiduApiKey+'&coord=bd09ll';
     var res = request('GET', path);
     try {
             var responseJson = JSON.parse(res.getBody().toString());
@@ -38,4 +39,16 @@ exports.getClientIP = function(req){
         });
     });
     return "IPv4";
+}
+exports.getNearbyCate = function(req){
+    var path = 'https://api.map.baidu.com/highacciploc/v1?extensions=1&qterm=pc&ak=K1jRXLt19Dbtuc6A1f4nlUZS4WG1egtx&coord=bd09ll';
+    var res = request('GET', path);
+    try {
+            var responseJson = JSON.parse(res.getBody().toString());
+            return responseJson;
+        } catch (error) {
+            // 解析失败
+            console.log(i + ": Error!" + error.stack);
+            console.log(body); // 输出body以供参考
+        }
 }
