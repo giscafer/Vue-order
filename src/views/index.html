@@ -1,29 +1,52 @@
-
-<div id="main">
-    <div id="mapContent" class="container">
+<style>
+    .toolbar {
+        position: fixed;
+        z-index: 100;
+        background: #e0d972;
+        width: 400px;
+        margin-left: 40px;
+        margin-top: 50px;
+    }
+    .searchbox-container {
+        border-radius: 2px 0 0 2px;
+        box-shadow: 1px 2px 1px rgba(0,0,0,.15)
+    }
+    .search-btn{
+        padding-left:20px;
+        padding-right:20px;
+    }
+    /*.footer{
+        position: fixed;
+        z-index: 100;
+        width: 400px;
+    }*/
+</style>
+<div id="index-content">
+    <div id="mapContent">
         <div class="panel">
-            <div class="row">
-                <div class="panel-title col-lg-6" v-text="locationText"></div>
-                <div class="form-group col-lg-6">
+            <div class="toolbar">
+                <div class="location-title" v-text="locationText"></div>
+                <div class="searchbox-container">
                     <div class="input-group">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control search-form">
                         <span class="input-group-btn">
-                            <button class="btn btn-default-justified " type="button">search</button>
+                            <button class="btn btn-primary search-btn" type="button"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="panel-body col-lg-12" style="height:520px;" id="orderMap"></div>
+                <div class="panel-body col-lg-12" style="height:100%;" id="orderMap"></div>
             </div>
         </div>
     </div>
 </div>
 <script>
+var winHeight=$(window).innerHeight()-70;
+$('#orderMap').css('height',winHeight);
 var vue = new Vue({
     el: '#mapContent',
     ready: function() {
-        debugger;
          $.post(Config.hostUrl+'/index/initMap', function(res) {
             var location=res.data;
             vue.initLocation(location);

@@ -53,7 +53,7 @@ exports.initMap = function(req, res, next){
           // 如果返回正常解析数据
           res.send({data:responseJson});
       } else {
-          // 如果返回错误解析数据
-          console.log(i + ': 请求失败！错误代码：' +responseJson.result.error + "\r\n");
+          // 如果返回错误解析数据，需要申请key，否则一天不能超过多少次请求。。。
+          console.log( ': 请求失败！错误代码：' +responseJson.result.error + "\r\n");
       } 
 };
