@@ -64,6 +64,7 @@
     "node-interceptor": "0.0.2",
     "pedding": "^1.0.0",
     "should": "^8.2.2",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "sync-request": "^3.0.1"
   }
 }
