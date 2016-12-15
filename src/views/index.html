@@ -4,7 +4,8 @@
         z-index: 100;
         background: #e0d972;
         width: 400px;
-        margin-left: 40px;
+        right: 40px;
+        margin-right: 40px;
         margin-top: 50px;
     }
     .searchbox-container {
@@ -20,9 +21,9 @@
         background-color: white;
         max-height: 90%;
         overflow-y: auto;
-        top: 60px;
-        right: 10px;
-        width: 280px;
+        top: 70px;
+        left: 10px;
+        width: 20%;
         border-bottom: solid 1px silver;
     }
 </style>
@@ -30,7 +31,7 @@
     <div id="mapContent">
         <div>
             <div class="toolbar">
-                <div class="location-title" v-text="locationText"></div>
+                <h3 style="width: 400px;"><p v-text="locationText"></p></h3>
                 <div class="searchbox-container">
                     <div class="input-group">
                         <input type="text" class="form-control search-form">
@@ -62,7 +63,8 @@ var mapVue = new Vue({
             resizeEnable: true
         }),
         pointMarker: {},
-        local: []
+        local: [],
+        placeSearchService:{}
     },
     ready: function() {
         setTimeout(this.initLocation,200);
@@ -86,16 +88,9 @@ var mapVue = new Vue({
                 mapVue.orderMap.addControl(geolocation);
                 geolocation.getCurrentPosition();
                 AMap.event.addListener(geolocation, 'complete', mapVue.onLocationComplete);//返回定位信息
-                // AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+                AMap.event.addListener(geolocation, 'error', mapVue.onLocationError);      //返回定位出错信息
             });
-            this.orderMap.on("moveend",function(event){
-                var center = this.getCenter();
-                // mapVue.placeSearch([center.lng,center.lat]);
-            })
-            this.orderMap.on("zoomend",function(event){
-                var center = this.getCenter();
-                // mapVue.placeSearch([center.lng,center.lat]);
-            })
+            
         },
         onLocationComplete: function(e){
             var lng = e.position.getLng();
@@ -107,14 +102,17 @@ var mapVue = new Vue({
             });
              geocoder.getAddress(this.local, function(status, result) {
                 if (status === 'complete' && result.info === 'OK') {
-                   mapVue.locationText+=result.regeocode.formattedAddress;
+                   mapVue.locationText="您当前位置："+result.regeocode.formattedAddress;
                 }
             });
             this.placeSearch(this.local);    
         },
+        onLocationError: function(e){
+            mapVue.locationText="无法您的位置信息";
+        },
         placeSearch: function(local){
              AMap.service(["AMap.PlaceSearch"], function() {
-                var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+                mapVue.placeSearchService = new AMap.PlaceSearch({ //构造地点查询类
                     pageSize: 5,
                     type: '餐饮服务',
                     pageIndex: 1,
@@ -122,11 +120,20 @@ var mapVue = new Vue({
                     map: mapVue.orderMap,
                     panel: "panel"
                 });
-                placeSearch.clear();
-                placeSearch.searchNearBy('', local, 200, function(status, result) {
-
+                mapVue.placeSearchService.searchNearBy('', local, 200, function(status, result) {
+                     mapVue.orderMap.on("moveend",function(event){
+                        var center = this.getCenter();
+                        mapVue.searchInBounds();
+                    })
+                    mapVue.orderMap.on("zoomend",function(event){
+                        var center = this.getCenter();
+                        mapVue.searchInBounds();
+                    })
                 });
             });
+        },
+        searchInBounds: function(){
+            mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds()); //地图可视范围查询
         }
     }
 })
