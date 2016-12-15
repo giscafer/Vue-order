@@ -36,60 +36,56 @@
                 </div>
             </div>
             <div class="row">
-                <div class="panel-body col-lg-12" style="height:100%;" id="orderMap"></div>
+                <div class="panel-body col-lg-12" style="height:100%;" id="orderMapDiv"></div>
             </div>
         </div>
     </div>
 </div>
 <script>
 var winHeight=$(window).innerHeight()-70;
-$('#orderMap').css('height',winHeight);
-var vue = new Vue({
+$('#orderMapDiv').css('height',winHeight);
+var mapVue = new Vue({
     el: '#mapContent',
-    ready: function() {
-         $.post(Config.hostUrl+'/index/initMap', function(res) {
-            var location=res.data;
-            vue.initLocation(location);
-        }).error(function(data, status, request) {
-            console.log('fail' + status + "," + request);
-        });
-    },
     data: {
         locationText: '您当前位置：',
-        map : new BMap.Map("orderMap"),
+        orderMap : new AMap.Map("orderMapDiv", {
+            resizeEnable: true
+        }),
         pointMarker: {},
         local: {}
     },
+    ready: function() {
+        setTimeout(this.initLocation,200);
+    },
     methods: {
-        initLocation: function(location){
-            this._data.locationText = "您当前位置："+location.content.formatted_address;
-            var address = location.content.address_component.city||"北京";
-            var point = location.content.location||{lng:116.404,lat:39.915};
-            this.map.centerAndZoom(new BMap.Point(point.lng, point.lat), 15);  // 初始化地图,设置中心点坐标和地图级别
-            this.map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-            this.map.setCurrentCity(address);          // 设置地图显示的城市 此项是必须设置的
-            this.map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-            var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
-            this.pointMarker = new BMap.Marker(point,{icon:myIcon});  // 创建标注
-            this.map.addOverlay(this.pointMarker);
-            this.local = new BMap.LocalSearch(this.map, {
-                renderOptions:{map:this.map}
+        initLocation: function(){
+             var customMarker = new AMap.Marker({
+                offset: new AMap.Pixel(-14, -34),//相对于基点的位置
+                icon: new AMap.Icon({  //复杂图标
+                    size: new AMap.Size(27, 36),//图标大小
+                    image: "http://developer.baidu.com/map/jsdemo/img/fox.gif", //大图地址
+                    imageOffset: new AMap.Pixel(-28, 0)//相对于大图的取图位置
+                })
             });
-            this.map.addEventListener('zoomend', function(e){
-                vue.getNearbyCate(this.getBounds());
+            this.orderMap.plugin('AMap.Geolocation', function(result) {
+                geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                    timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+                    maximumAge: 0,           //定位结果缓存0毫秒，默认：0
+                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    showButton: true,        //显示定位按钮，默认：true
+                    buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
+                    buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    showMarker: true,        //定位成功后在定位到的位置显示点标记，默认：true
+                    showCircle: true,        //定位成功后用圆圈表示定位精度范围，默认：true
+                    panToLocation: true,     //定位成功后将定位到的位置作为地图中心点，默认：true
+                    zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+                });
+                mapVue.orderMap.addControl(geolocation);
+                geolocation.getCurrentPosition();
+                // AMap.event.addListener(geolocation, 'complete', this.onLocationComplete);//返回定位信息
+                // AMap.event.addListener(geolocation, 'error', onLocationError);      //返回定位出错信息
             });
-            this.map.addEventListener('dragend', function(e){
-                vue.getNearbyCate(this.getBounds());
-            });
-             this.getNearbyCate();
-        },
-        getNearbyCate: function(bounds){
-            this.map.clearOverlays();
-            var searchBounds = bounds||this.map.getBounds();
-            this.local.searchInBounds("美食",searchBounds,function(e){
-                alert(this);
-            });
-            this.map.addOverlay(this.pointMarker);
         }
     }
 })
