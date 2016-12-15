@@ -15,15 +15,20 @@
         padding-left:20px;
         padding-right:20px;
     }
-    /*.footer{
+    #panel {
         position: fixed;
-        z-index: 100;
-        width: 400px;
-    }*/
+        background-color: white;
+        max-height: 90%;
+        overflow-y: auto;
+        top: 60px;
+        right: 10px;
+        width: 280px;
+        border-bottom: solid 1px silver;
+    }
 </style>
 <div id="index-content">
     <div id="mapContent">
-        <div class="panel">
+        <div>
             <div class="toolbar">
                 <div class="location-title" v-text="locationText"></div>
                 <div class="searchbox-container">
@@ -34,16 +39,21 @@
                         </span>
                     </div>
                 </div>
+                <div id="panel"></div>
             </div>
-            <div class="row">
-                <div class="panel-body col-lg-12" style="height:100%;" id="orderMapDiv"></div>
+            <div>
+                <div id="orderMapDiv"></div>
             </div>
         </div>
     </div>
 </div>
 <script>
-var winHeight=$(window).innerHeight()-70;
-$('#orderMapDiv').css('height',winHeight);
+var winHeight=$(window).innerHeight()-60;
+var winWidth=$(window).innerWidth();
+$('#orderMapDiv').css({
+    'height':winHeight,
+    'width':winWidth
+});
 var mapVue = new Vue({
     el: '#mapContent',
     data: {
@@ -52,27 +62,19 @@ var mapVue = new Vue({
             resizeEnable: true
         }),
         pointMarker: {},
-        local: {}
+        local: []
     },
     ready: function() {
         setTimeout(this.initLocation,200);
     },
     methods: {
         initLocation: function(){
-             var customMarker = new AMap.Marker({
-                offset: new AMap.Pixel(-14, -34),//相对于基点的位置
-                icon: new AMap.Icon({  //复杂图标
-                    size: new AMap.Size(27, 36),//图标大小
-                    image: "http://developer.baidu.com/map/jsdemo/img/fox.gif", //大图地址
-                    imageOffset: new AMap.Pixel(-28, 0)//相对于大图的取图位置
-                })
-            });
             this.orderMap.plugin('AMap.Geolocation', function(result) {
                 geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true,//是否使用高精度定位，默认:true
                     timeout: 10000,          //超过10秒后停止定位，默认：无穷大
                     maximumAge: 0,           //定位结果缓存0毫秒，默认：0
-                    convert: true,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
+                    convert: false,           //自动偏移坐标，偏移后的坐标为高德坐标，默认：true
                     showButton: true,        //显示定位按钮，默认：true
                     buttonPosition: 'LB',    //定位按钮停靠位置，默认：'LB'，左下角
                     buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
@@ -83,8 +85,47 @@ var mapVue = new Vue({
                 });
                 mapVue.orderMap.addControl(geolocation);
                 geolocation.getCurrentPosition();
-                // AMap.event.addListener(geolocation, 'complete', this.onLocationComplete);//返回定位信息
-                // AMap.event.addListener(geolocation, 'error', onLocationError);      //返回定位出错信息
+                AMap.event.addListener(geolocation, 'complete', mapVue.onLocationComplete);//返回定位信息
+                // AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+            });
+            this.orderMap.on("moveend",function(event){
+                var center = this.getCenter();
+                // mapVue.placeSearch([center.lng,center.lat]);
+            })
+            this.orderMap.on("zoomend",function(event){
+                var center = this.getCenter();
+                // mapVue.placeSearch([center.lng,center.lat]);
+            })
+        },
+        onLocationComplete: function(e){
+            var lng = e.position.getLng();
+            var lat = e.position.getLat();
+            this.local =[lng,lat];
+            var geocoder = new AMap.Geocoder({
+                radius: 1000,
+                extensions: "all"
+            });
+             geocoder.getAddress(this.local, function(status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                   mapVue.locationText+=result.regeocode.formattedAddress;
+                }
+            });
+            this.placeSearch(this.local);    
+        },
+        placeSearch: function(local){
+             AMap.service(["AMap.PlaceSearch"], function() {
+                var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+                    pageSize: 5,
+                    type: '餐饮服务',
+                    pageIndex: 1,
+                    city: "010", //城市
+                    map: mapVue.orderMap,
+                    panel: "panel"
+                });
+                placeSearch.clear();
+                placeSearch.searchNearBy('', local, 200, function(status, result) {
+
+                });
             });
         }
     }
