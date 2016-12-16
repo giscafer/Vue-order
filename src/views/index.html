@@ -34,9 +34,9 @@
                 <h3 style="width: 400px;"><p v-text="locationText"></p></h3>
                 <div class="searchbox-container">
                     <div class="input-group">
-                        <input type="text" class="form-control search-form">
+                        <input type="text" id="tipinput" v-model="searchText" class="form-control search-form">
                         <span class="input-group-btn">
-                            <button class="btn btn-primary search-btn" type="button"><i class="fa fa-search"></i></button>
+                            <button class="btn btn-primary search-btn" @click="search" type="button"><i class="fa fa-search"></i></button>
                         </span>
                     </div>
                 </div>
@@ -64,13 +64,22 @@ var mapVue = new Vue({
         }),
         pointMarker: {},
         local: [],
-        placeSearchService:{}
+        placeSearchService:{},
+        searchText: ""
     },
     ready: function() {
         setTimeout(this.initLocation,200);
     },
     methods: {
         initLocation: function(){
+            mapVue.orderMap.plugin(["AMap.Autocomplete"],function(){   //在地图中添加ToolBar插件      
+                var Autocomplete = new AMap.Autocomplete();  
+                mapVue.orderMap.addControl(Autocomplete);   
+                var auto = new AMap.Autocomplete({
+                    input: "tipinput"
+                });    
+            });  
+            
             this.orderMap.plugin('AMap.Geolocation', function(result) {
                 geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -116,7 +125,6 @@ var mapVue = new Vue({
                     pageSize: 5,
                     type: '餐饮服务',
                     pageIndex: 1,
-                    city: "010", //城市
                     map: mapVue.orderMap,
                     panel: "panel"
                 });
@@ -133,7 +141,14 @@ var mapVue = new Vue({
             });
         },
         searchInBounds: function(){
+            mapVue.placeSearchService.clear();
             mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds()); //地图可视范围查询
+        },
+        search: function(){
+            if(this.searchText){
+                mapVue.placeSearchService.clear();
+                mapVue.placeSearchService.search(this.searchText); //查询关键字
+            }
         }
     }
 })
