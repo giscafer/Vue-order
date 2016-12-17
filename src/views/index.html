@@ -65,7 +65,8 @@ var mapVue = new Vue({
         pointMarker: {},
         local: [],
         placeSearchService:{},
-        searchText: ""
+        searchText: "",
+        city:''
     },
     ready: function() {
         setTimeout(this.initLocation,200);
@@ -112,9 +113,24 @@ var mapVue = new Vue({
              geocoder.getAddress(this.local, function(status, result) {
                 if (status === 'complete' && result.info === 'OK') {
                    mapVue.locationText="您当前位置："+result.regeocode.formattedAddress;
+                   mapVue.city = result.regeocode.addressComponent.citycode;
                 }
             });
             this.placeSearch(this.local);    
+        },
+        addListener: function(){
+            // mapVue.orderMap.on("moveend",function(event){
+            //     var center = this.getCenter();
+            //     mapVue.searchInBounds();
+            // });
+            //  mapVue.orderMap.on("zoomend",function(event){
+            //     var center = this.getCenter();
+            //     mapVue.searchInBounds();
+            // });
+        },
+        removeListener: function(){
+            // mapVue.orderMap.off("moveend");
+            // mapVue.orderMap.off("zoomend");
         },
         onLocationError: function(e){
             mapVue.locationText="无法您的位置信息";
@@ -123,31 +139,31 @@ var mapVue = new Vue({
              AMap.service(["AMap.PlaceSearch"], function() {
                 mapVue.placeSearchService = new AMap.PlaceSearch({ //构造地点查询类
                     pageSize: 5,
-                    type: '餐饮服务',
                     pageIndex: 1,
+                    city: mapVue.city, //城市
+                    type: '餐饮服务',
                     map: mapVue.orderMap,
                     panel: "panel"
                 });
                 mapVue.placeSearchService.searchNearBy('', local, 200, function(status, result) {
-                     mapVue.orderMap.on("moveend",function(event){
-                        var center = this.getCenter();
-                        mapVue.searchInBounds();
-                    })
-                    mapVue.orderMap.on("zoomend",function(event){
-                        var center = this.getCenter();
-                        mapVue.searchInBounds();
-                    })
+                    setTimeout(mapVue.addListener,1000);
                 });
             });
         },
         searchInBounds: function(){
+            this.removeListener();
             mapVue.placeSearchService.clear();
-            mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds()); //地图可视范围查询
+            mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds(),function(e){
+                setTimeout(this.addListener,1000);
+            }); //地图可视范围查询
         },
         search: function(){
             if(this.searchText){
+                this.removeListener();
                 mapVue.placeSearchService.clear();
-                mapVue.placeSearchService.search(this.searchText); //查询关键字
+                mapVue.placeSearchService.search(this.searchText,function(e,result,data){
+                    setTimeout(this.addListener,2000);
+                }); //查询关键字
             }
         }
     }
