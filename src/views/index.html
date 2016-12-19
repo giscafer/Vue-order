@@ -147,14 +147,22 @@ var mapVue = new Vue({
                 });
                 mapVue.placeSearchService.searchNearBy('', local, 200, function(status, result) {
                     setTimeout(mapVue.addListener,1000);
+                    setTimeout(mapVue.appendBook,300);
                 });
             });
+        },
+        appendBook: function(){
+            $(".poi-info").append("<span><a onclick='mapVue.bookDining(this);' style='background-color: #ff9429;width: 48px;color: #fff;height: 19px;line-height: 19px;text-align: center;border-radius: 1px;'>预定</a></span>");
+        },
+        bookDining: function(e){
+            debugger;
         },
         searchInBounds: function(){
             this.removeListener();
             mapVue.placeSearchService.clear();
             mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds(),function(e){
                 setTimeout(this.addListener,1000);
+                setTimeout(mapVue.appendBook,300);
             }); //地图可视范围查询
         },
         search: function(){
@@ -163,6 +171,7 @@ var mapVue = new Vue({
                 mapVue.placeSearchService.clear();
                 mapVue.placeSearchService.search(this.searchText,function(e,result,data){
                     setTimeout(this.addListener,2000);
+                    setTimeout(mapVue.appendBook,300);
                 }); //查询关键字
             }
         }
