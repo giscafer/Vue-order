@@ -42,6 +42,46 @@
         margin-right: 85px;
         margin-left: 30px!important;
     }
+    .poi-row{
+        margin: 10px;
+    }
+    .poi-row span{
+        color:#666!important;
+        white-space: nowrap;
+    }
+    .comehere {
+        position: absolute;
+        right: 16px;
+        margin-top: 5px;
+        width: 54px;
+        height: 54px;
+        line-height: 72px;
+        text-align: center;
+        background: #0e89f5;
+        background-image: url(/assets/img/dirnew_white.png);
+        background-size: 15.5px 18px;
+        background-position: 50% 22%;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,.3);
+        transition: box-shadow .15s cubic-bezier(.4,0,1,1);
+    }
+    .comehere:hover {
+        box-shadow: 1px 2px 6px 0 rgba(0,0,0,.4);
+    }
+    .orderButton span{
+        display: inline-block;
+        margin-top: 5px;
+        background-color: #f44335;
+        font-size: 12px;
+        color: #FFF;
+        line-height: 34px;
+        width: 70px;
+        text-align: center;
+        border-radius: 2px;
+    }
 </style>
 <link rel="stylesheet" href="/libs/css/du.css">
 <div id="index-content">
@@ -58,30 +98,29 @@
                     </div>
                 </div>
                 <div id="panel">
-                    <ul class="poilist">
+                    <ul class="poilist" v-for="poiItem in pois">
                         <li data-index='1' class="search-item">
                             <div>
                                 <div class="col-l">
-                                    <a class="no-1"></a>
+                                    <a class="no-{{$index+1}}"></a>
                                 </div>
                                 <div class="col-r">
                                     <div class="img-wrap">
-                                        <img src="http://webmap3.map.bdimg.com/maps/services/thumbnails?width=132&amp;height=104&amp;align=center,center&amp;quality=100&amp;src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fbainuo%2Fcrop%253D0%252C0%252C470%252C285%253Bw%253D470%253Bq%253D79%2Fsign%3D86fa4d69c05c1038303194828f21bf23%2Fc995d143ad4bd1131c5afa415cafa40f4bfb0529.jpg" style="width:71px;height:58px;">
+                                        <img src="{{poiItem.photos[0].url}}" style="width:71px;height:58px;">
                                     </div>
+                                    <div class="comehere">去这里</div>
                                 </div>
                                 <div class="col-c">
-                                    <div class="">
-                                        <a class="n-blue">马德里皇家咖啡</a>
+                                    <div class="poi-row">
+                                        <a class="n-blue">{{poiItem.name}}</a>
                                     </div>
-                                    <div class="">
-                                        <span>1323223323</span>
+                                    <div class="poi-row">
+                                        <span>{{poiItem.tel}}</span>
                                     </div>
-                                    <div class=" addr">
-                                        <span class="n-grey">枣林路谭记烩面馆旁</span>
+                                    <div class="poi-row addr">
+                                        <span class="n-grey">{{poiItem.address}}</span>
                                     </div>
-                                    <div class="">
-                                        <span>马上订餐</span>
-                                    </div>
+                                    <div class="orderButton"><span>马上订餐</span></div>
                                 </div>
                             </div>
                         </li>
@@ -112,7 +151,8 @@ var mapVue = new Vue({
         local: [],
         placeSearchService:{},
         searchText: "",
-        city:''
+        city:'',
+        pois: null
     },
     ready: function() {
         setTimeout(this.initLocation,200);
@@ -191,7 +231,8 @@ var mapVue = new Vue({
                     extensions:'all',
                     map: mapVue.orderMap
                 });
-                mapVue.placeSearchService.searchNearBy('', local, 200, function(status, result) {
+                mapVue.placeSearchService.searchNearBy('', local, 2000, function(status, result) {
+                    mapVue.pois = result.poiList.pois;
                     debugger;
                     setTimeout(mapVue.addListener,1000);
                     setTimeout(mapVue.appendBook,300);
