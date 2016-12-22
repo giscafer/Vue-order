@@ -7,7 +7,7 @@ var EventProxy = require('eventproxy');
 var OrderProxy = require('../proxy').Order;
 var UserProxy = require('../proxy').User;
 var request = require('request');
-var map = require('./map');
+var requestSync = require('sync-request');
 
 exports.index = function (req, res, next) {
     var proxy = new EventProxy();
@@ -34,26 +34,26 @@ exports.index = function (req, res, next) {
           return tops;
         })
       );
-   var responseJson = map.userLocation();
     proxy.all('lasts','tops',function (lasts,tops) {
       res.locals.current_page='index';
       res.render('index', {
         lasts: lasts,
         tops: tops,
-        locationMap: responseJson,
         pageTitle:'首页'
       });
     });
 };
-exports.initMap = function(req, res, next){
-    // var clientIp = map.getClientIP(req);
-    var responseJson = map.userLocation();
-    // var cateJson = map.getNearbyCate();
-    if (responseJson.result.error == 161) {
-          // 如果返回正常解析数据
-          res.send({data:responseJson});
-      } else {
-          // 如果返回错误解析数据，需要申请key，否则一天不能超过多少次请求。。。
-          console.log( ': 请求失败！错误代码：' +responseJson.result.error + "\r\n");
-      } 
+exports.getMean = function(req, res, next){
+  var lng = req.query.lng;
+  var lat = req.query.lat;
+  var url = "http://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude="+lat+"&limit=1&longitude="+lng+"&offset=0";
+  var result = requestSync('GET', url);
+  try {
+      // var responseJson = JSON.parse(result.getBody().toString());
+      res.write(result.getBody().toString());
+      res.end();
+  } catch (error) {
+      // 解析失败
+      console.log("Error!" + error.stack);
+  }
 };
