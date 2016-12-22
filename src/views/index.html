@@ -19,7 +19,7 @@
     #panel {
         position: fixed;
         background-color: white;
-        max-height: 90%;
+        max-height: 70%;
         overflow-y: auto;
         top: 150px;
         left: 20px;
@@ -77,7 +77,7 @@
         background-color: #f44335;
         font-size: 12px;
         color: #FFF;
-        line-height: 34px;
+        line-height: 25px;
         width: 70px;
         text-align: center;
         border-radius: 2px;
@@ -108,7 +108,7 @@
                                     <div class="img-wrap">
                                         <img src="{{poiItem.photos[0].url}}" style="width:71px;height:58px;">
                                     </div>
-                                    <div class="comehere">去这里</div>
+                                    <div class="comehere" onclick="mapVue.ridingFn([{{poiItem.location.lng}},{{poiItem.location.lat}}]);">去这里</div>
                                 </div>
                                 <div class="col-c">
                                     <div class="poi-row">
@@ -120,7 +120,7 @@
                                     <div class="poi-row addr">
                                         <span class="n-grey">{{poiItem.address}}</span>
                                     </div>
-                                    <div class="orderButton"><span>马上订餐</span></div>
+                                    <div class="orderButton"><span onclick="mapVue.getMenu({{poiItem.location.lng}},{{poiItem.location.lat}});">马上订餐</span></div>
                                 </div>
                             </div>
                         </li>
@@ -146,13 +146,13 @@ var mapVue = new Vue({
         locationText: '您当前位置：',
         orderMap : new AMap.Map("orderMapDiv", {
             resizeEnable: true
-        }),
-        pointMarker: {},
-        local: [],
-        placeSearchService:{},
-        searchText: "",
-        city:'',
-        pois: null
+        }),//地图对象
+        local: [],//当前位置
+        placeSearchService:{},//搜索服务
+        riding: {},//不行路径规划服务
+        searchText: "",//搜索框
+        city:'',//当前城市
+        pois: null//搜索结果展示列表
     },
     ready: function() {
         setTimeout(this.initLocation,200);
@@ -166,7 +166,11 @@ var mapVue = new Vue({
                     input: "tipinput"
                 });    
             });  
-            
+            mapVue.orderMap.plugin(["AMap.Riding"],function(){   //在地图中添加ToolBar插件      
+                mapVue.riding = new AMap.Riding({
+                    map: mapVue.orderMap
+                });    
+            });
             this.orderMap.plugin('AMap.Geolocation', function(result) {
                 geolocation = new AMap.Geolocation({
                     enableHighAccuracy: true,//是否使用高精度定位，默认:true
@@ -186,7 +190,7 @@ var mapVue = new Vue({
                 AMap.event.addListener(geolocation, 'complete', mapVue.onLocationComplete);//返回定位信息
                 AMap.event.addListener(geolocation, 'error', mapVue.onLocationError);      //返回定位出错信息
             });
-            
+             
         },
         onLocationComplete: function(e){
             var lng = e.position.getLng();
@@ -233,24 +237,21 @@ var mapVue = new Vue({
                 });
                 mapVue.placeSearchService.searchNearBy('', local, 2000, function(status, result) {
                     mapVue.pois = result.poiList.pois;
-                    debugger;
                     setTimeout(mapVue.addListener,1000);
-                    setTimeout(mapVue.appendBook,300);
                 });
             });
         },
-        appendBook: function(){
-            $(".poi-info").append("<span><a onclick='mapVue.bookDining(this);' style='background-color: #ff9429;width: 48px;color: #fff;height: 19px;line-height: 19px;text-align: center;border-radius: 1px;'>预定</a></span>");
-        },
         bookDining: function(e){
             debugger;
+            //https://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id=2190668
+            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
+            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
         },
         searchInBounds: function(){
             this.removeListener();
             mapVue.placeSearchService.clear();
             mapVue.placeSearchService.searchInBounds("", mapVue.orderMap.getBounds(),function(e){
                 setTimeout(this.addListener,1000);
-                setTimeout(mapVue.appendBook,300);
             }); //地图可视范围查询
         },
         search: function(){
@@ -259,9 +260,35 @@ var mapVue = new Vue({
                 mapVue.placeSearchService.clear();
                 mapVue.placeSearchService.search(this.searchText,function(e,result,data){
                     setTimeout(this.addListener,2000);
-                    setTimeout(mapVue.appendBook,300);
                 }); //查询关键字
             }
+        },
+        ridingFn: function(destination){
+            mapVue.riding.search(mapVue.local, destination);
+        },
+        getMenu: function(lng,lat){
+            //https://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id=2190668
+            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
+            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
+            
+             var data = {
+                lng:lng,
+                lat:lat
+            };
+             $.ajax({
+                url: Config.hostUrl+'/index/getMean',
+                type : "get",
+                data:data,
+                cache : true,
+                success: function(data){
+                    console.log("OK");
+                    debugger;
+                },
+                error:function(err,result){
+                    console.log("NO");
+                    debugger;
+                }
+            })
         }
     }
 })
