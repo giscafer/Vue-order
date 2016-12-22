@@ -82,7 +82,7 @@ router.get('/charts',chartController.index);
 //statistics统计
 router.post('/charts/:type/statistics',chartController.statistics); //订餐统计
 //获取用户位置
-router.post('/index/initMap',siteController.initMap); //初始化地图
+router.get('/index/getMean',siteController.getMean); //初始化地图
 
 
 
