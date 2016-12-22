@@ -48,12 +48,18 @@ exports.getMean = function(req, res, next){
   var lat = req.query.lat;
   var url = "http://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude="+lat+"&limit=1&longitude="+lng+"&offset=0";
   var result = requestSync('GET', url);
-  try {
-      // var responseJson = JSON.parse(result.getBody().toString());
-      res.write(result.getBody().toString());
-      res.end();
-  } catch (error) {
-      // 解析失败
-      console.log("Error!" + error.stack);
-  }
+  var responseJson = JSON.parse(result.getBody().toString());
+  var canteenUrl = "http://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id="+responseJson[0].id;
+  var canteenResult = requestSync('GET', canteenUrl);
+  res.locals.current_page='orders'
+  res.render('orders', {
+      title: '首页'
+  });
+//   try {
+//       // res.write(canteenResult.getBody().toString());
+//       // res.end();
+//   } catch (error) {
+//       // 解析失败
+//       console.log("Error!" + error.stack);
+//   }
 };

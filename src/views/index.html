@@ -152,7 +152,8 @@ var mapVue = new Vue({
         riding: {},//不行路径规划服务
         searchText: "",//搜索框
         city:'',//当前城市
-        pois: null//搜索结果展示列表
+        pois: null,//搜索结果展示列表
+        canteenId: null
     },
     ready: function() {
         setTimeout(this.initLocation,200);
@@ -281,11 +282,11 @@ var mapVue = new Vue({
                 data:data,
                 cache : true,
                 success: function(data){
-                    console.log("OK");
-                    debugger;
+                    var result = JSON.parse(data);
+                    mapVue.canteenId = result.id;
                 },
                 error:function(err,result){
-                    console.log("NO");
+                    console.log("error");
                     debugger;
                 }
             })

@@ -12,12 +12,12 @@ var config = {
     //是否允许注册
     allow_sign_up: true,
     //注册是否需要激活邮箱
-    need_active_mail:false,
+    need_active_mail:true,
      /**
      * URL
      * 域名地址,如果没有请留空，(!domain || devMode)===true时会读取host+':'+port作为地址
      */
-    domain: 'vueorder.duapp.com',
+    domain: 'zengwei.duapp.com',
     host: '127.0.0.1',
     port: 18080,
     // mongodb 配置
@@ -25,9 +25,9 @@ var config = {
     //如果devMode=true，则数据库连接使用dev_dbUrl，反之为dbConfig
     dbConfig: {
         "host": "mongo.duapp.com",
-        "database": "SKxOi111111111PLSnCBzpYNJLv",
-        "userid": "a82c20111111111175bff285baf7839fdb",
-        "password": "e4d11111111163f54c1a87a88933a81eee57",
+        "database": "ecMNlJNblvczIeyQuMBN",
+        "userid": "Bl0YekC6r5MC9EmX1w4lL6vI",
+        "password": "iPvitY6K4rn749EdEf5gsHE4DxhaxNYI",
         "port": 8908
     },
     //session设置
@@ -37,13 +37,13 @@ var config = {
     auth_cookie_name: 'vueorder_cookie', //cookie名称
     
     //百度应用的	用户名和密码
-    bae_accesskey:'a82c2085536e41111111111baf7839fdb',
-    bae_secretkey:'e4db12d663f54c1a87a889111111111ee57',
+    bae_accesskey:'Bl0YekC6r5MC9EmX1w4lL6vI',
+    bae_secretkey:'iPvitY6K4rn749EdEf5gsHE4DxhaxNYI',
     
     // redis 配置，BAE
     redis_host: 'redis.duapp.com',
     redis_port: 80,
-    redis_db: 'ywBsVfllj111111111NwcXThQo',
+    redis_db: 'exLeDgEWxbrvHSKPDEAP',
      //超级管理员账户（user_login_name: true ）
     admins: {
         // user_login_name: true 

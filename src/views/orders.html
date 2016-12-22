@@ -1,5 +1,6 @@
-<div class="container-fluid fixed" id="VueAapp">
-    <div class="col-md-12" id="content">
+<div class="container-fluid" id="VueAapp">
+    <div class="col-lg-5" v-model="mean"></div>
+    <div class="col-lg-7" id="content">
         <div class="heading-buttons">
             <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
             <div class="buttons pull-right">
@@ -72,7 +73,7 @@
             <li>我要订餐</li>
         </ul>
         <br>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-lg-8 col-lg-offset-2">
             <div id="add-order">
                 <form action="/orders/create" method='post' id="orderForm" class="form-horizontal">
                     <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
@@ -171,6 +172,7 @@ var EventProxy = new EventProxy();
 var vue = new Vue({
     el: '#VueAapp',
     ready: function() {
+        console.log(this.mean);
         var that = this;
         var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
         $("#queryDateValue").val(queryDate);
@@ -193,6 +195,7 @@ var vue = new Vue({
             dish_price: '',
             ispack: ''
         },
+        mean: null,
         orders: ''
     },
     computed: {

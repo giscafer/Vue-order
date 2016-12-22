@@ -33,7 +33,7 @@ var UserSchema=new Schema({
 
 UserSchema.plugin(BaseModel);
 UserSchema.virtual('avatar_url').get(function () {
- var url = this.avatar || ('http://vueorder.duapp.com/assets/avatar.jpg?size=48');
+ var url = this.avatar || ('http://zengwei.duapp.com/assets/avatar.jpg?size=48');
   return url;
 });
 

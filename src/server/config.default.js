@@ -17,7 +17,7 @@ var config = {
      * URL
      * 域名地址,如果没有请留空，(!domain || devMode)===true时会读取host+':'+port作为地址
      */
-    domain: 'vueorder.duapp.com',
+    domain: 'zengwei.duapp.com',
     host: '127.0.0.1',
     port: 18080,
     // mongodb 配置
