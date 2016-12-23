@@ -1,120 +1,221 @@
+<style>
+    .rstblock {
+        background-color: #fff;
+        border-bottom: 1px #f5f5f5 solid;
+        height: 140px;
+        width: 50%;
+    }
+    .rstblock,.rstblock-logo {
+        float: left;
+        font-size: 12px;
+        position: relative;
+    }
+    
+    .rstblock-logo {
+        padding: 20px;
+        color: #999;
+        text-align: center;
+    }
+    
+    .rstblock,
+    .rstblock-logo {
+        float: left;
+        font-size: 12px;
+        position: relative;
+    }
+    
+    .rstblock-logo-icon {
+        display: block;
+        width: 70px;
+        height: 70px;
+        margin-bottom: 10px;
+    }
+    
+    .rstblock-logo {
+        padding: 20px;
+        color: #999;
+        text-align: center;
+    }
+    
+    .rstblock,
+    .rstblock-logo {
+        float: left;
+        font-size: 12px;
+        position: relative;
+    }
+    
+    .rstblock-logo-premiumsign {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        top: 20px;
+        left: 40px;
+        z-index: 1;
+    }
+    
+    .elemeicon {
+        background: url(//faas.elemecdn.com/desktop/media/img/icon.d5d696.png) no-repeat;
+    }
+    
+    .rstblock-content {
+        padding: 20px;
+    }
+    
+    .rstblock-title {
+        font-size: 16px;
+        margin-bottom: 6px;
+        font-weight: 600;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: #333;
+    }
+    
+    .starrating {
+        position: relative;
+        display: inline-block;
+        line-height: 1em;
+        color: #ccc;
+    }
+    .rstblock-monthsales {
+        color: #999;
+        margin-left: 10px;
+    }
+    
+    .rstblock-cost {
+        color: #999;
+        margin-top: 3px;
+    }
+</style>
 <div class="container-fluid" id="VueAapp">
-    <div class="col-lg-5" v-model="mean"></div>
-    <div class="col-lg-7" id="content">
-        <div class="heading-buttons">
-            <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
-            <div class="buttons pull-right">
+    <div class="col-lg-6" v-model="mean">
+        <a href="/shop/721672" data-rst-id="721672" data-bidding="" target="_blank" class="rstblock">
+            <div class="rstblock-logo">
+                <img src="//fuss10.elemecdn.com/9/36/0a9ea36fe68900defd8b3043bb27fjpeg.jpeg?imageMogr2/thumbnail/70x70/format/webp/quality/85"
+                    width="70" height="70" alt="U味儿（金百万万城店）" class="rstblock-logo-icon">
             </div>
-        </div>
-        <br>
-        <div class="well">
-            <form class="form-inline">
-                <label for="queryDate" class="control-label">查询：</label>
-                <div class="col-sm-8 input-prepend input-group">
-                    <div id="queryDate" class="input-group date form_time" data-date-format="yyyy-mm-dd">
-                        <input id="queryDateValue" class="form-control" size="16" readonly type="text">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                    </div>
-                </div>
-                <label class="btn btn-success" @click="todayQuery()">查看今天</label>&nbsp;&nbsp;&nbsp;
-                <label class="btn btn-success" @click="copyTheOrder()">复制</label>
-            </form>
-        </div>
-        <div>
-            <table class="table table-condensed table-primary table-vertical-center table-thead-simple" v-cloak>
-                <thead>
-                    <tr>
-                        <th class="text-center" @click="sortBy('$index')">序号</th>
-                        <th class="text-center" @click="sortBy('dish_name')">菜名</th>
-                        <th class="text-center" @click="sortBy('user_id')">用户</th>
-                        <th class="text-center" @click="sortBy('dish_price')">价格(元)</th>
-                        <th class="text-center" @click="sortBy('ispack')">是否打包</th>
-                        <th class="text-center" @click="sortBy('update_at')">修改时间</th>
-                        <% if (current_user) { %>
-                            <th class="text-center">操作</th>
-                            <% } %>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="order in orders">
-                        <td class="text-center">{{$index+1}}</td>
-                        <td class="text-center">
-                            {{order.dish_name}}
-                        </td>
-                        <td class="text-center">{{order.username}}</td>
-                        <td class="text-center">{{order.dish_price}}</td>
-                        <td class="text-center" v-bind:class="{ 'important':order.ispack}">
-                            {{order.ispack?'打包':'堂吃'}}
-                        </td>
-                        <td class="text-center">{{order.update_at | dateformat}}</td>
-                        <% if (current_user) { %>
-                            <td class="text-center">
-                                <% if (current_user.is_admin) { %>
-                                    <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
-                                    <% } else { %>
-                                        <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
-                                        <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
-                                        <% } %>
-                            </td>
-                            <% } %>
-                    </tr>
-                    <tr>
-                        <td class="text-right" colspan="8">
-                            <h4>总数：{{count}}（份） ，总价：{{sum}}（元）</h4></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="separator bottom line"></div>
-        <ul class="breadcrumb">
-            <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
-            <li class="divider"></li>
-            <li>我要订餐</li>
-        </ul>
-        <br>
-        <div class="col-lg-8 col-lg-offset-2">
-            <div id="add-order">
-                <form action="/orders/create" method='post' id="orderForm" class="form-horizontal">
-                    <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
-                        <div class="alert alert-danger">
-                            <a class="close" data-dismiss="alert" href="#">&times;</a>
-                            <strong><%= edit_error %></strong>
-                        </div>
-                        <%} %>
-                            <div class="form-group">
-                                <label for="dish_name" class="col-sm-2 control-label">菜名</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="dish_name" id="dish_name" placeholder="请输入菜名" v-model="order.name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="dish_price" class="col-sm-2 control-label">价格</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="dish_price" name="dish_price" v-model="order.price" placeholder="请输入价格">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"></label>
-                                <div class="col-sm-6">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="ispack"> 打包（如需打包请勾选）
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"></label>
-                                <div class="col-sm-6">
-                                    <button class="btn btn-primary btn-block" @click="addOrder()">订餐</button>
-                                </div>
-                            </div>
-                </form>
-            </div>
-            <br>
+            <div class="rstblock-content">
+                <div class="rstblock-title">U味儿（金百万万城店）</div>
+                <span class="rstblock-monthsales">月售1506单</span>
+                <div class="rstblock-cost">地址:复兴路34号院实验楼三层</div>
+    </div>
+    </a>
+</div>
+<div class="col-lg-6">
+    <div class="heading-buttons">
+        <h3>Ordering Lunch<span>| Simple and easy to use</span></h3>
+        <div class="buttons pull-right">
         </div>
     </div>
+    <br>
+    <div class="well">
+        <form class="form-inline">
+            <label for="queryDate" class="control-label">查询：</label>
+            <div class="col-sm-8 input-prepend input-group">
+                <div id="queryDate" class="input-group date form_time" data-date-format="yyyy-mm-dd">
+                    <input id="queryDateValue" class="form-control" size="16" readonly type="text">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                </div>
+            </div>
+            <label class="btn btn-success" @click="todayQuery()">查看今天</label>&nbsp;&nbsp;&nbsp;
+            <label class="btn btn-success" @click="copyTheOrder()">复制</label>
+        </form>
+    </div>
+    <div>
+        <table class="table table-condensed table-primary table-vertical-center table-thead-simple" v-cloak>
+            <thead>
+                <tr>
+                    <th class="text-center" @click="sortBy('$index')">序号</th>
+                    <th class="text-center" @click="sortBy('dish_name')">菜名</th>
+                    <th class="text-center" @click="sortBy('user_id')">用户</th>
+                    <th class="text-center" @click="sortBy('dish_price')">价格(元)</th>
+                    <th class="text-center" @click="sortBy('ispack')">是否打包</th>
+                    <th class="text-center" @click="sortBy('update_at')">修改时间</th>
+                    <% if (current_user) { %>
+                        <th class="text-center">操作</th>
+                        <% } %>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="order in orders">
+                    <td class="text-center">{{$index+1}}</td>
+                    <td class="text-center">
+                        {{order.dish_name}}
+                    </td>
+                    <td class="text-center">{{order.username}}</td>
+                    <td class="text-center">{{order.dish_price}}</td>
+                    <td class="text-center" v-bind:class="{ 'important':order.ispack}">
+                        {{order.ispack?'打包':'堂吃'}}
+                    </td>
+                    <td class="text-center">{{order.update_at | dateformat}}</td>
+                    <% if (current_user) { %>
+                        <td class="text-center">
+                            <% if (current_user.is_admin) { %>
+                                <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                <% } else { %>
+                                    <a class="btn btn-info btn-sm" href="/orders/{{order._id}}/edit">修改</a>
+                                    <button type="button" class="btn btn-danger btn-sm" @click="delOrder(order)">删除</button>
+                                    <% } %>
+                        </td>
+                        <% } %>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="8">
+                        <h4>总数：{{count}}（份） ，总价：{{sum}}（元）</h4></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="separator bottom line"></div>
+    <ul class="breadcrumb">
+        <li><a href="/" class="glyphicons home"><i></i> ORDER</a></li>
+        <li class="divider"></li>
+        <li>我要订餐</li>
+    </ul>
+    <br>
+    <div class="col-lg-8 col-lg-offset-2">
+        <div id="add-order">
+            <form action="/orders/create" method='post' id="orderForm" class="form-horizontal">
+                <% if(typeof(edit_error) !== 'undefined' && edit_error){ %>
+                    <div class="alert alert-danger">
+                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                        <strong><%= edit_error %></strong>
+                    </div>
+                    <%} %>
+                        <div class="form-group">
+                            <label for="dish_name" class="col-sm-2 control-label">菜名</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="dish_name" id="dish_name" placeholder="请输入菜名" v-model="order.name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dish_price" class="col-sm-2 control-label">价格</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="dish_price" name="dish_price" v-model="order.price" placeholder="请输入价格">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <div class="checkbox">
+                                    <label>
+                                            <input type="checkbox" name="ispack"> 打包（如需打包请勾选）
+                                        </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <button class="btn btn-primary btn-block" @click="addOrder()">订餐</button>
+                            </div>
+                        </div>
+            </form>
+        </div>
+        <br>
+    </div>
+</div>
 </div>
 <script type="text/javascript">
     $(document).ready(function() {

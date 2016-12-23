@@ -242,12 +242,6 @@ var mapVue = new Vue({
                 });
             });
         },
-        bookDining: function(e){
-            debugger;
-            //https://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id=2190668
-            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
-            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
-        },
         searchInBounds: function(){
             this.removeListener();
             mapVue.placeSearchService.clear();
@@ -268,10 +262,6 @@ var mapVue = new Vue({
             mapVue.riding.search(mapVue.local, destination);
         },
         getMenu: function(lng,lat){
-            //https://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id=2190668
-            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
-            //https://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude=39.90671&limit=24&longitude=116.26976&offset=0
-            
              var data = {
                 lng:lng,
                 lat:lat
@@ -282,8 +272,8 @@ var mapVue = new Vue({
                 data:data,
                 cache : true,
                 success: function(data){
-                    var result = JSON.parse(data);
-                    mapVue.canteenId = result.id;
+                    // var result = JSON.parse(data);
+                    // mapVue.canteenId = result.id;
                 },
                 error:function(err,result){
                     console.log("error");

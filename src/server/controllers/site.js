@@ -52,9 +52,9 @@ exports.getMean = function(req, res, next){
   var canteenUrl = "http://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id="+responseJson[0].id;
   var canteenResult = requestSync('GET', canteenUrl);
   res.locals.current_page='orders'
-  res.render('orders', {
-      title: '首页'
-  });
+	res.render('orders', {
+	    title: '首页'
+	});
 //   try {
 //       // res.write(canteenResult.getBody().toString());
 //       // res.end();
