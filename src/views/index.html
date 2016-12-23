@@ -272,8 +272,9 @@ var mapVue = new Vue({
                 data:data,
                 cache : true,
                 success: function(data){
-                    // var result = JSON.parse(data);
-                    // mapVue.canteenId = result.id;
+                    var result = JSON.parse(data);
+                    localStorage.mean = result;
+                    window.location.href='./orders';
                 },
                 error:function(err,result){
                     console.log("error");

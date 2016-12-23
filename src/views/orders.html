@@ -1,94 +1,5 @@
-<style>
-    .rstblock {
-        background-color: #fff;
-        border-bottom: 1px #f5f5f5 solid;
-        height: 140px;
-        width: 50%;
-    }
-    .rstblock,.rstblock-logo {
-        float: left;
-        font-size: 12px;
-        position: relative;
-    }
-    
-    .rstblock-logo {
-        padding: 20px;
-        color: #999;
-        text-align: center;
-    }
-    
-    .rstblock,
-    .rstblock-logo {
-        float: left;
-        font-size: 12px;
-        position: relative;
-    }
-    
-    .rstblock-logo-icon {
-        display: block;
-        width: 70px;
-        height: 70px;
-        margin-bottom: 10px;
-    }
-    
-    .rstblock-logo {
-        padding: 20px;
-        color: #999;
-        text-align: center;
-    }
-    
-    .rstblock,
-    .rstblock-logo {
-        float: left;
-        font-size: 12px;
-        position: relative;
-    }
-    
-    .rstblock-logo-premiumsign {
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        top: 20px;
-        left: 40px;
-        z-index: 1;
-    }
-    
-    .elemeicon {
-        background: url(//faas.elemecdn.com/desktop/media/img/icon.d5d696.png) no-repeat;
-    }
-    
-    .rstblock-content {
-        padding: 20px;
-    }
-    
-    .rstblock-title {
-        font-size: 16px;
-        margin-bottom: 6px;
-        font-weight: 600;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        color: #333;
-    }
-    
-    .starrating {
-        position: relative;
-        display: inline-block;
-        line-height: 1em;
-        color: #ccc;
-    }
-    .rstblock-monthsales {
-        color: #999;
-        margin-left: 10px;
-    }
-    
-    .rstblock-cost {
-        color: #999;
-        margin-top: 3px;
-    }
-</style>
 <div class="container-fluid" id="VueAapp">
-    <div class="col-lg-6" v-model="mean">
+    <div class="col-lg-6" v-model="mean" style="display:none;">
         <a href="/shop/721672" data-rst-id="721672" data-bidding="" target="_blank" class="rstblock">
             <div class="rstblock-logo">
                 <img src="//fuss10.elemecdn.com/9/36/0a9ea36fe68900defd8b3043bb27fjpeg.jpeg?imageMogr2/thumbnail/70x70/format/webp/quality/85"
@@ -274,6 +185,7 @@ var vue = new Vue({
     el: '#VueAapp',
     ready: function() {
         console.log(this.mean);
+        this.mean = localStorage.mean
         var that = this;
         var queryDate = $.formatDate(new Date(), "yyyy-MM-dd");
         $("#queryDateValue").val(queryDate);
