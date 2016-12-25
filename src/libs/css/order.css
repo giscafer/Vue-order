@@ -85,3 +85,184 @@
         color: #999;
         margin-top: 3px;
     }
+
+    .tabs-vertical{
+    font: bold 13px sans-serif;
+    background-color: #f7f7f7;
+    box-shadow: 0 0 22px #E2E2E2 inset, 2px 2px 3px #E8E8E8;
+    border: 1px solid #CECECE;
+    margin-top: 30px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+/* The tabs */
+
+.tabs-vertical ul{
+    float: left;
+    list-style: none;
+    text-align: left;
+
+    margin: 0;
+    padding-left: 0;
+}
+
+.tabs-vertical ul li{
+    margin-right: -1px;
+}
+
+.tabs-vertical ul li a{
+    display: block;
+    text-decoration: none;
+    color: #656a6d;
+
+    border: 1px solid transparent;
+    border-right: 0;
+    border-left: 0;
+
+    padding: 16px 40px 16px 20px;
+}
+
+.tabs-vertical ul li a.tab-active {
+    border-color: #dddddd;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 0px #EFEFEF;
+}
+
+.tabs-vertical ul li:first-child a{
+    border-top: 0;
+}
+
+/* The content */
+
+.tabs-vertical .tabs-content-placeholder{
+    overflow: hidden;
+    border-left: 1px solid #dddddd;
+    font-weight: normal;
+    background-color: #fff;
+    padding: 20px 40px 45px;
+    margin: 0 auto;
+    box-shadow: -3px 0 0px #F3F3F3;
+    text-align: center;
+}
+
+.tabs-vertical .tabs-content-placeholder div{
+    display: none;
+}
+
+.tabs-vertical .tabs-content-placeholder div.tab-content-active{
+    display: block;
+}
+
+.tabs-vertical .tabs-content-placeholder div p{
+    color: #565a5c;
+    line-height: 1.5;
+    text-align: left;
+
+    margin: 5px 0 20px;
+}
+
+.tabs-vertical .tabs-content-placeholder div img{
+    max-width: 100%;
+}
+
+@media (max-width: 600px) {
+
+    .tabs-vertical ul{
+        float: none;
+    }
+
+    .tabs-vertical ul li{
+        display: inline-block;
+        margin-bottom: -1px;
+    }
+
+    .tabs-vertical ul li a{
+        border: 1px solid transparent;
+        border-bottom: 0;
+        border-top: 0;
+        padding: 12px 15px;
+    }
+
+    .tabs-vertical ul li a.tab-active {
+        border-color: #dddddd;
+        background-color: #ffffff;
+        box-shadow: 2px 0px 0px #EFEFEF;
+    }
+
+    .tabs-vertical ul li:first-child a{
+        border-left: 0;
+    }
+
+    .tabs-vertical .tabs-content-placeholder{
+        padding: 15px 30px 30px;
+        border-left: 0;
+        border-top: 1px solid #dddddd;
+        box-shadow: 0px -3px 0px #F3F3F3;
+    }
+
+}
+/*food*/
+.shopmenu-food {
+    margin-bottom: 12px;
+    font-size: 12px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    height: 102px;
+    position: relative;
+    float: left;
+    margin-right: 2%;
+    padding-right: 10px;
+    width: 48%;
+}
+.shopmenu-food img {
+    float: left;
+    margin-right: 14px;
+    width: 100px;
+    height: 100px;
+}
+.shopmenu-food-name {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 700;
+}
+.ui-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.shopmenu-food-price {
+    position: absolute;
+    bottom: 15px;
+    font-size: 14px;
+    left: 40%;
+    text-align: left;
+    color: #f74342;
+    font-weight: 700;
+}
+.shopmenu-food-price:before {
+    content: "\00a5";
+    margin-right: 3px;
+    font-size: 12px;
+}
+.shopmenu-food-price small {
+    margin-left: 3px;
+    font-size: 12px;
+    color: #888;
+}
+.shop-cartbutton {
+    display: inline-block;
+    background-color: #0089dc;
+    color: #fff;
+        position: absolute;
+    right: 10px;
+    bottom: 10px;
+    border: 0;
+    cursor: pointer;
+    width: 90px;
+    height: 26px;
+    line-height: 26px;
+    border-radius: 20px;
+    text-align: center;
+    outline: 0;
+}
