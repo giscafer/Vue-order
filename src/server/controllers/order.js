@@ -97,7 +97,7 @@ exports.create = function (req, res, next) {
     var editError;
     if (dish_name === '') {
         editError = '菜名不能是空的。';
-    } else if (dish_name.length < 2 || dish_name.length > 8) {
+    } else if (dish_name.length < 2 || dish_name.length > 40) {
         editError = '菜名字数太多或太少（2~8个字符）。';
     } else if (dish_price < 0) {
         editError = '价格不能小于0。';

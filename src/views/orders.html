@@ -19,22 +19,22 @@
                 </li>
             </ul>
             <div class="tabs-content-placeholder">
-                <div class="tab-content-active" v-for="meanItem in mean">
-                    <div class="shopmenu-food" v-for="food in meanItem.foods">
+                <div :class="$index==0?'tab-content-active':'tab-content'" v-for="meanItem in mean">
+                    <span class="shopmenu-food" v-for="food in meanItem.foods">
                         <span>
                             <a href="javascript:">
                                 <img ng-src="//fuss10.elemecdn.com/0/ec/c5f7699d6971d8b1cf55595429b08jpeg.jpeg?imageMogr2/thumbnail/100x100/format/webp/quality/85" alt="老北京鸡肉卷的图片" src="//fuss10.elemecdn.com/0/ec/c5f7699d6971d8b1cf55595429b08jpeg.jpeg?imageMogr2/thumbnail/100x100/format/webp/quality/85">
                             </a>
                         </span>
-                        <div class="col-2 shopmenu-food-main">
+                        <span class="col-2 shopmenu-food-main">
                             <h3 class="shopmenu-food-name">{{food.name}}</h3>
                             <p class="color-mute ui-ellipsis ng-binding" tooltip="{{food.description}}">{{food.description}}</p>
-                        </div>
+                        </span>
                         <span class="col-3 shopmenu-food-price color-stress ng-binding">{{food.specfoods[0].price}}<small class="ng-binding"></small></span>
                         <span class="col-4">
-                            <button class="shop-cartbutton ng-binding ng-scope" ng-if="!cartItem.quantity &amp;&amp; menuFood.stock" ng-click="cartItem.add($event)">加入购物车</button>
+                            <button class="shop-cartbutton ng-binding ng-scope" @click="addOrder(food.name,food.specfoods[0].price)">预定</button>
                         </span>
-                    </div>
+                    </span>
                 </div>
             </div>
 
@@ -186,8 +186,8 @@
                     },
                     stringLength: {
                         min: 2,
-                        max: 8,
-                        message: '菜名字符个数为2~8'
+                        max: 40,
+                        message: '菜名字符个数为2~40'
                     }
                 }
             },
@@ -277,10 +277,31 @@ var orderVue = new Vue({
             console.log(str);
             confirm(str);
         },
-        addOrder: function() {
-            if ($('#orderForm').data('bootstrapValidator').isValid()) {
-                // $('#orderForm').submit();
-                document.getElementById("orderForm").submit();
+        addOrder: function(name,price) {
+            if(name){
+                var data = {
+                    dish_name:name,
+                    dish_price:price,
+                    ispack:false
+                }
+                $.ajax({
+                    url: Config.hostUrl+'/orders/create',
+                    type : "post",
+                    data:data,
+                    success: function(data){
+                        window.location.href='./orders';
+                        console.log("order OK");
+                    },
+                    error:function(err,result){
+                        console.log("error");
+                        debugger;
+                    }
+                })
+            }else{
+               if ($('#orderForm').data('bootstrapValidator').isValid()) {
+                    // $('#orderForm').submit();
+                    document.getElementById("orderForm").submit();
+                } 
             }
         },
         delOrder: function(order) {

@@ -12,7 +12,7 @@ var config = {
     //是否允许注册
     allow_sign_up: true,
     //注册是否需要激活邮箱
-    need_active_mail:true,
+    need_active_mail:false,
      /**
      * URL
      * 域名地址,如果没有请留空，(!domain || devMode)===true时会读取host+':'+port作为地址

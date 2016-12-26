@@ -87,14 +87,15 @@
     }
 
     .tabs-vertical{
-    font: bold 13px sans-serif;
-    background-color: #f7f7f7;
-    box-shadow: 0 0 22px #E2E2E2 inset, 2px 2px 3px #E8E8E8;
-    border: 1px solid #CECECE;
-    margin-top: 30px;
-    text-align: center;
-    border-radius: 2px;
-}
+        position: absolute;
+        font: bold 13px sans-serif;
+        background-color: #f7f7f7;
+        box-shadow: 0 0 22px #E2E2E2 inset, 2px 2px 3px #E8E8E8;
+        border: 1px solid #CECECE;
+        margin-top: 30px;
+        text-align: center;
+        border-radius: 2px;
+    }
 
 /* The tabs */
 
@@ -140,7 +141,7 @@
     border-left: 1px solid #dddddd;
     font-weight: normal;
     background-color: #fff;
-    padding: 20px 40px 45px;
+    padding: 20px 10px;
     margin: 0 auto;
     box-shadow: -3px 0 0px #F3F3F3;
     text-align: center;
@@ -235,7 +236,7 @@
     position: absolute;
     bottom: 15px;
     font-size: 14px;
-    left: 40%;
+    left: 45%;
     text-align: left;
     color: #f74342;
     font-weight: 700;
@@ -244,6 +245,7 @@
     content: "\00a5";
     margin-right: 3px;
     font-size: 12px;
+    font-family: Arial;
 }
 .shopmenu-food-price small {
     margin-left: 3px;
@@ -254,15 +256,14 @@
     display: inline-block;
     background-color: #0089dc;
     color: #fff;
-        position: absolute;
+    position: absolute;
     right: 10px;
     bottom: 10px;
     border: 0;
     cursor: pointer;
-    width: 90px;
-    height: 26px;
-    line-height: 26px;
+    width: 40px;
+    height: 21px;
+    line-height: 21px;
     border-radius: 20px;
     text-align: center;
-    outline: 0;
 }
