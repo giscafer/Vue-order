@@ -15,7 +15,8 @@ var errorPageMiddleware = require("./src/server/common/error_page");
 var authMiddleware = require("./src/server/common/auth");
 // var passport  = require('passport');
 // require('./middlewares/mongoose_log'); // 打印 mongodb 查询日志
-var webRouter = require('./src/server/web_router');
+var adminRouter = require('./src/server/routes/admin_route');
+var orderRouter = require('./src/server/routes/order_route');
 var mongoosekeeper = require('./src/server/models/mongoosekeeper');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
@@ -106,7 +107,8 @@ app.use(authMiddleware.authUser);
 app.locals.current_user = null;
 app.locals.current_page = null;
 //router
-app.use('/', webRouter);
+app.use('/', adminRouter);
+app.use('/', orderRouter);
 
 // error handler
 if (config.debug) {

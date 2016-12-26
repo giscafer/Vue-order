@@ -168,7 +168,7 @@ body.login .container-fluid.fixed {
     top: 0;
     right: 0;
     height: 80px;
-    line-height: normal;
+    line-height: 4em;
 }
 
 .navbar.main .profile span {
