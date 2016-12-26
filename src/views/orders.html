@@ -290,11 +290,11 @@ var orderVue = new Vue({
                     data:data,
                     success: function(data){
                         window.location.href='./orders';
-                        console.log("order OK");
                     },
                     error:function(err,result){
-                        console.log("error");
-                        debugger;
+                        if(err.status == 403){
+                            window.location.href='./signin';
+                        }
                     }
                 })
             }else{
