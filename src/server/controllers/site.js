@@ -46,23 +46,26 @@ exports.index = function (req, res, next) {
 exports.getMean = function(req, res, next){
   var lng = req.query.lng;
   var lat = req.query.lat;
-  var url = "http://mainsite-restapi.ele.me/shopping/restaurants?extras%5B%5D=activities&geohash=wx4ejbc13vb&latitude="+lat+"&limit=1&longitude="+lng+"&offset=0";
+  var name = req.query.name;
+  var url = "http://mainsite-restapi.ele.me/shopping/restaurants/search?extras[]=activity&keyword="+name+"&latitude="+lat+"&limit=1&longitude="+lng+"&offset=0";
   var result = requestSync('GET', url);
   try {
       var responseJson = JSON.parse(result.getBody().toString());
   } catch (error) {
       // 解析失败
       console.log("Error!" + error.stack);
+      res.write({ success: false, message: '获取商铺信息失败' });
       res.end();
   }
   
-  var canteenUrl = "http://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id="+responseJson[0].id;
+  var canteenUrl = "http://mainsite-restapi.ele.me/shopping/v1/menu?restaurant_id="+responseJson.restaurant_with_foods[0].restaurant.id;
   var canteenResult = requestSync('GET', canteenUrl);
   try {
       res.write(canteenResult.getBody().toString());
       res.end();
   } catch (error) {
       // 解析失败
-      console.log("Error!" + error.stack);
+      res.write({ success: false, message: '获取商铺信息失败' });
+      res.end();
   }
 };

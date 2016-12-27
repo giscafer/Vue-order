@@ -108,7 +108,7 @@
                                     <div class="img-wrap">
                                         <img src="{{poiItem.photos[0].url}}" style="width:71px;height:58px;">
                                     </div>
-                                    <div class="comehere" onclick="mapVue.ridingFn([{{poiItem.location.lng}},{{poiItem.location.lat}}]);">去这里</div>
+                                    <div class="comehere" @click="ridingFn([poiItem.location.lng,poiItem.location.lat]);">去这里</div>
                                 </div>
                                 <div class="col-c">
                                     <div class="poi-row">
@@ -120,7 +120,7 @@
                                     <div class="poi-row addr">
                                         <span class="n-grey">{{poiItem.address}}</span>
                                     </div>
-                                    <div class="orderButton"><span onclick="mapVue.getMenu({{poiItem.location.lng}},{{poiItem.location.lat}});">马上订餐</span></div>
+                                    <div class="orderButton"><span @click="getMenu(poiItem.location.lng,poiItem.location.lat,poiItem.name);">马上订餐</span></div>
                                 </div>
                             </div>
                         </li>
@@ -153,6 +153,7 @@ var mapVue = new Vue({
         searchText: "",//搜索框
         city:'',//当前城市
         pois: null,//搜索结果展示列表
+        meanName: null,//餐厅名称
         canteenId: null
     },
     ready: function() {
@@ -261,18 +262,20 @@ var mapVue = new Vue({
         ridingFn: function(destination){
             mapVue.riding.search(mapVue.local, destination);
         },
-        getMenu: function(lng,lat){
+        getMenu: function(lng,lat,name){
+            this.meanName = name;
              var data = {
                 lng:lng,
-                lat:lat
+                lat:lat,
+                name:name
             };
              $.ajax({
                 url: Config.hostUrl+'/index/getMean',
                 type : "get",
                 data:data,
-                cache : true,
                 success: function(data){
                     localStorage.setItem("mean",data);
+                    localStorage.setItem("meanName",mapVue.meanName);
                     window.location.href='./orders';
                 },
                 error:function(err,result){

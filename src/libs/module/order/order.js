@@ -82,6 +82,7 @@
               ispack: ''
           },
           mean: null,
+          meanName: localStorage.meanName,
           orders: ''
       },
       computed: {
